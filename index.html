@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="nl" class="no-js">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harvey's Aalst</title>
+  <meta name="description"
+    content="Harvey's Women en Harvey's Men in de Kattestraat in Aalst. Persoonlijke service, wekelijks nieuwe stukken en een klantenkaart met 5% korting." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Karla:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/beweging.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <div id="top"></div>
+
+  <!-- ========== Header ========== -->
+  <header class="header">
+    <div class="container header__inner">
+      <a class="woordmerk" href="#top" aria-label="Harvey's, naar boven">
+        <img class="woordmerk__icoon" src="images/harveys-icon.png" alt="" width="78" height="78" />
+        <span>Harvey's</span>
+      </a>
+      <nav class="nav" aria-label="Hoofdmenu">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="hoofdmenu">
+          <span class="nav__toggle-lijn" aria-hidden="true"></span>
+          <span class="nav__toggle-lijn" aria-hidden="true"></span>
+          <span class="visually-hidden">Menu</span>
+        </button>
+        <div class="nav__paneel" id="hoofdmenu">
+          <ul class="nav__lijst">
+            <li><a class="nav__link" href="#home">Home</a></li>
+            <li><a class="nav__link" href="#nieuws">Nieuws</a></li>
+            <li><a class="nav__link" href="#collectie">Collectie</a></li>
+            <li><a class="nav__link" href="#merken">Merken</a></li>
+            <li><a class="nav__link" href="#over">Over ons</a></li>
+            <li><a class="nav__link" href="#contact">Contact</a></li>
+          </ul>
+          <p class="nav__adres">Kattestraat 38 &amp; 49<br />9300 Aalst</p>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ========== Hero: video met intro-animatie van het logo ========== -->
+    <section class="hero" id="home" aria-label="Welkom bij Harvey's">
+      <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="images/hero-poster.jpg"
+        data-hls="https://customer-el0steweaibtzxvs.cloudflarestream.com/419ec1ab9adf4b9a2218a81a97b8692d/manifest/video.m3u8"
+        aria-hidden="true" tabindex="-1"></video>
+      <div class="hero__inhoud">
+        <h1 class="hero__logo">
+          <svg class="hero__icoon" role="img" aria-label="Harvey's" viewBox="0 0 78 77.67" xmlns="http://www.w3.org/2000/svg">
+            <circle class="hero__ring" cx="38.95" cy="39" r="36.26" fill="none" stroke="currentColor" stroke-width="5.47"
+              pathLength="1" transform="rotate(-90 38.95 39)" />
+            <circle class="hero__ring hero__ring--dun" cx="39" cy="38.83" r="32" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-miterlimit="10" pathLength="1" transform="rotate(-90 39 38.83)" />
+            <path class="hero__icoon-h"
+              d="M32.19,38.59v12.1c0,2,.11,3.25.33,3.75s.65.94,1.3,1.31c.64.38,1.51.56,2.61.56h1.3v1.07h-20.43v-1.07h1.3c1.13,0,2.04-.2,2.74-.6.5-.27.88-.73,1.15-1.38.21-.46.32-1.67.32-3.63v-25.7c0-2-.11-3.25-.32-3.75-.21-.5-.64-.94-1.28-1.31-.64-.38-1.51-.56-2.61-.56h-1.3v-1.07h20.43v1.07h-1.3c-1.13,0-2.04.2-2.74.6-.5.27-.89.73-1.18,1.38-.21.46-.32,1.67-.32,3.63v11.06h13.8v-11.06c0-2-.11-3.25-.32-3.75-.21-.5-.64-.94-1.3-1.31-.65-.38-1.53-.56-2.62-.56h-1.27v-1.07h20.4v1.07h-1.27c-1.15,0-2.06.2-2.74.6-.5.27-.89.73-1.18,1.38-.21.46-.32,1.67-.32,3.63v25.7c0,2,.1,3.25.32,3.75.21.5.64.94,1.3,1.31.65.38,1.53.56,2.62.56h1.27v1.07h-20.4v-1.07h1.27c1.15,0,2.06-.2,2.74-.6.5-.27.89-.73,1.18-1.38.21-.46.32-1.67.32-3.63v-12.1h-13.8Z"
+              fill="currentColor" />
+          </svg>
+          <!-- acht losse SVG's, gegenereerd door tools/splits-woordmerk.py -->
+          <span class="hero__woordmerk" aria-hidden="true">
+            <!-- woordmerk:start -->
+            <svg class="teken" viewBox="0.00 0 57.61 78" style="--gap: 0.00" aria-hidden="true"><path d="M19.69,29.35v16c0,2.64.15,4.29.44,4.95.29.66.86,1.24,1.71,1.73.85.5,2,.74,3.45.74h1.71v1.41H0v-1.41h1.71c1.5,0,2.7-.27,3.62-.8.66-.36,1.17-.96,1.52-1.83.28-.61.42-2.21.42-4.8V11.37c0-2.64-.14-4.29-.42-4.95-.28-.66-.84-1.24-1.69-1.73-.85-.5-2-.74-3.45-.74H0v-1.41h27v1.41h-1.71c-1.5,0-2.7.27-3.62.8-.66.36-1.18.96-1.56,1.83-.28.61-.42,2.21-.42,4.8v14.62h18.24v-14.62c0-2.64-.14-4.29-.42-4.95-.28-.66-.85-1.24-1.71-1.73-.86-.5-2.02-.74-3.47-.74h-1.68v-1.41h26.96v1.41h-1.68c-1.52,0-2.73.27-3.62.8-.66.36-1.18.96-1.56,1.83-.28.61-.42,2.21-.42,4.8v33.97c0,2.64.14,4.29.42,4.95.28.66.85,1.24,1.71,1.73.86.5,2.02.74,3.47.74h1.68v1.41h-26.96v-1.41h1.68c1.52,0,2.73-.27,3.62-.8.66-.36,1.18-.96,1.56-1.83.28-.61.42-2.21.42-4.8v-16h-18.24Z" fill="currentColor" /></svg>
+            <svg class="teken" viewBox="57.68 0 40.08 78" style="--gap: 0.07" aria-hidden="true"><path d="M80.95,43.44h-13.33l-1.59,3.67c-.52,1.22-.78,2.24-.78,3.03,0,1.06.43,1.84,1.28,2.34.5.3,1.73.52,3.7.67v1.03h-12.55v-1.03c1.35-.2,2.47-.77,3.34-1.68.87-.92,1.95-2.82,3.23-5.69l13.5-30.11h.53l13.61,30.95c1.3,2.93,2.37,4.78,3.2,5.54.63.58,1.52.91,2.67,1v1.03h-18.26v-1.03h.75c1.47,0,2.5-.2,3.09-.61.41-.3.61-.72.61-1.28,0-.33-.06-.68-.17-1.03-.04-.17-.32-.86-.83-2.09l-2-4.7ZM80.01,41.38l-5.62-13-5.79,13h11.41Z" fill="currentColor" /></svg>
+            <svg class="teken" viewBox="98.14 0 40.60 78" style="--gap: 0.38" aria-hidden="true"><path d="M112.23,36.98v10.58c0,2.04.12,3.33.38,3.85.25.53.69.95,1.32,1.27.63.32,1.81.47,3.53.47v1.03h-19.32v-1.03c1.74,0,2.93-.16,3.55-.49.62-.32,1.06-.75,1.31-1.27.25-.52.38-1.8.38-3.84v-24.49c0-2.04-.12-3.33-.38-3.85-.25-.53-.69-.95-1.32-1.27-.63-.32-1.81-.47-3.53-.47v-1.03h17.53c4.56,0,7.9.32,10.02.95s3.84,1.79,5.18,3.49c1.34,1.7,2,3.69,2,5.97,0,2.78-1,5.08-3.01,6.9-1.28,1.15-3.07,2.01-5.37,2.59l9.07,12.77c1.19,1.65,2.03,2.68,2.53,3.09.76.58,1.64.89,2.64.95v1.03h-11.88l-12.16-17.2h-2.48ZM112.23,18.47v16.53h1.59c2.58,0,4.51-.24,5.79-.71,1.28-.47,2.29-1.33,3.02-2.56.73-1.23,1.1-2.84,1.1-4.83,0-2.88-.67-5-2.02-6.37-1.35-1.37-3.51-2.06-6.5-2.06h-2.98Z" fill="currentColor" /></svg>
+            <svg class="teken" viewBox="135.39 0 40.13 78" style="--gap: -3.35" aria-hidden="true"><path d="M175.52,16.44v1.03c-1.37.22-2.6.96-3.67,2.2-.78.93-1.94,3.11-3.48,6.54l-13,28.83h-.92l-12.94-30c-1.56-3.62-2.6-5.74-3.13-6.37-.53-.63-1.53-1.03-2.99-1.2v-1.03h18.09v1.03h-.61c-1.63,0-2.75.21-3.34.61-.43.28-.64.69-.64,1.22,0,.33.07.73.22,1.18s.65,1.67,1.5,3.66l8.04,18.79,7.46-16.73c.89-2.02,1.44-3.38,1.64-4.06.2-.69.31-1.27.31-1.75,0-.56-.15-1.05-.45-1.48-.3-.43-.73-.75-1.31-.97-.8-.32-1.86-.47-3.17-.47v-1.03h12.39Z" fill="currentColor" /></svg>
+            <svg class="teken" viewBox="175.92 0 34.32 78" style="--gap: 0.40" aria-hidden="true"><path d="M190.32,18.61v15.36h.75c2.39,0,4.13-.75,5.21-2.25,1.08-1.5,1.76-3.72,2.06-6.65h1.06v19.76h-1.06c-.22-2.15-.69-3.92-1.41-5.29-.71-1.37-1.54-2.3-2.49-2.77-.95-.47-2.32-.71-4.12-.71v10.63c0,2.08.09,3.35.26,3.81.18.46.5.84.99,1.14.48.3,1.26.45,2.34.45h2.25c3.53,0,6.35-.82,8.47-2.45,2.12-1.63,3.65-4.12,4.58-7.46h1.03l-1.7,12h-32.62v-1.03h1.25c1.09,0,1.98-.2,2.64-.58.48-.26.85-.71,1.11-1.34.2-.45.31-1.61.31-3.51v-24.83c0-1.71-.05-2.76-.14-3.14-.19-.65-.53-1.15-1.03-1.5-.71-.52-1.67-.78-2.89-.78h-1.25v-1.03h31.59v11.16h-1.06c-.54-2.73-1.29-4.68-2.27-5.87-.97-1.19-2.35-2.06-4.13-2.62-1.04-.33-2.99-.5-5.84-.5h-3.9Z" fill="currentColor" /></svg>
+            <svg class="teken" viewBox="212.01 0 40.02 78" style="--gap: 1.77" aria-hidden="true"><path d="M252.02,16.44v1.03c-1.24.17-2.2.53-2.87,1.09-.93.78-2.39,2.9-4.4,6.37l-8.18,13.67v9.13c0,1.95.1,3.16.31,3.63.2.47.61.89,1.21,1.25.6.36,1.41.54,2.41.54h2.12v1.03h-21.18v-1.03h1.98c1.11,0,1.99-.2,2.64-.58.48-.26.86-.71,1.14-1.34.2-.45.31-1.61.31-3.51v-7.57l-8.88-16.17c-1.76-3.19-3.01-5.07-3.73-5.64-.72-.57-1.69-.86-2.89-.88v-1.03h18.09v1.03h-.81c-1.1,0-1.86.16-2.3.47s-.65.65-.65,1c0,.67.74,2.35,2.23,5.04l6.82,12.5,6.79-11.38c1.69-2.78,2.53-4.63,2.53-5.54,0-.5-.24-.92-.72-1.25-.63-.46-1.79-.74-3.48-.84v-1.03h11.52Z" fill="currentColor" /></svg>
+            <svg class="teken" viewBox="257.30 0 14.80 78" style="--gap: 5.27" aria-hidden="true"><path d="M258.7,26.02v-1.72c3.02-1.3,5.21-2.99,6.58-5.06s2.05-4.2,2.05-6.39c0-.42-.09-.74-.27-.98-.18-.21-.37-.31-.55-.31-.16,0-.39.09-.7.27-.76.44-1.69.66-2.81.66-1.54,0-2.87-.6-4-1.8-1.13-1.2-1.7-2.6-1.7-4.22,0-1.72.65-3.23,1.95-4.53s2.88-1.95,4.73-1.95c2.24,0,4.15.87,5.74,2.6,1.59,1.73,2.38,4.11,2.38,7.13,0,3.72-1.13,7.03-3.38,9.92-2.25,2.89-5.59,5.01-10.02,6.37Z" fill="currentColor" /></svg>
+            <svg class="teken" viewBox="280.27 0 37.17 78" style="--gap: 8.17" aria-hidden="true"><path d="M313.73,0l.43,17.66h-1.6c-.76-4.43-2.61-7.99-5.57-10.68-2.96-2.7-6.15-4.04-9.59-4.04-2.66,0-4.76.71-6.31,2.13-1.55,1.42-2.32,3.05-2.32,4.9,0,1.17.27,2.21.82,3.12.75,1.22,1.97,2.44,3.63,3.63,1.22.86,4.05,2.38,8.48,4.57,6.2,3.05,10.38,5.92,12.54,8.63,2.13,2.71,3.2,5.81,3.2,9.3,0,4.43-1.73,8.24-5.18,11.43-3.45,3.19-7.83,4.79-13.14,4.79-1.67,0-3.24-.17-4.73-.51-1.48-.34-3.35-.98-5.59-1.91-1.25-.52-2.28-.78-3.09-.78-.68,0-1.39.26-2.15.78-.76.52-1.37,1.31-1.84,2.38h-1.45v-20h1.45c1.15,5.62,3.35,9.92,6.62,12.87,3.27,2.96,6.79,4.43,10.57,4.43,2.92,0,5.24-.79,6.97-2.38,1.73-1.59,2.6-3.44,2.6-5.55,0-1.25-.33-2.46-1-3.63s-1.67-2.29-3.03-3.34c-1.35-1.05-3.75-2.43-7.19-4.12-4.82-2.37-8.28-4.39-10.39-6.06-2.11-1.67-3.73-3.53-4.86-5.59-1.13-2.06-1.7-4.32-1.7-6.8,0-4.22,1.55-7.81,4.65-10.78,3.1-2.97,7-4.45,11.72-4.45,1.72,0,3.38.21,5,.62,1.22.31,2.71.89,4.47,1.74,1.76.85,2.99,1.27,3.69,1.27s1.21-.21,1.6-.62c.39-.42.75-1.42,1.09-3.01h1.17Z" fill="currentColor" /></svg>
+            <!-- woordmerk:einde -->
+          </span>
+        </h1>
+        <span class="hero__haarlijn" aria-hidden="true"></span>
+        <p class="hero__regel">High level quality brands.</p>
+        <p class="hero__adres">Kattestraat 38 &amp; 49 · 9300 Aalst</p>
+      </div>
+    </section>
+
+    <!-- ========== Nieuws ========== -->
+    <section class="sectie reveal" id="nieuws" aria-labelledby="nieuws-titel">
+      <div class="container">
+        <div class="sectie__kop">
+          <h2 id="nieuws-titel">Nieuws</h2>
+        </div>
+        <div class="nieuws">
+          <article class="nieuws-item nieuws-item--uitgelicht">
+            <div class="beeld beeld--4x3">
+              <img src="images/collectie-schoenen.jpg"
+                alt="Crèmekleurige loafers van Nathan-Baume met gouden gesp, gedragen met witte sokken" loading="lazy"
+                decoding="async" />
+            </div>
+            <div class="nieuws-item__tekst">
+              <time datetime="2026-03-15">15 maart 2026</time>
+              <h3>Ontdek de nieuwe collectie schoenen van Nathan-Baume</h3>
+              <p>
+                De nieuwe collectie schoenen van Nathan-Baume is aangekomen bij Harvey’s Women.
+                Kom ze ontdekken en passen in de Kattestraat.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Collectie: fotogalerij ========== -->
+    <section class="sectie sectie--linnen reveal" id="collectie" aria-labelledby="collectie-titel">
+      <div class="container">
+        <div class="sectie__kop">
+          <h2 id="collectie-titel">Collectie</h2>
+          <p>Een greep uit wat er nu in de winkel hangt. Klik op een foto om ze te vergroten.</p>
+        </div>
+      </div>
+      <div class="container galerij" id="galerij">
+        <div class="galerij__groep">
+          <h3>Voor haar</h3>
+          <div class="galerij__raster">
+          <figure class="galerij__item" data-merk="No Secrets" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — No Secrets">
+              <img src="images/collectie/haar-no-secrets-1.jpg" alt="" width="835" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>No Secrets</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Guess" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Guess">
+              <img src="images/collectie/haar-guess-1.jpg" alt="" width="899" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Guess</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="ForAllMankind" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — ForAllMankind">
+              <img src="images/collectie/haar-forallmankind-1.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>ForAllMankind</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Rino &amp; Pelle" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Rino &amp; Pelle">
+              <img src="images/collectie/haar-rino-pelle-1.jpg" alt="" width="798" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Rino &amp; Pelle</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Freebird" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Freebird">
+              <img src="images/collectie/haar-freebird-1.jpg" alt="" width="856" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Freebird</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="ForAllMankind" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — ForAllMankind">
+              <img src="images/collectie/haar-forallmankind-2.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>ForAllMankind</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Jott" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Jott">
+              <img src="images/collectie/haar-jott-1.jpg" alt="" width="960" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Jott</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="ForAllMankind" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — ForAllMankind">
+              <img src="images/collectie/haar-forallmankind-3.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>ForAllMankind</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Cambio" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Cambio">
+              <img src="images/collectie/haar-cambio-1.jpg" alt="" width="933" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Cambio</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Liu Jo" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Liu Jo">
+              <img src="images/collectie/haar-liu-jo-1.jpg" alt="" width="860" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Liu Jo</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Liu Jo" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Liu Jo">
+              <img src="images/collectie/haar-liu-jo-2.jpg" alt="" width="860" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Liu Jo</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Liu Jo" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Liu Jo">
+              <img src="images/collectie/haar-liu-jo-3.jpg" alt="" width="860" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Liu Jo</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Cambio" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Cambio">
+              <img src="images/collectie/haar-cambio-2.jpg" alt="" width="933" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Cambio</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Reset" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Reset">
+              <img src="images/collectie/haar-reset-1.jpg" alt="" width="900" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Reset</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Guess" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Guess">
+              <img src="images/collectie/haar-guess-2.jpg" alt="" width="900" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Guess</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Senso" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Senso">
+              <img src="images/collectie/haar-senso-1.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Senso</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Cambio" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Cambio">
+              <img src="images/collectie/haar-cambio-3.jpg" alt="" width="923" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Cambio</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Polo Ralph Lauren" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Polo Ralph Lauren">
+              <img src="images/collectie/haar-polo-ralph-lauren-1.jpg" alt="" width="956" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Polo Ralph Lauren</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="No Secrets" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — No Secrets">
+              <img src="images/collectie/haar-no-secrets-2.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>No Secrets</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Guess" data-groep="Voor haar">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor haar — Guess">
+              <img src="images/collectie/haar-guess-3.jpg" alt="" width="900" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Guess</figcaption>
+          </figure>
+          </div>
+        </div>
+        <div class="galerij__groep">
+          <h3>Voor hem</h3>
+          <div class="galerij__raster">
+          <figure class="galerij__item" data-merk="Barbour" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Barbour">
+              <img src="images/collectie/hem-barbour-1.jpg" alt="" width="961" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Barbour</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Joop" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Joop">
+              <img src="images/collectie/hem-joop-1.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Joop</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Jott" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Jott">
+              <img src="images/collectie/hem-jott-1.jpg" alt="" width="960" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Jott</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Antwrp" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Antwrp">
+              <img src="images/collectie/hem-antwrp-1.jpg" alt="" width="799" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Antwrp</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="McAlson" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — McAlson">
+              <img src="images/collectie/hem-mcalson-1.jpg" alt="" width="1200" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>McAlson</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="ForAllMankind" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — ForAllMankind">
+              <img src="images/collectie/hem-forallmankind-1.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>ForAllMankind</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Zilton" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Zilton">
+              <img src="images/collectie/hem-zilton-1.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Zilton</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Reset" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Reset">
+              <img src="images/collectie/hem-reset-1.jpg" alt="" width="900" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Reset</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Digel" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Digel">
+              <img src="images/collectie/hem-digel-1.jpg" alt="" width="587" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Digel</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Joop" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Joop">
+              <img src="images/collectie/hem-joop-2.jpg" alt="" width="800" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Joop</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Antwrp" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Antwrp">
+              <img src="images/collectie/hem-antwrp-2.jpg" alt="" width="799" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Antwrp</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Façonnable" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Façonnable">
+              <img src="images/collectie/hem-faconnable-1.jpg" alt="" width="868" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Façonnable</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Profuomo" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Profuomo">
+              <img src="images/collectie/hem-profuomo-1.jpg" alt="" width="1000" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Profuomo</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Fourten" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Fourten">
+              <img src="images/collectie/hem-fourten-1.jpg" alt="" width="928" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Fourten</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Hackett" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Hackett">
+              <img src="images/collectie/hem-hackett-1.jpg" alt="" width="868" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Hackett</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Polo Ralph Lauren" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Polo Ralph Lauren">
+              <img src="images/collectie/hem-polo-ralph-lauren-1.jpg" alt="" width="954" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Polo Ralph Lauren</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Lyle &amp; Scott" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Lyle &amp; Scott">
+              <img src="images/collectie/hem-lyle-scott-1.jpg" alt="" width="960" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Lyle &amp; Scott</figcaption>
+          </figure>
+          <figure class="galerij__item" data-merk="Mason&#x27;s" data-groep="Voor hem">
+            <button class="galerij__knop" type="button" aria-label="Vergroot: Voor hem — Mason&#x27;s">
+              <img src="images/collectie/hem-mason-s-1.jpg" alt="" width="799" height="1200" loading="lazy"
+                decoding="async" />
+            </button>
+            <figcaption>Mason&#x27;s</figcaption>
+          </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lichtbak: vergrote foto uit de galerij -->
+    <dialog class="lichtbak" id="lichtbak" aria-label="Foto uit de collectie">
+      <div class="lichtbak__inhoud">
+        <div class="lichtbak__beeld">
+          <img id="lichtbak-beeld" alt="" />
+        </div>
+        <div class="lichtbak__tekst">
+          <p class="lichtbak__nummer"><span id="lichtbak-nummer">01</span> / <span id="lichtbak-totaal">38</span></p>
+          <h3 class="lichtbak__titel" id="lichtbak-titel"></h3>
+          <p class="lichtbak__groep" id="lichtbak-groep"></p>
+          <div class="lichtbak__nav">
+            <button class="lichtbak__pijl" type="button" data-richting="-1">Vorige</button>
+            <button class="lichtbak__pijl" type="button" data-richting="1">Volgende</button>
+          </div>
+        </div>
+      </div>
+      <button class="lichtbak__sluit" type="button" aria-label="Sluiten" autofocus>Sluiten</button>
+    </dialog>
+
+    <!-- ========== Merken ========== -->
+    <section class="sectie reveal" id="merken" aria-labelledby="merken-titel">
+      <div class="container">
+        <div class="sectie__kop">
+          <h2 id="merken-titel">Merken</h2>
+          <p>Hippe merken gaan hand in hand met de meer klassieke merken.</p>
+        </div>
+      </div>
+      <div class="merkgroep">
+        <div class="container">
+          <h3>Voor haar</h3>
+        </div>
+        <div class="merkband merkband--links">
+          <div class="merkband__spoor">
+            <ul class="merklijst">
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/liu-jo.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Liu Jo</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/guess.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Guess</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/cambio.png" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Cambio</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">No Secrets</span></span>
+                <span class="merk__naam">No Secrets</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/rino-pelle.png" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Rino &amp; Pelle</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">Freebird</span></span>
+                <span class="merk__naam">Freebird</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">Senso</span></span>
+                <span class="merk__naam">Senso</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/forallmankind.png" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">7 For All Mankind</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/jott.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Jott</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">Reset</span></span>
+                <span class="merk__naam">Reset</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/ralph-lauren.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Polo Ralph Lauren</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">Nathan-Baume</span></span>
+                <span class="merk__naam">Nathan-Baume</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">Beaumont</span></span>
+                <span class="merk__naam">Beaumont</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">Hox</span></span>
+                <span class="merk__naam">Hox</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="merkgroep">
+        <div class="container">
+          <h3>Voor hem</h3>
+        </div>
+        <div class="merkband merkband--rechts">
+          <div class="merkband__spoor">
+            <ul class="merklijst">
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/ralph-lauren.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Polo Ralph Lauren</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/barbour.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Barbour</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/joop.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Joop!</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/antwrp.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Antwrp</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/faconnable.png" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Façonnable</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/hackett.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Hackett</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/masons.png" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Mason’s</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/profuomo.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Profuomo</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/lyle-scott.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Lyle &amp; Scott</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/jott.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Jott</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/digel.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Digel</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/zilton.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Zilton</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/forallmankind.png" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">7 For All Mankind</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/mcalson.svg" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">McAlson</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><img src="images/merken/fourten.png" alt="" loading="lazy"
+                    decoding="async" /></span>
+                <span class="merk__naam">Fourten</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">Reset</span></span>
+                <span class="merk__naam">Reset</span>
+              </li>
+              <li class="merk">
+                <span class="merk__logo"><span class="merk__tekst" aria-hidden="true">Hox</span></span>
+                <span class="merk__naam">Hox</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Over Harvey's ========== -->
+    <section class="sectie sectie--linnen reveal" id="over" aria-labelledby="over-titel">
+      <div class="container over">
+        <div class="over__tekst">
+          <h2 id="over-titel">Over Harvey's</h2>
+          <p>
+            Harvey’s is méér dan zomaar een winkel: het is een begrip in de regio. U vindt er
+            stijlvolle mode in een sfeervol en hedendaags kader, en het is er aangenaam en
+            ontspannen shoppen in een familiale sfeer.
+          </p>
+          <p>
+            Door onze persoonlijke service maakt u snel kennis met het uitgebreide merkenpakket.
+            Wekelijks wordt de collectie uitgebreid met de nieuwste mode. Hippe merken gaan hand
+            in hand met de meer klassieke merken: een groot aanbod vrijetijds- en stadskleding
+            voor jong en oud, aangevuld met accessoires zoals schoenen, juwelen, handtassen en
+            ceinturen.
+          </p>
+          <p>
+            Goede service, kwaliteit en professioneel advies komen op de eerste plaats;
+            originaliteit staat centraal.
+          </p>
+          <aside class="kaart-callout" aria-labelledby="kaart-titel">
+            <h3 id="kaart-titel">Klantenkaart</h3>
+            <p>Met uw klantenkaart geniet u van 5% korting.</p>
+          </aside>
+        </div>
+        <div class="carrousel over__carrousel" id="over-carrousel" aria-roledescription="carrousel"
+          aria-label="Foto's van de winkels">
+          <div class="carrousel__spoor" tabindex="0">
+            <figure class="carrousel__slide" aria-label="Foto 1 van 5">
+              <img src="images/winkel/women-1.jpg" alt="Wand met gestapelde truien en hemden in kleur, rek met jeans en een paspop" loading="lazy" decoding="async" />
+              <figcaption>Harvey's Women</figcaption>
+            </figure>
+            <figure class="carrousel__slide" aria-label="Foto 2 van 5">
+              <img src="images/winkel/men-1.jpg" alt="Wand met gestapelde hemden en truien in blauwtinten, rek met hemden" loading="lazy" decoding="async" />
+              <figcaption>Harvey's Men</figcaption>
+            </figure>
+            <figure class="carrousel__slide" aria-label="Foto 3 van 5">
+              <img src="images/winkel/women-2.jpg" alt="Wand met zwarte kleding en handtassen, rek met blouses en een paspop" loading="lazy" decoding="async" />
+              <figcaption>Harvey's Women</figcaption>
+            </figure>
+            <figure class="carrousel__slide" aria-label="Foto 4 van 5">
+              <img src="images/winkel/men-2.jpg" alt="Rekken met boxershorts, sokken, handschoenen en mutsen" loading="lazy" decoding="async" />
+              <figcaption>Harvey's Men</figcaption>
+            </figure>
+            <figure class="carrousel__slide" aria-label="Foto 5 van 5">
+              <img src="images/winkel/men-3.jpg" alt="Blazers en gestapelde hemden" loading="lazy" decoding="async" />
+              <figcaption>Harvey's Men</figcaption>
+            </figure>
+          </div>
+          <div class="carrousel__balk">
+            <p class="carrousel__teller"><span class="carrousel__nu">01</span> / 05</p>
+            <span class="carrousel__voortgang" aria-hidden="true"><i></i></span>
+            <div class="carrousel__knoppen">
+              <button type="button" data-richting="-1" aria-label="Vorige foto">&larr;</button>
+              <button type="button" data-richting="1" aria-label="Volgende foto">&rarr;</button>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <!-- ========== Contact ========== -->
+    <section class="sectie reveal" id="contact" aria-labelledby="contact-titel">
+      <div class="container">
+        <div class="sectie__kop">
+          <h2 id="contact-titel">Contact</h2>
+          <p>Beide winkels vindt u in de Kattestraat in Aalst.</p>
+        </div>
+        <div class="contact">
+          <article class="contact-kaart">
+            <div class="beeld beeld--4x3">
+              <img src="images/winkel-women.jpg" alt="Gevel van Harvey's Women in de Kattestraat" loading="lazy"
+                decoding="async" />
+            </div>
+            <h3>Harvey's Women</h3>
+            <address>
+              <span>Kattestraat 38</span>
+              <span>9300 Aalst</span>
+              <a href="tel:+3253809284">053 80 92 84</a>
+            </address>
+          </article>
+          <article class="contact-kaart">
+            <div class="beeld beeld--4x3">
+              <img src="images/winkel-men.jpg" alt="Gevel van Harvey's Men in de Kattestraat" loading="lazy"
+                decoding="async" />
+            </div>
+            <h3>Harvey's Men</h3>
+            <address>
+              <span>Kattestraat 49</span>
+              <span>9300 Aalst</span>
+              <a href="tel:+3253701455">053 70 14 55</a>
+            </address>
+          </article>
+        </div>
+        <div class="contact__uren">
+          <h3>Openingsuren</h3>
+          <ul>
+            <li>Maandag tot en met zaterdag: doorlopend van 10 tot 18 uur</li>
+            <li>Zondag en feestdagen: gesloten</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Nieuwsbrief ========== -->
+    <section class="sectie sectie--linnen reveal" id="nieuwsbrief" aria-labelledby="nieuwsbrief-titel">
+      <div class="container nieuwsbrief">
+        <div class="nieuwsbrief__tekst">
+          <h2 id="nieuwsbrief-titel">Blijf op de hoogte</h2>
+          <p>
+            Als eerste weten wat er nieuw binnenkomt? Schrijf u in voor onze nieuwsbrief.
+          </p>
+        </div>
+        <form class="nieuwsbrief__form" novalidate>
+          <label>
+            <span class="visually-hidden">E-mailadres</span>
+            <input type="email" name="email" autocomplete="email" required placeholder="Uw e-mailadres" />
+          </label>
+          <button class="knop" type="submit">Inschrijven</button>
+          <p class="nieuwsbrief__bericht" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== Footer ========== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <img class="footer__logo" src="images/harveys-logo-white.png" alt="Harvey's" width="429" height="78" />
+      <div class="footer__meta">
+        <span>Harvey’s Women &amp; Harvey’s Men, Kattestraat, 9300 Aalst</span>
+        <span>BTW BE 0455.889.607</span>
+        <span>*DIT IS EEN MOCKUP, GEEN OFFICIELE WEBSITE</span>
+      </div>
+      <nav class="footer__links" aria-label="Juridisch">
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/galerij.js"></script>
+</body>
+
+</html>
