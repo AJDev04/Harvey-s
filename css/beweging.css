@@ -1,0 +1,276 @@
+/* Beweging: alles wat op scroll of bij het laden in beeld komt.
+   Enkel actief als de bezoeker geen "minder beweging" heeft ingesteld;
+   zonder beweging staat alles gewoon meteen op zijn plaats.
+
+   De secties krijgen .is-visible van js/main.js zodra ze in beeld komen
+   (voor de lijnen); elk tekstblok krijgt .tekst en apart .is-in. */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ---------- Tekst schuift omhoog en wordt zichtbaar ----------
+     js/main.js geeft elk tekstblok onder de hero de klasse .tekst en zet
+     .is-in zodra het in beeld komt. Blokken die samen in beeld komen,
+     krijgen daar een oplopende vertraging bij, zodat ze na elkaar volgen. */
+  .tekst {
+    opacity: 0;
+    transform: translateY(2.5rem);
+    transition:
+      opacity var(--duur-tekst) var(--ease-uit),
+      transform var(--duur-tekst) var(--ease-uit);
+  }
+
+  .tekst.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---------- Lijnen trekken zich van links naar rechts ---------- */
+  .reveal .merkgroep h3,
+  .reveal .galerij__groep h3,
+  .reveal .nieuws-item,
+  .reveal .contact__uren {
+    border-color: transparent;
+    background-image: linear-gradient(var(--lijn), var(--lijn));
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size calc(var(--duur-tekst) * 1.4) var(--ease-uit) 300ms;
+  }
+
+  .reveal .merkgroep h3,
+  .reveal .galerij__groep h3 {
+    background-position: left bottom;
+  }
+
+  .reveal .nieuws-item,
+  .reveal .contact__uren {
+    background-position: left top;
+  }
+
+  .reveal.is-visible .merkgroep h3,
+  .reveal.is-visible .galerij__groep h3,
+  .reveal.is-visible .nieuws-item,
+  .reveal.is-visible .contact__uren {
+    background-size: 100% 1px;
+  }
+
+  /* Het bronzen streepje van de klantenkaart groeit van boven naar onder */
+  .reveal .kaart-callout {
+    border-left-color: transparent;
+    background-image: linear-gradient(var(--brons), var(--brons));
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: 2px 0%;
+    transition:
+      opacity var(--duur-tekst) var(--ease-uit) 300ms,
+      transform var(--duur-tekst) var(--ease-uit) 300ms,
+      background-size var(--duur-tekst) var(--ease-uit) 500ms;
+  }
+
+  .reveal.is-visible .kaart-callout {
+    background-size: 2px 100%;
+  }
+
+  /* ---------- Merken: de banden schuiven traag voorbij ----------
+     js/main.js zet de lijst tweemaal in het spoor en geeft --n (aantal merken)
+     mee; één lijstlengte verschuiven = één lus. Stilstaan bij hover of focus. */
+  .merkband__spoor {
+    animation: merkband calc(var(--n, 12) * var(--merk-tempo)) linear infinite;
+  }
+
+  .merkband--rechts .merkband__spoor {
+    animation-direction: reverse;
+  }
+
+  .no-js .merkband__spoor,
+  .merkband__spoor.is-stil {
+    animation: none;
+  }
+
+  .merkband:hover .merkband__spoor,
+  .merkband:focus-within .merkband__spoor {
+    animation-play-state: paused;
+  }
+
+  @keyframes merkband {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* ---------- Carrousel: vloeiend schuiven ---------- */
+  .carrousel__spoor {
+    scroll-behavior: smooth;
+  }
+
+  /* ---------- Hero bij het laden: de intro van het logo ----------
+     Keyframes bevatten enkel de tussenstanden; de eindstand is de gewone stijl. */
+  .hero__video {
+    animation: hero-video 1800ms var(--ease) both;
+  }
+
+  /* 1. de H verschijnt (links, ter hoogte van het woordmerk); tijdens de veeg en
+     de klim krijgt ze bewegingsonscherpte: blur plus een rek in de bewegingsrichting.
+     Latere animaties vullen enkel vooruit, anders zou hun beginstand de eerdere
+     al vanaf het begin overschrijven. */
+  .hero__icoon-h {
+    animation:
+      hero-h var(--t-h) var(--ease-land) both,
+      hero-h-veeg var(--t-veeg) var(--ease-veeg) var(--t-veeg-start) forwards,
+      hero-h-omhoog var(--t-omhoog) var(--ease-omhoog) var(--t-omhoog-start) forwards;
+  }
+
+  /* 2. het icoon veegt van links naar rechts over het woordmerk,
+     3. en schuift dan omhoog naar zijn plaats in het midden */
+  .hero__icoon {
+    animation:
+      hero-icoon-veeg var(--t-veeg) var(--ease-veeg) var(--t-veeg-start) both,
+      hero-icoon-omhoog var(--t-omhoog) var(--ease-omhoog) var(--t-omhoog-start) forwards;
+  }
+
+  /* het woordmerk wordt vrijgegeven precies waar de H passeert: het spoor */
+  .hero__woordmerk {
+    animation: hero-woordmerk-spoor var(--t-veeg) var(--ease-veeg) var(--t-veeg-start) both;
+  }
+
+  /* 4. de ringen tekenen zichzelf rond de H, bovenaan beginnend (rotate -90 in de svg) */
+  .hero__ring {
+    animation: hero-ring var(--t-ring) var(--ease-ring) var(--t-ring-start) both;
+  }
+
+  .hero__ring--dun {
+    animation-delay: calc(var(--t-ring-start) + 120ms);
+  }
+
+  /* 5. de haarlijn opent uit het midden */
+  .hero__haarlijn {
+    animation: hero-lijn var(--t-lijn) var(--ease-lijn) var(--t-lijn-start) both;
+  }
+
+  /* 6. tagline en adres faden in */
+  .hero__regel,
+  .hero__adres {
+    animation: hero-tekst var(--t-tekst) var(--ease-fade) both;
+  }
+
+  .hero__regel {
+    animation-delay: var(--t-regel-start);
+  }
+
+  .hero__adres {
+    animation-delay: var(--t-adres-start);
+  }
+
+  @keyframes hero-video {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: var(--hero-video-opacity);
+    }
+  }
+
+  @keyframes hero-h {
+    from {
+      opacity: 0;
+      transform: scale(0.82);
+    }
+  }
+
+  /* Het icoon staat in rust boven het woordmerk. Tijdens de veeg staat het ter
+     hoogte van de letters; het hart van de H loopt van de linkerrand van het
+     woordmerk tot voorbij de rechterrand, precies zo ver dat ook de linkerkant
+     van de H de laatste letter gepasseerd is. */
+  @keyframes hero-icoon-veeg {
+    from {
+      transform: translate(calc(var(--hero-wm-breedte) / -2), var(--hero-y-woord));
+    }
+    to {
+      transform: translate(calc(var(--hero-wm-breedte) / 2 + var(--hero-h-links)), var(--hero-y-woord));
+    }
+  }
+
+  @keyframes hero-icoon-omhoog {
+    from {
+      transform: translate(calc(var(--hero-wm-breedte) / 2 + var(--hero-h-links)), var(--hero-y-woord));
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  /* Bewegingsonscherpte op de H: onscherp en uitgerekt op het snelste punt,
+     weer scherp bij het afremmen. Horizontaal tijdens de veeg, verticaal in de klim. */
+  @keyframes hero-h-veeg {
+    from {
+      filter: blur(0);
+      transform: scaleX(1);
+    }
+
+    45% {
+      filter: blur(var(--hero-blur));
+      transform: scaleX(1.07);
+    }
+
+    to {
+      filter: blur(0);
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes hero-h-omhoog {
+    from {
+      filter: blur(0);
+      transform: scaleY(1);
+    }
+
+    35% {
+      filter: blur(calc(var(--hero-blur) * 0.7));
+      transform: scaleY(1.05);
+    }
+
+    to {
+      filter: blur(0);
+      transform: scaleY(1);
+    }
+  }
+
+  /* Zelfde duur en easing als de veeg; het vak van het woordmerk begint --hero-h-links
+     vóór de letters, dus de rand van het spoor valt samen met de linkerkant van de H. */
+  @keyframes hero-woordmerk-spoor {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes hero-ring {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  @keyframes hero-lijn {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes hero-tekst {
+    from {
+      opacity: 0;
+      transform: translateY(0.4rem);
+    }
+  }
+}
+
+/* Zonder beweging: het menu verschijnt meteen, zonder schuiven of vertraging */
+@media (prefers-reduced-motion: reduce) {
+  .nav__lijst,
+  .nav__lijst li,
+  .nav__adres,
+  .nav::before,
+  .nav__toggle-lijn {
+    transition: none !important;
+  }
+}

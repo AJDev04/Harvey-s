@@ -1,0 +1,139 @@
+/* Ontwerptokens — de enige plek met losse waarden. */
+:root {
+  /* Kleur */
+  --kalk: #f5f2ed; /* hoofdachtergrond */
+  --linnen: #e8e1d6; /* tweede vlak, secties die moeten afwijken */
+  --blauw: #39546f; /* logokleur: accent, links, knoppen, footer */
+  --inkt: #232c36; /* tekst: bijna zwart, met de blauwe ondertoon van het logo */
+  --steen: #7f8289; /* secundaire tekst, labels */
+  --brons: #a98252; /* zeldzaam accent, lijnen en details */
+  --zwart: #000; /* vlak achter de hero-video */
+
+  /* Afgeleide kleuren, altijd opgebouwd uit het palet */
+  --lijn: color-mix(in srgb, var(--brons) 35%, var(--linnen));
+  --lijn-zacht: color-mix(in srgb, var(--steen) 25%, var(--kalk));
+  --blauw-donker: color-mix(in srgb, var(--blauw) 80%, var(--inkt));
+  --beeld-vlak: color-mix(in srgb, var(--linnen) 70%, var(--kalk));
+  --kalk-op-inkt: color-mix(in srgb, var(--kalk) 78%, var(--inkt));
+  --kalk-op-blauw: color-mix(in srgb, var(--kalk) 82%, var(--blauw));
+
+  /* Typografie */
+  --font-serif: 'Crimson Text', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-sans: 'Karla', 'Helvetica Neue', Arial, sans-serif;
+
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9375rem;
+  --fs-md: 1.0625rem;
+  --fs-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --fs-xl: clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);
+  --fs-2xl: clamp(2.125rem, 1.6rem + 2.4vw, 3.5rem);
+  --fs-3xl: clamp(2.5rem, 1.8rem + 3.4vw, 4.5rem);
+
+  --lh-tight: 1.1;
+  --lh-snug: 1.3;
+  --lh-body: 1.65;
+
+  --tracking-wide: 0.04em;
+
+  /* Ruimte */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  --sectie-y: clamp(var(--space-8), 8vw, var(--space-10));
+  --gutter: clamp(var(--space-4), 4vw, var(--space-7));
+
+  /* Vorm */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  --maxw: 74rem;
+  --maxw-smal: 44rem;
+  --measure: 62ch;
+
+  --header-h: 4rem;
+
+  /* Hero-video: lager = donkerder, het zwarte vlak eronder schemert door */
+  --hero-video-opacity: 0.55;
+
+  /* Hero-logo. Elk teken van het woordmerk heeft een viewBox van --wm-vak hoog
+     (zie tools/splits-woordmerk.py); de letters zelf zijn --wm-letters hoog. */
+  --wm-vak: 78;
+  --wm-letters: 55.43;
+  --wm-breedte: 317.44; /* viewBox-breedte van images/harveys-logo.svg */
+  --hero-icoon: clamp(4.5rem, 16vw, 7.5rem);
+  --hero-wm-h: clamp(3rem, 14vw, 5.5rem);
+  --hero-wm-eenheid: calc(var(--hero-wm-h) / var(--wm-vak));
+  --hero-wm-breedte: calc(var(--wm-breedte) * var(--hero-wm-eenheid));
+  --hero-logo-gap: var(--space-5);
+  /* afstand van het hart van het icoon tot de linkerkant van de H erin (viewBox: 38.95 - 17.3) */
+  --hero-h-links: calc(var(--hero-icoon) * 21.65 / 78);
+  /* afstand van het rustpunt van het icoon tot het hart van de letters eronder */
+  --hero-y-woord: calc(
+    var(--hero-icoon) * 77.67 / 78 / 2 + var(--hero-logo-gap) + var(--wm-letters) / 2 * var(--hero-wm-eenheid)
+  );
+
+  /* Galerij: minimumbreedte van één foto (4:5) en de ruimte ertussen */
+  --galerij-item-w: 9.5rem;
+  --galerij-gap: var(--space-4);
+
+  /* Merken: breedte van één merk in de band, ruimte ertussen, hoogte van het logovak,
+     en hoe lang één merk erover doet om voorbij te schuiven */
+  --merk-w: 9rem;
+  --merk-gap: var(--space-6);
+  --merk-logo-h: 3rem;
+  --merk-tempo: 3200ms;
+
+  /* Beweging */
+  --duur-snel: 160ms;
+  --duur-reveal: 600ms;
+  --duur-tekst: 1300ms; /* tekstblokken die opkomen, lijnen die zich trekken */
+  --stap: 60ms; /* vertraging tussen opeenvolgende woorden of kaarten */
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --ease-uit: cubic-bezier(0.16, 1, 0.3, 1); /* snel vertrekken, zacht landen */
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0); /* zacht vertrekken, snel weg (sluiten) */
+  --duur-menu: 650ms; /* mobiel menu opent */
+  --duur-menu-dicht: 380ms; /* en sluit vlotter */
+
+  /* Intro van het hero-logo, één keer bij het laden (± 2,6 s):
+     de H verschijnt links, veegt naar rechts en laat het woordmerk als spoor
+     achter, schuift dan omhoog naar het midden, waarna de ring zich eromheen
+     tekent en de lijn, tagline en adres volgen. */
+  --t-h: 250ms; /* de H verschijnt */
+  --t-veeg-start: 250ms;
+  --t-veeg: 700ms; /* de H veegt over de breedte van het woordmerk */
+  --t-omhoog-start: 1000ms;
+  --t-omhoog: 500ms; /* de H schuift omhoog naar het midden */
+  --t-ring-start: 1400ms;
+  --t-ring: 1000ms; /* de ring houdt zijn eigen tempo */
+  --t-lijn-start: 1950ms;
+  --t-lijn: 500ms;
+  --t-regel-start: 2100ms;
+  --t-adres-start: 2250ms;
+  --t-tekst: 500ms;
+  --ease-land: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-veeg: cubic-bezier(0.65, 0, 0.35, 1); /* rustig aanzetten, rustig afremmen */
+  --ease-omhoog: cubic-bezier(0.34, 1.02, 0.4, 1); /* zacht landen, een zweem van nazakken */
+  --hero-blur: 1px; /* bewegingsonscherpte op de H, op het snelste punt; subtiel */
+  --ease-ring: cubic-bezier(0.65, 0.05, 0.36, 1);
+  --ease-lijn: cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-fade: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Telefoon: kleinere foto's in de galerij (drie naast elkaar) en smallere merkvakken */
+@media (max-width: 47.99em) {
+  :root {
+    --galerij-item-w: 6.25rem;
+    --galerij-gap: var(--space-3);
+    --merk-w: 7rem;
+    --merk-gap: var(--space-5);
+  }
+}

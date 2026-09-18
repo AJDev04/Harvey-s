@@ -1,0 +1,186 @@
+/* Pagina-opbouw: containers, secties en rasters. Geen kleuren of decoratie hier. */
+.container {
+  width: min(100% - 2 * var(--gutter), var(--maxw));
+  margin-inline: auto;
+}
+
+.container--smal {
+  max-width: var(--maxw-smal);
+}
+
+.sectie {
+  padding-block: var(--sectie-y);
+}
+
+.sectie--linnen {
+  background: var(--linnen);
+}
+
+.sectie__kop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-7);
+}
+
+.sectie__kop p {
+  color: var(--steen);
+  font-size: var(--fs-lg);
+  line-height: var(--lh-snug);
+}
+
+/* Header */
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--header-h);
+}
+
+/* Hero: volle breedte. De hoogte volgt de 16:9-verhouding van de video, zodat
+   die niet bijgesneden wordt; nooit hoger dan het scherm onder de header. */
+.hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: min(56.25vw, 100svh - var(--header-h));
+  min-height: 24rem;
+  padding: var(--space-6) var(--gutter);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Over: tekst links, beeld rechts */
+.over {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-7);
+  align-items: center;
+}
+
+@media (min-width: 56em) {
+  .over {
+    grid-template-columns: 4fr 6fr;
+    gap: var(--space-8);
+  }
+}
+
+/* De carrousel loopt rechts door tot aan de rand van het scherm: de rechter
+   containermarge wordt teruggenomen */
+.over__carrousel {
+  margin-right: calc(-1 * max(var(--gutter), (100vw - var(--maxw)) / 2));
+}
+
+/* Merken: twee kolommen */
+/* Merken: twee banden onder elkaar, over de volle breedte */
+.merkgroep + .merkgroep {
+  margin-top: var(--space-7);
+}
+
+.merkband {
+  overflow: hidden;
+  padding-block: var(--space-2);
+}
+
+.merkband__spoor {
+  display: flex;
+  width: max-content;
+}
+
+.merklijst {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--merk-gap);
+  padding-inline: calc(var(--merk-gap) / 2);
+}
+
+.merk {
+  flex: 0 0 var(--merk-w);
+}
+
+/* Zonder beweging (of zonder JavaScript) loopt de lijst gewoon om in een raster */
+.merkband__spoor.is-stil,
+.no-js .merkband__spoor {
+  width: auto;
+}
+
+.merkband__spoor.is-stil .merklijst,
+.no-js .merkband__spoor .merklijst {
+  flex-wrap: wrap;
+  row-gap: var(--space-5);
+  width: min(100% - 2 * var(--gutter), var(--maxw));
+  margin-inline: auto;
+}
+
+/* Op een telefoon is 16:9 te laag voor het logo: dan vult de hero het grootste
+   deel van het scherm */
+@media (max-width: 47.99em) {
+  .hero {
+    height: calc(78svh - var(--header-h));
+    min-height: 26rem;
+  }
+}
+
+/* Collectie: eerst haar, dan hem; elk een raster van staande foto's */
+.galerij {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.galerij__raster {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--galerij-item-w), 1fr));
+  gap: var(--space-5) var(--galerij-gap);
+}
+
+/* Nieuws: één kolom; items volgen elkaar op met een lijn ertussen */
+.nieuws {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* Contact: twee winkels, daaronder openingsuren */
+.contact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 48em) {
+  .contact {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-7);
+  }
+}
+
+.contact__uren {
+  margin-top: var(--space-7);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--lijn);
+}
+
+/* Nieuwsbrief + footer */
+.nieuwsbrief {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+@media (min-width: 56em) {
+  .nieuwsbrief {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-9);
+  }
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  padding-block: var(--space-6);
+}
