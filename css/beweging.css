@@ -23,16 +23,67 @@
     transform: none;
   }
 
+  /* ---------- Titels: de letters komen één voor één uit hun woord omhoog ----------
+     js/main.js (setupKoppen) splitst elke .kop in woorden en letters en zet
+     .is-in zodra de titel in beeld komt; --i is de plaats van de letter. */
+  .kop.is-gesplitst .kop__letter {
+    transform: translateY(110%) rotate(6deg);
+    transform-origin: 0 100%;
+    transition: transform var(--duur-kop) var(--ease-uit);
+    transition-delay: calc(var(--i, 0) * var(--stap-letter));
+  }
+
+  .kop.is-gesplitst.is-in .kop__letter {
+    transform: none;
+  }
+
+  /* ---------- Statement: de woorden lichten op terwijl je scrolt ----------
+     js/main.js (setupStatement) zet per woord --aan (0 tot 1). */
+  .statement.is-gesplitst .statement__woord {
+    opacity: calc(0.15 + 0.85 * var(--aan, 0));
+    transition: opacity 120ms linear;
+  }
+
+  /* ---------- Beelden: openen van onder naar boven en zoomen uit ---------- */
+  .reveal .beeld--onthul {
+    clip-path: inset(100% 0 0 0 round var(--radius-md));
+    transition: clip-path calc(var(--duur-tekst) * 1.2) var(--ease-uit) 150ms;
+  }
+
+  .reveal .beeld--onthul img {
+    transform: scale(1.25);
+    transition: transform calc(var(--duur-tekst) * 1.6) var(--ease-uit) 150ms;
+  }
+
+  .reveal.is-visible .beeld--onthul {
+    clip-path: inset(0 0 0 0 round var(--radius-md));
+  }
+
+  .reveal.is-visible .beeld--onthul img {
+    transform: none;
+  }
+
+  /* daarna weer de gewone hover-zoom */
+  .reveal.is-visible .nieuws-item:hover .beeld--onthul img {
+    transform: scale(1.04);
+    transition-delay: 0s;
+    transition-duration: var(--duur-beeld);
+  }
+
   /* ---------- Lijnen trekken zich van links naar rechts ---------- */
   .reveal .merkgroep h3,
   .reveal .galerij__groep h3,
-  .reveal .nieuws-item,
-  .reveal .contact__uren {
+  .reveal .contact__uren,
+  .reveal .klantenkaart {
     border-color: transparent;
-    background-image: linear-gradient(var(--lijn), var(--lijn));
+    background-image: linear-gradient(var(--lijn-sterk), var(--lijn-sterk));
     background-repeat: no-repeat;
     background-size: 0% 1px;
     transition: background-size calc(var(--duur-tekst) * 1.4) var(--ease-uit) 300ms;
+  }
+
+  .reveal .merkgroep h3 {
+    background-image: linear-gradient(var(--lijn-op-oranje), var(--lijn-op-oranje));
   }
 
   .reveal .merkgroep h3,
@@ -40,33 +91,16 @@
     background-position: left bottom;
   }
 
-  .reveal .nieuws-item,
-  .reveal .contact__uren {
+  .reveal .contact__uren,
+  .reveal .klantenkaart {
     background-position: left top;
   }
 
   .reveal.is-visible .merkgroep h3,
   .reveal.is-visible .galerij__groep h3,
-  .reveal.is-visible .nieuws-item,
-  .reveal.is-visible .contact__uren {
+  .reveal.is-visible .contact__uren,
+  .reveal.is-visible .klantenkaart {
     background-size: 100% 1px;
-  }
-
-  /* Het bronzen streepje van de klantenkaart groeit van boven naar onder */
-  .reveal .kaart-callout {
-    border-left-color: transparent;
-    background-image: linear-gradient(var(--brons), var(--brons));
-    background-repeat: no-repeat;
-    background-position: left top;
-    background-size: 2px 0%;
-    transition:
-      opacity var(--duur-tekst) var(--ease-uit) 300ms,
-      transform var(--duur-tekst) var(--ease-uit) 300ms,
-      background-size var(--duur-tekst) var(--ease-uit) 500ms;
-  }
-
-  .reveal.is-visible .kaart-callout {
-    background-size: 2px 100%;
   }
 
   /* ---------- Merken: de banden schuiven traag voorbij ----------
@@ -101,176 +135,121 @@
     scroll-behavior: smooth;
   }
 
+  /* ---------- Open: de stip ademt ---------- */
+  .status.is-open .status__stip::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--succes);
+    animation: stip 2s var(--ease) infinite;
+  }
+
+  @keyframes stip {
+    to {
+      opacity: 0;
+      transform: scale(3);
+    }
+  }
+
   /* ---------- Hero bij het laden: de intro van het logo ----------
-     Keyframes bevatten enkel de tussenstanden; de eindstand is de gewone stijl. */
-  .hero__video {
-    animation: hero-video 1800ms var(--ease) both;
+     Keyframes bevatten enkel de beginstand; de eindstand is de gewone stijl. */
+
+  /* 1. de letters van de naam komen één voor één van onder op uit hun masker */
+  .hero__logo .teken {
+    animation: logo-teken var(--t-letter) var(--ease-uit) both;
+    animation-delay: calc(var(--t-letter-start) + var(--i, 0) * var(--t-letter-stap));
   }
 
-  /* 1. de H verschijnt (links, ter hoogte van het woordmerk); tijdens de veeg en
-     de klim krijgt ze bewegingsonscherpte: blur plus een rek in de bewegingsrichting.
-     Latere animaties vullen enkel vooruit, anders zou hun beginstand de eerdere
-     al vanaf het begin overschrijven. */
-  .hero__icoon-h {
-    animation:
-      hero-h var(--t-h) var(--ease-land) both,
-      hero-h-veeg var(--t-veeg) var(--ease-veeg) var(--t-veeg-start) forwards,
-      hero-h-omhoog var(--t-omhoog) var(--ease-omhoog) var(--t-omhoog-start) forwards;
+  /* 2. de slogan loopt open vanuit het midden: elk teken schuift van --dx naar
+     zijn plaats (de afstand staat in het pad, gezet door tools/maak-logo.py) */
+  .hero__logo .slogan-teken {
+    animation: logo-slogan var(--t-slogan) var(--ease-uit) var(--t-slogan-start) both;
   }
 
-  /* 2. het icoon veegt van links naar rechts over het woordmerk,
-     3. en schuift dan omhoog naar zijn plaats in het midden */
-  .hero__icoon {
-    animation:
-      hero-icoon-veeg var(--t-veeg) var(--ease-veeg) var(--t-veeg-start) both,
-      hero-icoon-omhoog var(--t-omhoog) var(--ease-omhoog) var(--t-omhoog-start) forwards;
+  /* 3. het videovenster komt omhoog, 4. de hoeken faden in */
+  .hero__venster {
+    animation: hero-venster var(--t-venster) var(--ease-uit) var(--t-venster-start) both;
   }
 
-  /* het woordmerk wordt vrijgegeven precies waar de H passeert: het spoor */
-  .hero__woordmerk {
-    animation: hero-woordmerk-spoor var(--t-veeg) var(--ease-veeg) var(--t-veeg-start) both;
+  .hero__hoek {
+    animation: hero-hoek var(--t-hoek) var(--ease-uit) var(--t-hoek-start) both;
   }
 
-  /* 4. de ringen tekenen zichzelf rond de H, bovenaan beginnend (rotate -90 in de svg) */
-  .hero__ring {
-    animation: hero-ring var(--t-ring) var(--ease-ring) var(--t-ring-start) both;
+  .hero__hoek + .hero__hoek {
+    animation-delay: calc(var(--t-hoek-start) + 120ms);
   }
 
-  .hero__ring--dun {
-    animation-delay: calc(var(--t-ring-start) + 120ms);
+  /* de korrel trilt zachtjes, zoals op film */
+  .hero__korrel {
+    animation: korrel 900ms steps(5) infinite;
   }
 
-  /* 5. de haarlijn opent uit het midden */
-  .hero__haarlijn {
-    animation: hero-lijn var(--t-lijn) var(--ease-lijn) var(--t-lijn-start) both;
+  @keyframes logo-teken {
+    from {
+      transform: translateY(115%);
+    }
   }
 
-  /* 6. tagline en adres faden in */
-  .hero__regel,
-  .hero__adres {
-    animation: hero-tekst var(--t-tekst) var(--ease-fade) both;
-  }
-
-  .hero__regel {
-    animation-delay: var(--t-regel-start);
-  }
-
-  .hero__adres {
-    animation-delay: var(--t-adres-start);
-  }
-
-  @keyframes hero-video {
+  @keyframes logo-slogan {
     from {
       opacity: 0;
-    }
-    to {
-      opacity: var(--hero-video-opacity);
+      transform: translateX(calc(var(--dx, 0) * 1px));
     }
   }
 
-  @keyframes hero-h {
+  @keyframes hero-venster {
     from {
       opacity: 0;
-      transform: scale(0.82);
+      transform: translateY(3rem);
     }
   }
 
-  /* Het icoon staat in rust boven het woordmerk. Tijdens de veeg staat het ter
-     hoogte van de letters; het hart van de H loopt van de linkerrand van het
-     woordmerk tot voorbij de rechterrand, precies zo ver dat ook de linkerkant
-     van de H de laatste letter gepasseerd is. */
-  @keyframes hero-icoon-veeg {
-    from {
-      transform: translate(calc(var(--hero-wm-breedte) / -2), var(--hero-y-woord));
-    }
-    to {
-      transform: translate(calc(var(--hero-wm-breedte) / 2 + var(--hero-h-links)), var(--hero-y-woord));
-    }
-  }
-
-  @keyframes hero-icoon-omhoog {
-    from {
-      transform: translate(calc(var(--hero-wm-breedte) / 2 + var(--hero-h-links)), var(--hero-y-woord));
-    }
-    to {
-      transform: none;
-    }
-  }
-
-  /* Bewegingsonscherpte op de H: onscherp en uitgerekt op het snelste punt,
-     weer scherp bij het afremmen. Horizontaal tijdens de veeg, verticaal in de klim. */
-  @keyframes hero-h-veeg {
-    from {
-      filter: blur(0);
-      transform: scaleX(1);
-    }
-
-    45% {
-      filter: blur(var(--hero-blur));
-      transform: scaleX(1.07);
-    }
-
-    to {
-      filter: blur(0);
-      transform: scaleX(1);
-    }
-  }
-
-  @keyframes hero-h-omhoog {
-    from {
-      filter: blur(0);
-      transform: scaleY(1);
-    }
-
-    35% {
-      filter: blur(calc(var(--hero-blur) * 0.7));
-      transform: scaleY(1.05);
-    }
-
-    to {
-      filter: blur(0);
-      transform: scaleY(1);
-    }
-  }
-
-  /* Zelfde duur en easing als de veeg; het vak van het woordmerk begint --hero-h-links
-     vóór de letters, dus de rand van het spoor valt samen met de linkerkant van de H. */
-  @keyframes hero-woordmerk-spoor {
-    from {
-      clip-path: inset(0 100% 0 0);
-    }
-    to {
-      clip-path: inset(0 0 0 0);
-    }
-  }
-
-  @keyframes hero-ring {
-    from {
-      stroke-dashoffset: 1;
-    }
-  }
-
-  @keyframes hero-lijn {
-    from {
-      transform: scaleX(0);
-    }
-  }
-
-  @keyframes hero-tekst {
+  @keyframes hero-hoek {
     from {
       opacity: 0;
-      transform: translateY(0.4rem);
+      transform: translateY(0.75rem);
     }
+  }
+
+  @keyframes korrel {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-1rem, 0.5rem); }
+    40% { transform: translate(0.75rem, -1rem); }
+    60% { transform: translate(-0.5rem, 1rem); }
+    80% { transform: translate(1rem, 0.25rem); }
   }
 }
 
-/* Zonder beweging: het menu verschijnt meteen, zonder schuiven of vertraging */
+/* Zonder beweging: geen hero die blijft staan, het venster blijft klein; het menu
+   verschijnt meteen, zonder schuiven of vertraging; de band staat stil */
 @media (prefers-reduced-motion: reduce) {
-  .nav__lijst,
-  .nav__lijst li,
-  .nav__adres,
-  .nav::before,
-  .nav__toggle-lijn {
+  .hero {
+    height: auto;
+  }
+
+  .hero__plak {
+    position: relative;
+  }
+
+  .band__rij {
+    transform: none !important;
+  }
+
+  .nav__paneel,
+  .nav__link,
+  .nav__voet,
+  .nav__toggle-lijnen i,
+  .nav__toggle-tekst span {
     transition: none !important;
   }
+}
+
+/* Zonder JavaScript: geen scroll die het venster opent, dus ook geen lange hero */
+.no-js .hero {
+  height: auto;
+}
+
+.no-js .hero__plak {
+  position: relative;
 }

@@ -9,27 +9,41 @@
 }
 
 .sectie {
+  position: relative;
   padding-block: var(--sectie-y);
 }
 
-.sectie--linnen {
-  background: var(--linnen);
-}
-
+/* Kop van een sectie: nummer, titel en intro. Op groter scherm staat het nummer
+   naast de titel en de intro rechts ervan, op één lijn. */
 .sectie__kop {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  column-gap: var(--space-4);
+  row-gap: var(--space-4);
   margin-bottom: var(--space-7);
 }
 
-.sectie__kop p {
-  color: var(--steen);
-  font-size: var(--fs-lg);
-  line-height: var(--lh-snug);
+.sectie__kop > p {
+  grid-column: 1 / -1;
 }
 
-/* Header */
+@media (min-width: 56em) {
+  .sectie__kop {
+    grid-template-columns: auto auto 1fr;
+    align-items: end;
+    column-gap: var(--space-5);
+    margin-bottom: var(--space-8);
+  }
+
+  .sectie__kop > p {
+    grid-column: 3;
+    justify-self: end;
+    max-width: 26rem;
+  }
+}
+
+/* Header: vast bovenaan, over de hero heen */
 .header__inner {
   display: flex;
   align-items: center;
@@ -38,41 +52,88 @@
   min-height: var(--header-h);
 }
 
-/* Hero: volle breedte. De hoogte volgt de 16:9-verhouding van de video, zodat
-   die niet bijgesneden wordt; nooit hoger dan het scherm onder de header. */
+/* Tekstpagina's hebben geen hero: de inhoud begint onder de vaste header */
+.pagina-tekst main {
+  padding-top: var(--header-h);
+}
+
+/* Hero: de sectie is langer dan het scherm; het plakkende deel blijft staan
+   terwijl het videovenster opengaat (zie components.css en js/main.js) */
 .hero {
   position: relative;
-  display: grid;
-  place-items: center;
-  height: min(56.25vw, 100svh - var(--header-h));
-  min-height: 24rem;
-  padding: var(--space-6) var(--gutter);
+  height: var(--hero-reis);
+}
+
+.hero__plak {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 32rem;
   overflow: hidden;
   isolation: isolate;
 }
 
-/* Over: tekst links, beeld rechts */
-.over {
+.hero__inhoud {
+  position: absolute;
+  inset: 0 var(--gutter);
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-7);
-  align-items: center;
+  place-items: center;
+  padding-bottom: 14svh; /* het logo staat iets boven het midden, zoals in de huisstijl */
+  pointer-events: none;
 }
 
-@media (min-width: 56em) {
-  .over {
-    grid-template-columns: 4fr 6fr;
-    gap: var(--space-8);
+.hero__voet {
+  position: absolute;
+  inset: auto var(--gutter) var(--space-5);
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: var(--space-4);
+}
+
+@media (max-width: 47.99em) {
+  .hero__voet {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    text-align: center;
   }
 }
 
-/* De carrousel loopt rechts door tot aan de rand van het scherm: de rechter
-   containermarge wordt teruggenomen */
-.over__carrousel {
-  margin-right: calc(-1 * max(var(--gutter), (100vw - var(--maxw)) / 2));
+/* Nieuws: beeld en tekst naast elkaar */
+.nieuws {
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
-/* Merken: twee kolommen */
+/* Collectie: bento. Elke zevende foto is dubbel zo groot; de rest schuift eromheen. */
+.galerij {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.galerij__raster {
+  display: grid;
+  grid-template-columns: repeat(var(--kolommen), minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: var(--galerij-gap);
+}
+
+@media (min-width: 48em) {
+  .galerij__item:nth-child(7n + 1) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+/* Telefoon: twee kolommen, elke vijfde foto over de volle breedte */
+@media (max-width: 47.99em) {
+  .galerij__item:nth-child(5n + 1) {
+    grid-column: span 2;
+  }
+}
+
 /* Merken: twee banden onder elkaar, over de volle breedte */
 .merkgroep + .merkgroep {
   margin-top: var(--space-7);
@@ -95,8 +156,13 @@
   padding-inline: calc(var(--merk-gap) / 2);
 }
 
+/* Een vaste breedte, niet enkel een flex-basis: Safari rekent de breedte van de lijst
+   anders uit de logo's zelf (svg's zonder eigen maat) en dan komt de kopie van de
+   lijst bovenop de eerste te liggen */
 .merk {
-  flex: 0 0 var(--merk-w);
+  flex: none;
+  width: var(--merk-w);
+  min-width: 0;
 }
 
 /* Zonder beweging (of zonder JavaScript) loopt de lijst gewoon om in een raster */
@@ -113,39 +179,33 @@
   margin-inline: auto;
 }
 
-/* Op een telefoon is 16:9 te laag voor het logo: dan vult de hero het grootste
-   deel van het scherm */
-@media (max-width: 47.99em) {
-  .hero {
-    height: calc(78svh - var(--header-h));
-    min-height: 26rem;
+/* Over: statement over de volle breedte, daaronder tekst links en foto's rechts */
+.over {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-7);
+  align-items: start;
+  margin-top: var(--space-8);
+}
+
+@media (min-width: 56em) {
+  .over {
+    grid-template-columns: 4fr 6fr;
+    gap: var(--space-8);
   }
 }
 
-/* Collectie: eerst haar, dan hem; elk een raster van staande foto's */
-.galerij {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-}
-
-.galerij__raster {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--galerij-item-w), 1fr));
-  gap: var(--space-5) var(--galerij-gap);
-}
-
-/* Nieuws: één kolom; items volgen elkaar op met een lijn ertussen */
-.nieuws {
-  display: grid;
-  grid-template-columns: 1fr;
+/* De carrousel loopt rechts door tot aan de rand van het scherm: de rechter
+   containermarge wordt teruggenomen */
+.over__carrousel {
+  margin-right: calc(-1 * max(var(--gutter), (100vw - var(--maxw)) / 2));
 }
 
 /* Contact: twee winkels, daaronder openingsuren */
 .contact {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-6);
+  gap: var(--space-8);
 }
 
 @media (min-width: 48em) {
@@ -156,31 +216,49 @@
 }
 
 .contact__uren {
-  margin-top: var(--space-7);
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
   padding-top: var(--space-6);
-  border-top: 1px solid var(--lijn);
+  border-top: 1px solid var(--lijn-sterk);
 }
 
-/* Nieuwsbrief + footer */
+@media (min-width: 48em) {
+  .contact__uren {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-7);
+  }
+}
+
+/* Nieuwsbrief */
 .nieuwsbrief {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-6);
-  align-items: center;
+  gap: var(--space-7);
+  align-items: end;
 }
 
 @media (min-width: 56em) {
   .nieuwsbrief {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 6fr 5fr;
     gap: var(--space-9);
   }
 }
 
-.footer__inner {
+/* Footer */
+.footer__boven,
+.footer__onder {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: space-between;
-  gap: var(--space-4) var(--space-6);
+  gap: var(--space-5) var(--space-7);
+}
+
+.footer__boven {
+  padding-block: var(--space-8) var(--space-7);
+}
+
+.footer__onder {
+  align-items: center;
   padding-block: var(--space-6);
 }

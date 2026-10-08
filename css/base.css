@@ -19,29 +19,37 @@ body {
   font-size: var(--fs-md);
   line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-serif);
   font-weight: 400;
-  line-height: var(--lh-tight);
   margin: 0;
   text-wrap: balance;
 }
 
-h1 {
-  font-size: var(--fs-3xl);
+/* Titels van secties: Michroma, in kapitalen, breed */
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
 }
 
-h2 {
-  font-size: var(--fs-2xl);
+/* Kleinere titels: de serif, de zachte stem van het merk */
+h3,
+h4 {
+  font-family: var(--font-serif);
+  line-height: var(--lh-snug);
 }
 
 h3 {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-h3);
 }
 
 h4 {
@@ -57,16 +65,24 @@ p + p {
   margin-top: var(--space-4);
 }
 
+em {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
 a {
-  color: var(--blauw);
+  color: var(--oranje-diep);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
-  transition: color var(--duur-snel) var(--ease);
+  text-underline-offset: 0.2em;
+  transition:
+    color var(--duur-snel) var(--ease),
+    text-decoration-thickness var(--duur-snel) var(--ease);
 }
 
 a:hover {
-  color: var(--blauw-donker);
+  color: var(--inkt);
+  text-decoration-thickness: 2px;
 }
 
 ul,
@@ -76,9 +92,14 @@ ol {
   list-style: none;
 }
 
-img {
+img,
+svg,
+video {
   display: block;
   max-width: 100%;
+}
+
+img {
   height: auto;
 }
 
@@ -100,15 +121,19 @@ input {
   color: inherit;
 }
 
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Zichtbare focus voor toetsenbordgebruikers, ongeacht element */
 :focus-visible {
-  outline: 2px solid var(--blauw);
+  outline: 2px solid var(--oranje-diep);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
 
 ::selection {
-  background: var(--linnen);
+  background: var(--oranje);
   color: var(--inkt);
 }
 
@@ -138,6 +163,15 @@ input {
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Label: Michroma in kapitalen, ruim gespatieerd */
+.label {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  line-height: 1.4;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,7 +1,10 @@
-/* Galerij in de sectie Collectie: klik op een foto opent de lichtbak, waarin
-   het beeld vanuit zijn plek in het raster naar het midden groeit. Zonder
-   JavaScript staan de foto's gewoon in het raster; zonder beweging
-   (prefers-reduced-motion) vervalt het groeien. */
+/* Galerij in de sectie Collectie.
+   - "Voor haar" en "Voor hem" worden twee tabbladen met een oranje pil die meeschuift.
+   - Met een muis volgt een oranje bol met "Bekijk" de cursor boven de foto's.
+   - Klik op een foto opent de lichtbak, waarin het beeld vanuit zijn plek in het
+     raster naar het midden groeit; bladeren gaat binnen dezelfde groep.
+   Zonder JavaScript staan beide groepen gewoon onder elkaar in het raster; zonder
+   beweging (prefers-reduced-motion) vervallen het groeien en de bol. */
 
 (function () {
   'use strict';
@@ -10,28 +13,162 @@
   var lichtbak = document.getElementById('lichtbak');
   if (!galerij || !lichtbak) return;
 
-  var items = Array.prototype.slice.call(galerij.querySelectorAll('.galerij__item'));
-  if (!items.length) return;
+  var groepen = Array.prototype.slice.call(galerij.querySelectorAll('.galerij__groep'));
+  if (!groepen.length) return;
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var muis = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   var ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+  function itemsVan(groep) {
+    return Array.prototype.slice.call(groep.querySelectorAll('.galerij__item'));
+  }
+
+  /* ---------- Tabbladen ---------- */
+  function maakTabs() {
+    if (groepen.length < 2) return;
+
+    var tabs = document.createElement('div');
+    tabs.className = 'tabs';
+    tabs.setAttribute('role', 'tablist');
+    tabs.setAttribute('aria-label', 'Collectie');
+
+    var glijder = document.createElement('span');
+    glijder.className = 'tabs__glijder';
+    glijder.setAttribute('aria-hidden', 'true');
+    tabs.appendChild(glijder);
+
+    var knoppen = groepen.map(function (groep, i) {
+      var titel = groep.querySelector('h3');
+      groep.id = groep.id || 'galerij-groep-' + (i + 1);
+      var knop = document.createElement('button');
+      knop.type = 'button';
+      knop.className = 'tabs__knop';
+      knop.id = groep.id + '-tab';
+      knop.setAttribute('role', 'tab');
+      knop.setAttribute('aria-controls', groep.id);
+      knop.appendChild(document.createTextNode(titel ? titel.textContent : 'Groep ' + (i + 1)));
+      var aantal = document.createElement('span');
+      aantal.className = 'tabs__aantal';
+      aantal.textContent = itemsVan(groep).length;
+      knop.appendChild(aantal);
+      groep.setAttribute('role', 'tabpanel');
+      groep.setAttribute('aria-labelledby', knop.id);
+      tabs.appendChild(knop);
+      return knop;
+    });
+
+    galerij.insertBefore(tabs, groepen[0]);
+    galerij.classList.add('is-tabs');
+
+    var actief = 0;
+
+    // de pil schuift naar de gekozen knop en neemt haar breedte aan
+    function schuif() {
+      var knop = knoppen[actief];
+      tabs.style.setProperty('--x', knop.offsetLeft + 'px');
+      tabs.style.setProperty('--w', knop.offsetWidth + 'px');
+    }
+
+    function kies(i, metFocus) {
+      var anders = i !== actief;
+      actief = i;
+      knoppen.forEach(function (knop, j) {
+        var aan = j === i;
+        knop.setAttribute('aria-selected', String(aan));
+        knop.tabIndex = aan ? 0 : -1;
+        groepen[j].hidden = !aan;
+      });
+      if (metFocus) knoppen[i].focus();
+      schuif();
+      if (anders && !reduced) {
+        groepen[i].animate(
+          [{ opacity: 0, transform: 'translateY(1.5rem)' }, { opacity: 1, transform: 'none' }],
+          { duration: 700, easing: ease }
+        );
+      }
+    }
+
+    knoppen.forEach(function (knop, i) {
+      knop.addEventListener('click', function () {
+        kies(i);
+      });
+    });
+
+    // Pijltjes, Home en End wisselen van tabblad (zoals bij elk tablist)
+    tabs.addEventListener('keydown', function (e) {
+      var n = knoppen.length;
+      var doel = { ArrowRight: actief + 1, ArrowLeft: actief - 1, Home: 0, End: n - 1 }[e.key];
+      if (doel === undefined) return;
+      e.preventDefault();
+      kies((doel + n) % n, true);
+    });
+
+    window.addEventListener('resize', schuif);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(schuif);
+    kies(0);
+  }
+
+  /* ---------- Bol met "Bekijk" ---------- */
+  var cursor = document.querySelector('.galerij__cursor');
+
+  function verbergCursor() {
+    if (cursor) cursor.classList.remove('is-zichtbaar');
+  }
+
+  function maakCursor() {
+    if (!cursor || reduced || !muis) return;
+    galerij.classList.add('heeft-cursor');
+    var doelX = 0;
+    var doelY = 0;
+    var x = 0;
+    var y = 0;
+    var loopt = false;
+
+    // de bol loopt de muis zacht achterna
+    function stap() {
+      x += (doelX - x) * 0.22;
+      y += (doelY - y) * 0.22;
+      cursor.style.transform = 'translate3d(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px, 0)';
+      if (Math.abs(doelX - x) > 0.3 || Math.abs(doelY - y) > 0.3) requestAnimationFrame(stap);
+      else loopt = false;
+    }
+
+    galerij.addEventListener('pointermove', function (e) {
+      var opFoto = !!e.target.closest('.galerij__knop');
+      doelX = e.clientX;
+      doelY = e.clientY;
+      // vanuit het niets verschijnt de bol meteen op de muis
+      if (opFoto && !cursor.classList.contains('is-zichtbaar')) {
+        x = doelX;
+        y = doelY;
+      }
+      cursor.classList.toggle('is-zichtbaar', opFoto);
+      if (!loopt) {
+        loopt = true;
+        requestAnimationFrame(stap);
+      }
+    });
+    galerij.addEventListener('pointerleave', verbergCursor);
+    window.addEventListener('scroll', verbergCursor, { passive: true });
+  }
 
   /* ---------- Lichtbak ---------- */
   var beeld = document.getElementById('lichtbak-beeld');
   var nummer = document.getElementById('lichtbak-nummer');
   var totaal = document.getElementById('lichtbak-totaal');
   var titel = document.getElementById('lichtbak-titel');
-  var groep = document.getElementById('lichtbak-groep');
+  var groepTekst = document.getElementById('lichtbak-groep');
   var tekst = lichtbak.querySelector('.lichtbak__tekst');
+  var lijst = []; // de foto's van de groep waarin geklikt werd
   var huidig = -1;
 
-  totaal.textContent = String(items.length).padStart(2, '0');
-
   function vulTekst(i) {
-    var item = items[i];
+    var item = lijst[i];
     nummer.textContent = String(i + 1).padStart(2, '0');
+    totaal.textContent = String(lijst.length).padStart(2, '0');
     titel.textContent = item.dataset.merk;
-    groep.textContent = item.dataset.groep;
+    groepTekst.textContent = item.dataset.groep;
   }
 
   // Groei van de kleine foto (in het raster) naar de grote (in de lichtbak):
@@ -59,14 +196,21 @@
     });
   }
 
-  function open(i) {
-    huidig = i;
-    var item = items[i];
+  function zetBeeld(i) {
+    var item = lijst[i];
     var bron = item.querySelector('img');
+    huidig = i;
     vulTekst(i);
     beeld.src = bron.currentSrc || bron.src;
     beeld.alt = item.dataset.groep + ' — ' + item.dataset.merk;
+    return bron;
+  }
+
+  function open(item) {
+    lijst = itemsVan(item.closest('.galerij__groep') || galerij);
+    var bron = zetBeeld(lijst.indexOf(item));
     var van = bron.getBoundingClientRect();
+    verbergCursor();
     if (!lichtbak.open) lichtbak.showModal();
     lichtbak.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: ease, fill: 'both' });
     // wachten tot het beeld maat heeft, anders klopt de eindstand niet
@@ -80,7 +224,7 @@
 
   function sluit() {
     if (!lichtbak.open) return;
-    var item = items[huidig];
+    var item = lijst[huidig];
     var naar = item.querySelector('img').getBoundingClientRect();
     var klaar = groei(naar, beeld, true);
     lichtbak.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 350, delay: 200, easing: ease, fill: 'both' });
@@ -91,20 +235,15 @@
   }
 
   function blader(richting) {
-    var i = (huidig + richting + items.length) % items.length;
+    var i = (huidig + richting + lijst.length) % lijst.length;
     if (reduced) {
-      open(i);
+      zetBeeld(i);
       return;
     }
     // korte overgang: oud beeld weg, nieuw beeld erin
     var weg = beeld.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: ease, fill: 'both' });
     weg.finished.then(function () {
-      var item = items[i];
-      var bron = item.querySelector('img');
-      huidig = i;
-      vulTekst(i);
-      beeld.src = bron.currentSrc || bron.src;
-      beeld.alt = item.dataset.groep + ' — ' + item.dataset.merk;
+      zetBeeld(i);
       var toon = function () {
         beeld.animate([{ opacity: 0, transform: 'translateY(0.5rem)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: ease, fill: 'both' });
         tekstIn();
@@ -114,9 +253,9 @@
     });
   }
 
-  items.forEach(function (item, i) {
+  galerij.querySelectorAll('.galerij__item').forEach(function (item) {
     item.querySelector('.galerij__knop').addEventListener('click', function () {
-      open(i);
+      open(item);
     });
   });
 
@@ -140,4 +279,6 @@
     if (e.key === 'ArrowLeft') blader(-1);
   });
 
+  maakTabs();
+  maakCursor();
 })();
