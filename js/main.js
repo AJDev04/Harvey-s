@@ -363,22 +363,23 @@
     });
   }
 
-  /* ---------- Klantenkaart ----------
-     De kaart kantelt naar de muis (--rx/--ry) en de glans volgt (--gx/--gy). */
-  function setupKaart() {
-    var vak = document.querySelector('.klantenkaart');
-    var kaart = vak && vak.querySelector('.klantenkaart__kaart');
-    if (!kaart || reduced || !muis) return;
+  /* ---------- Cadeaubon ----------
+     De twee bonnen kantelen samen naar de muis (--rx/--ry) en de glans op de
+     voorste bon volgt (--gx/--gy). */
+  function setupBon() {
+    var vak = document.querySelector('.cadeaubon__beeld');
+    var stapel = vak && vak.querySelector('.cadeaubon__stapel');
+    if (!stapel || reduced || !muis) return;
     var ex = 0;
     var ey = 0;
     var kantel = perFrame(function () {
-      var r = kaart.getBoundingClientRect();
+      var r = stapel.getBoundingClientRect();
       var x = Math.min(1, Math.max(0, (ex - r.left) / r.width));
       var y = Math.min(1, Math.max(0, (ey - r.top) / r.height));
-      kaart.style.setProperty('--ry', ((x - 0.5) * 16).toFixed(2) + 'deg');
-      kaart.style.setProperty('--rx', ((0.5 - y) * 12).toFixed(2) + 'deg');
-      kaart.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
-      kaart.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
+      stapel.style.setProperty('--ry', ((x - 0.5) * 12).toFixed(2) + 'deg');
+      stapel.style.setProperty('--rx', ((0.5 - y) * 9).toFixed(2) + 'deg');
+      stapel.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
+      stapel.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
     });
     vak.addEventListener('pointermove', function (e) {
       ex = e.clientX;
@@ -387,7 +388,7 @@
     });
     vak.addEventListener('pointerleave', function () {
       ['--rx', '--ry', '--gx', '--gy'].forEach(function (p) {
-        kaart.style.removeProperty(p);
+        stapel.style.removeProperty(p);
       });
     });
   }
@@ -512,7 +513,8 @@
     var selector = [
       '.reveal h3', '.reveal p:not(.statement)', '.reveal figure:not(.carrousel__slide)',
       '.reveal time', '.reveal li:not(.merk)', '.reveal address', '.reveal .beeld:not(.beeld--onthul)',
-      '.reveal .carrousel', '.reveal .merkband', '.reveal .klantenkaart', '.reveal .sectie__nr',
+      '.reveal .carrousel', '.reveal .merkband', '.reveal .cadeaubon__beeld',
+      '.reveal .cadeaubon__feiten > div', '.reveal .cadeaubon__actie',
       '.reveal .winkel__nr', '.reveal .nieuwsbrief__form', '.reveal .tabs',
       '.footer__boven > *', '.footer__logo', '.footer__meta > *'
     ].join(',');
@@ -749,7 +751,7 @@
   setupKoppen();
   setupStatement();
   setupMagneet();
-  setupKaart();
+  setupBon();
   setupStatus();
   setupNewsletter();
   setupTekst();

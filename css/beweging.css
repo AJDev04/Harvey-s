@@ -73,8 +73,7 @@
   /* ---------- Lijnen trekken zich van links naar rechts ---------- */
   .reveal .merkgroep h3,
   .reveal .galerij__groep h3,
-  .reveal .contact__uren,
-  .reveal .klantenkaart {
+  .reveal .contact__uren {
     border-color: transparent;
     background-image: linear-gradient(var(--lijn-sterk), var(--lijn-sterk));
     background-repeat: no-repeat;
@@ -91,16 +90,35 @@
     background-position: left bottom;
   }
 
-  .reveal .contact__uren,
-  .reveal .klantenkaart {
+  .reveal .contact__uren {
     background-position: left top;
   }
 
   .reveal.is-visible .merkgroep h3,
   .reveal.is-visible .galerij__groep h3,
-  .reveal.is-visible .contact__uren,
-  .reveal.is-visible .klantenkaart {
+  .reveal.is-visible .contact__uren {
     background-size: 100% 1px;
+  }
+
+  /* ---------- Cadeaubon: de bonnen waaieren open ----------
+     Ze liggen eerst recht op elkaar, in het midden tussen hun eindplaatsen, en
+     schuiven uit elkaar zodra het beeld .is-in krijgt (js/main.js, setupTekst). */
+  .cadeaubon__beeld.tekst .bon {
+    transition: transform calc(var(--duur-tekst) * 1.3) var(--ease-uit) 250ms;
+  }
+
+  .cadeaubon__beeld.tekst:not(.is-in) .bon {
+    --bon-hoek: 0deg;
+  }
+
+  .cadeaubon__beeld.tekst:not(.is-in) .bon--omslag {
+    --bon-x: 17.5cqi;
+    --bon-y: 10.5cqi;
+  }
+
+  .cadeaubon__beeld.tekst:not(.is-in) .bon--kaart {
+    --bon-x: -17.5cqi;
+    --bon-y: -10.5cqi;
   }
 
   /* ---------- Merken: de banden schuiven traag voorbij ----------

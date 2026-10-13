@@ -19,8 +19,8 @@ Wat het script schrijft:
   images/harveys-casual-luxury-oranje.svg  het logo op het oranje vlak, zoals de huisstijl
   favicon.svg                              de H op een oranje vlak
   index.html, disclaimer.html, privacy.html, tussen de markeringen
-      <!-- logo:naam:start --> … <!-- logo:naam:einde -->        de naam (header, kaart)
-      <!-- logo:slogan:start --> … <!-- logo:slogan:einde -->    de slogan (menu, kaart)
+      <!-- logo:naam:start --> … <!-- logo:naam:einde -->        de naam (header, bon)  
+      <!-- logo:slogan:start --> … <!-- logo:slogan:einde -->    de slogan (menu, bon)  
       <!-- logo:lockup:start --> … <!-- logo:lockup:einde -->    naam + slogan (footer)
   index.html
       <!-- logo:hero:start --> … <!-- logo:hero:einde -->        het hero-logo, elk

@@ -17,27 +17,20 @@
    naast de titel en de intro rechts ervan, op één lijn. */
 .sectie__kop {
   display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: start;
-  column-gap: var(--space-4);
   row-gap: var(--space-4);
   margin-bottom: var(--space-7);
 }
 
-.sectie__kop > p {
-  grid-column: 1 / -1;
-}
-
 @media (min-width: 56em) {
   .sectie__kop {
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto 1fr;
     align-items: end;
     column-gap: var(--space-5);
     margin-bottom: var(--space-8);
   }
 
   .sectie__kop > p {
-    grid-column: 3;
+    grid-column: 2;
     justify-self: end;
     max-width: 26rem;
   }
@@ -199,6 +192,21 @@
    containermarge wordt teruggenomen */
 .over__carrousel {
   margin-right: calc(-1 * max(var(--gutter), (100vw - var(--maxw)) / 2));
+}
+
+/* Cadeaubon: de bonnen links, de uitleg rechts */
+.cadeaubon {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+@media (min-width: 56em) {
+  .cadeaubon {
+    grid-template-columns: 5fr 6fr;
+    gap: var(--space-9);
+  }
 }
 
 /* Contact: twee winkels, daaronder openingsuren */

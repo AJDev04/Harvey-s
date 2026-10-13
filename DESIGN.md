@@ -29,7 +29,7 @@ for the hero video only (already part of the site).
 ```css
 :root {
   /* Brand */
-  --oranje: #e04b00;          /* brand field: hero, merken, nieuwsbrief, kaart */
+  --oranje: #e04b00;          /* brand field: hero, merken, nieuwsbrief, cadeaubon */
   --oranje-diep: #b83c00;     /* hover on orange; orange text on light (AA 5:1) */
   --oranje-licht: #f2835a;    /* hero spotlight core, never for text */
 
@@ -73,11 +73,12 @@ for the hero video only (already part of the site).
 | steen on kalk / linnen | 5.7 / 5.0 : 1 | secondary text |
 | oranje-diep on kalk | 5.0 : 1 | small orange text, links |
 | oranje on kalk | 3.5 : 1 | **large display only** (≥ 24px) |
-| kalk on inkt | 17 : 1 | footer, lightbox |
+| kalk on inkt | 17 : 1 | footer, lightbox, cadeaubon |
+| oranje on inkt | 3.9 : 1 | **large display only** (≥ 24px), cadeaubon lead |
 
 **Color Rules:**
 - Every colour is a token in `css/tokens.css`; components never contain hex values.
-- Orange is a *field*, not a sprinkle: it fills a whole section, a card or a pill. Small
+- Orange is a *field*, not a sprinkle: it fills a whole section, a card, a voucher or a pill. Small
   orange accents are limited to the active-state dot, the focus ring and the progress line.
 - Text on orange is always `--inkt`, as on the brand board, never white.
 - Never put orange text under 24px on a light background; use `--oranje-diep`.
@@ -126,7 +127,7 @@ and re-run the script; every logo on the site updates.
 
 **Text Decoration** (per text-decoration-rules):
 - Hero logo: no gradient, no shadow. The brand board is flat and that holds here.
-- H2: no gradient, no shadow. A small index number (`01`–`06`) in Michroma sits beside it.
+- H2: no gradient, no shadow, no index number.
 - Marquee: the second row is *outlined* (`-webkit-text-stroke`, transparent fill) for rhythm.
 - Body: no decoration ever.
 
@@ -200,9 +201,14 @@ a:hover { color: var(--inkt); text-decoration-thickness: 2px; }
   transform: translateX(var(--x)); width: var(--w); transition: transform var(--duur-menu) var(--ease-uit), width var(--duur-menu) var(--ease-uit); }
 ```
 
-### Klantenkaart: a real membership card (signature detail)
-Orange card (ISO 85.6 × 54 ratio), logo top-left, "5%" in Michroma, slogan at the bottom.
-3D tilt up to 8° and a glare that follows the pointer (hover devices only).
+### Cadeaubon: two paper vouchers (signature detail)
+An ink section with two A6 vouchers (105 × 148) stacked at an angle: the orange cover
+(logo, slogan, MEN · WOMEN) behind, the bone voucher itself in front (hairline inner frame,
+*Cadeaubon* in Instrument Serif italic, dotted "geschonken door" lines, "1 jaar geldig" in
+`--oranje-diep`). Everything on the vouchers is sized in `cqi`, so it scales with the image.
+On enter the vouchers fan out from a straight stack; on hover devices the pair tilts up
+to 6° in 3D and a glare follows the pointer. Next to it: lead, a hairline fact list
+(`dl`), an orange pill (`.knop--oranje`) and the phone numbers.
 
 ### Form (nieuwsbrief)
 ```css
@@ -226,14 +232,14 @@ Orange card (ISO 85.6 × 54 ratio), logo top-left, "5%" in Michroma, slogan at t
 
 **Grid:**
 ```css
-/* Section head: index number | title | intro, on one baseline row (desktop) */
+/* Section head: title | intro, on one baseline row (desktop) */
 .sectie__kop { display: grid; grid-template-columns: auto 1fr; column-gap: var(--space-5); }
 
 /* Collectie: bento, every 7th photo is 2×2 and the rest pack around it */
 .galerij__raster { display: grid; grid-template-columns: repeat(var(--kolommen), 1fr); grid-auto-flow: dense; gap: var(--galerij-gap); }
 .galerij__item:nth-child(7n + 1) { grid-column: span 2; grid-row: span 2; }
 
-/* Contact: two stores side by side, giant house numbers */
+/* Contact: two stores side by side, a small grey house number beside each name */
 .contact { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-7); }
 ```
 
@@ -245,7 +251,7 @@ The site is flat on purpose. Depth comes from colour blocks, scale and overlap, 
 |-------|-----------|-----|
 | Flat | none | sections, gallery, text |
 | Hairline | `box-shadow: 0 1px 0 var(--lijn)` | sticky header once scrolled |
-| Lifted | `0 1.5rem 3rem -1.5rem rgba(var(--inkt-rgb), .45)` | klantenkaart, lightbox image |
+| Lifted | `0 1.5rem 3rem -1.5rem rgba(var(--inkt-rgb), .45)` | cadeaubon, lightbox image |
 | Overlay | `backdrop-filter: blur(12px)` + 90% kalk | header only (≤ 14px blur) |
 
 ## 7. Animation & Interaction
@@ -265,7 +271,7 @@ starts on its own, except the one-time logo intro.
 | 5 | Text: Section H2 | All H2 | letters float up out of a mask on enter (ScrollFloat) |
 | 6 | Text: Body | Over: statement | words light up from 15% to 100% as you scroll (ScrollReveal) |
 | 7 | Component | Collectie | segmented tabs + bento grid + orange "Bekijk" cursor bubble + FLIP lightbox |
-| 8 | Element | CTA / klantenkaart | magnetic buttons; 3D tilt + glare on the loyalty card |
+| 8 | Element | CTA / cadeaubon | magnetic buttons; vouchers fan out, 3D tilt + glare on hover |
 
 **Clever detail:** the opening-hours block knows Belgian time and public holidays and shows
 a live chip: *Nu open · tot 18 uur* with a pulsing orange dot, or *Gesloten · opent
@@ -317,12 +323,11 @@ JS mirrors this: no split-text, no scrub, no autoplay, no carousel auto-advance.
 ## 8. Do's and Don'ts
 
 ### Do
-- Use orange as a full field (hero, merken, nieuwsbrief, klantenkaart) with ink type on it.
+- Use orange as a full field (hero, merken, nieuwsbrief, cadeaubon) with ink type on it.
 - Let the wordmark breathe: at least 1× its cap-height of clear space on every side.
 - Set Michroma in capitals with wide tracking; pair it with Instrument Serif for warmth.
 - Keep photography untouched: no filters, duotones or overlays (except the hero scrim).
 - Keep every text from harveys.be. The only new line is the slogan *Casual Luxury*.
-- Number the sections (`01`–`06`). It's a quiet editorial device, not decoration.
 
 ### Don't
 - ❌ Don't hard-code a hex value outside `tokens.css`.

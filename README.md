@@ -20,7 +20,7 @@ css/base.css        reset en basiselementen
 css/layout.css      containers, secties en rasters
 css/components.css  header, hero, band, galerij, kaarten, formulier, footer
 css/beweging.css    animaties bij het laden en op scroll (uit bij "minder beweging")
-js/main.js          menu, header, hero, band, titels, klantenkaart, open/gesloten,
+js/main.js          menu, header, hero, band, titels, cadeaubon, open/gesloten,
                     nieuwsbrief, reveal van secties, merkbanden, carrousel
 js/galerij.js       tabbladen, de bol "Bekijk" en de lichtbak van de Collectie
 tools/maak-logo.py  maakt het logo als SVG-paden en zet het in de pagina's
@@ -41,7 +41,7 @@ en ga naar http://localhost:8000.
 
 ## Huisstijl
 
-- **Kleur**: oranje `--oranje` als vlak (hero, merken, nieuwsbrief, klantenkaart),
+- **Kleur**: oranje `--oranje` als vlak (hero, merken, nieuwsbrief, cadeaubon),
   met zwarte tekst erop, zoals in de huisstijl. Verder gebroken wit `--kalk`, linnen
   en warm zwart `--inkt`. Op de oranje vlakken ligt een fijne filmkorrel (`--korrel`).
 - **Letters**: Michroma (de open heruitgave van Microgramma) voor titels, labels en
@@ -73,15 +73,15 @@ ontwerp: `--font pad/naar/lettertype.otf`, `--bron ontwerp.svg`.
 Het script schrijft `images/harveys-casual-luxury.svg` (zwart op transparant),
 `images/harveys-casual-luxury-oranje.svg` (op het oranje vlak, zoals de huisstijl)
 en `favicon.svg` (de H), en zet het logo in de pagina's tussen de markeringen
-`<!-- logo:naam:… -->` (header, klantenkaart), `<!-- logo:slogan:… -->` (mobiel
-menu, klantenkaart), `<!-- logo:lockup:… -->` (footer) en `<!-- logo:hero:… -->`
+`<!-- logo:naam:… -->` (header, cadeaubon), `<!-- logo:slogan:… -->` (mobiel
+menu, cadeaubon), `<!-- logo:lockup:… -->` (footer) en `<!-- logo:hero:… -->`
 (hero, elk teken een apart pad voor de intro). Een nieuwe versie van het logo:
 vervang `tools/logo-bron.svg` en draai het script opnieuw.
 
 ## Inhoud aanpassen
 
 Alle teksten staan in `index.html`. Elke sectie is gemarkeerd met een commentaar
-(`<!-- ===== Merken ===== -->`) en genummerd (`01`–`06`, ook in het mobiele menu).
+(`<!-- ===== Merken ===== -->`).
 Merken zijn `<li class="merk">`-blokken met een logo uit `images/merken/` en de naam
 (`merk__naam`); nieuwsitems zijn `<article class="nieuws-item">`-blokken: kopiëren, plakken
 en tekst wijzigen.

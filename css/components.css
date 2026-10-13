@@ -54,7 +54,6 @@
 }
 
 .nav__toggle,
-.nav__nr,
 .nav__voet {
   display: none;
 }
@@ -204,9 +203,7 @@
   }
 
   .nav__link {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-4);
+    display: block;
     padding-block: var(--space-4);
     font-size: clamp(1.375rem, 6.5vw, 2.25rem);
     letter-spacing: var(--tracking-display);
@@ -233,12 +230,6 @@
   .nav__lijst li:nth-child(4) .nav__link { --i: 3; }
   .nav__lijst li:nth-child(5) .nav__link { --i: 4; }
   .nav__lijst li:nth-child(6) .nav__link { --i: 5; }
-
-  .nav__nr {
-    display: inline;
-    font-size: var(--fs-label);
-    letter-spacing: var(--tracking-label);
-  }
 
   /* adres en slogan onderaan het doek */
   .nav__voet {
@@ -342,6 +333,13 @@ html.menu-open .header {
   outline-offset: 3px;
 }
 
+/* Oranje pil, voor op inkt */
+.knop--oranje {
+  background: var(--oranje);
+  border-color: var(--oranje);
+  color: var(--inkt);
+}
+
 .knop:disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -395,16 +393,6 @@ html.menu-open .header {
   outline-color: var(--inkt);
 }
 
-.sectie__nr {
-  align-self: start;
-  padding-top: 0.35em;
-  color: var(--steen);
-}
-
-.sectie--oranje .sectie__nr {
-  color: var(--inkt);
-}
-
 .sectie__kop > p {
   color: var(--steen);
   font-size: var(--fs-lead);
@@ -413,6 +401,24 @@ html.menu-open .header {
 
 .sectie--oranje .sectie__kop > p {
   color: var(--inkt);
+}
+
+/* Inkt: een donkere sectie (cadeaubon), kalk erop zoals in de footer */
+.sectie--inkt {
+  background: var(--inkt);
+  color: var(--kalk);
+}
+
+.sectie--inkt a:not(.knop) {
+  color: var(--kalk);
+}
+
+.sectie--inkt a:not(.knop):hover {
+  color: var(--oranje);
+}
+
+.sectie--inkt :focus-visible {
+  outline-color: var(--oranje);
 }
 
 /* Titels die js/main.js (setupKoppen) in letters splitst: elk woord is een vak
@@ -1091,101 +1097,6 @@ html.menu-open .header {
   margin-top: 0;
 }
 
-/* Klantenkaart: een echte kaart (85,6 × 54 mm) naast de uitleg. --rx/--ry en
-   --gx/--gy zet js/main.js (setupKaart): de kaart kantelt en de glans volgt de muis. */
-.klantenkaart {
-  display: grid;
-  gap: var(--space-5);
-  align-items: center;
-  margin-top: var(--space-4);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--lijn-sterk);
-}
-
-@media (min-width: 30em) {
-  .klantenkaart {
-    grid-template-columns: minmax(0, 15rem) 1fr;
-  }
-}
-
-.klantenkaart__kaart {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr auto;
-  aspect-ratio: 85.6 / 54;
-  max-width: 15rem;
-  padding: 0.9rem 1rem;
-  overflow: hidden;
-  background: var(--oranje) var(--korrel);
-  color: var(--inkt);
-  border-radius: 0.75rem;
-  box-shadow: var(--schaduw-zwevend);
-  transform: perspective(50rem) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform var(--duur-reveal) var(--ease-uit);
-}
-
-/* de chip */
-.klantenkaart__kaart::before {
-  content: '';
-  grid-row: 2;
-  align-self: center;
-  width: 1.6rem;
-  height: 1.2rem;
-  border: 1px solid var(--lijn-op-oranje);
-  border-radius: 0.25rem;
-  background:
-    linear-gradient(var(--lijn-op-oranje), var(--lijn-op-oranje)) 50% 0 / 1px 100% no-repeat,
-    linear-gradient(var(--lijn-op-oranje), var(--lijn-op-oranje)) 0 50% / 100% 1px no-repeat;
-}
-
-.klantenkaart__logo {
-  grid-column: 1 / -1;
-}
-
-.klantenkaart__logo svg {
-  height: 0.55rem;
-  width: auto;
-}
-
-.klantenkaart__procent {
-  grid-row: 3;
-  font-family: var(--font-display);
-  font-size: 2rem;
-  line-height: 1;
-}
-
-.klantenkaart__slogan {
-  grid-row: 3;
-  align-self: end;
-  padding-bottom: 0.2rem;
-}
-
-.klantenkaart__slogan svg {
-  height: 0.3rem;
-  width: auto;
-}
-
-.klantenkaart__glans {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--gx, 30%) var(--gy, 0%), rgba(var(--kalk-rgb), 0.55), transparent 60%);
-  mix-blend-mode: soft-light;
-  opacity: 0.4;
-  pointer-events: none;
-  transition: opacity var(--duur-reveal) var(--ease);
-}
-
-.klantenkaart:hover .klantenkaart__glans {
-  opacity: 1;
-}
-
-.klantenkaart__tekst {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
 /* ---------- Carrousel (Over Harvey's): schuifbaar spoor met een glimp van de volgende foto ---------- */
 .carrousel {
   --carrousel-slide-w: min(78%, 40rem);
@@ -1327,6 +1238,218 @@ html.menu-open .header {
   color: var(--inkt);
 }
 
+/* ---------- Cadeaubon ----------
+   Twee bonnen op elkaar: de oranje omslag achteraan, de bon zelf ervoor. Alle maten
+   in cqi, zodat alles op de bonnen meeschaalt met de breedte van het beeld.
+   --rx/--ry en --gx/--gy zet js/main.js (setupBon): de stapel kantelt en de glans
+   volgt de muis. */
+.cadeaubon__beeld {
+  width: min(90%, 30rem);
+  justify-self: center;
+  container-type: inline-size;
+}
+
+.cadeaubon__stapel {
+  position: relative;
+  aspect-ratio: 10 / 11;
+  transform: perspective(60rem) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform var(--duur-reveal) var(--ease-uit);
+}
+
+/* Een bon is A6 (105 × 148 mm), 58cqi breed */
+.bon {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 58cqi;
+  aspect-ratio: 105 / 148;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--schaduw-zwevend);
+  transform: translate3d(var(--bon-x, 0), var(--bon-y, 0), var(--bon-z, 0)) rotate(var(--bon-hoek));
+}
+
+.bon svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Omslag: oranje vlak met logo en slogan, half achter de bon */
+.bon--omslag {
+  --bon-hoek: -6deg;
+  top: 3cqi;
+  left: 3cqi;
+  justify-content: center;
+  padding: 0 7cqi 6cqi;
+  background: var(--oranje) var(--korrel);
+  color: var(--inkt);
+}
+
+.bon--omslag .bon__logo {
+  width: 46cqi;
+}
+
+.bon--omslag .bon__slogan {
+  width: 28cqi;
+  margin-top: 2.5cqi;
+}
+
+.bon--omslag .bon__merken {
+  width: 40cqi;
+  margin-top: 2.5cqi;
+  padding-top: 2cqi;
+  border-top: 1px solid var(--inkt);
+  font-size: 2.2cqi;
+}
+
+/* De bon zelf: gebroken wit, een dun kader binnen de rand */
+.bon--kaart {
+  --bon-hoek: 4deg;
+  --bon-z: 1.5rem;
+  top: 24cqi;
+  left: 38cqi;
+  align-items: center;
+  padding: 7cqi 5cqi 6cqi;
+  background: var(--kalk);
+  color: var(--inkt);
+  text-align: center;
+  outline: 1px solid var(--lijn-sterk);
+  outline-offset: -2.5cqi;
+}
+
+.bon--kaart .bon__logo {
+  width: 26cqi;
+}
+
+.bon__merken,
+.bon__veld,
+.bon__geldig {
+  font-family: var(--font-display);
+  font-size: 1.9cqi;
+  line-height: 1.4;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.bon--kaart .bon__merken {
+  margin-top: 1.2cqi;
+}
+
+.bon__titel {
+  margin-top: 3cqi;
+  font-family: var(--font-serif);
+  font-size: 9.5cqi;
+  font-style: italic;
+  line-height: 1;
+}
+
+.bon__veld {
+  margin-top: auto;
+}
+
+/* twee stippellijnen om op te schrijven */
+.bon__regels {
+  width: 40cqi;
+  height: 8cqi;
+  border-bottom: 1px dotted var(--lijn-sterk);
+}
+
+.bon__regels::before {
+  content: '';
+  display: block;
+  height: 50%;
+  border-bottom: 1px dotted var(--lijn-sterk);
+}
+
+.bon__geldig {
+  margin-top: auto;
+  color: var(--oranje-diep);
+}
+
+.bon__glans {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--gx, 30%) var(--gy, 0%), rgba(var(--kalk-rgb), 0.55), transparent 60%);
+  mix-blend-mode: soft-light;
+  opacity: 0.4;
+  pointer-events: none;
+  transition: opacity var(--duur-reveal) var(--ease);
+}
+
+.cadeaubon__beeld:hover .bon__glans {
+  opacity: 1;
+}
+
+.cadeaubon__tekst {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.cadeaubon__lead {
+  font-family: var(--font-serif);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+}
+
+/* op inkt haalt oranje 3,9:1, genoeg voor tekst van deze grootte */
+.cadeaubon__lead em {
+  color: var(--oranje);
+}
+
+/* Feiten: label links, waarde rechts, gescheiden door haarlijnen */
+.cadeaubon__feiten {
+  margin: 0;
+  border-bottom: 1px solid var(--lijn-op-inkt);
+}
+
+.cadeaubon__feiten > div {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 1fr) 2fr;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--lijn-op-inkt);
+}
+
+.cadeaubon__feiten dt {
+  color: var(--kalk-op-inkt);
+}
+
+.cadeaubon__feiten dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* kleine lettertjes: enkel een lijn erboven */
+.cadeaubon__feiten--klein {
+  border-bottom: 0;
+}
+
+.cadeaubon__feiten--klein dd {
+  color: var(--kalk-op-inkt);
+  font-size: var(--fs-sm);
+  font-weight: 400;
+}
+
+.cadeaubon__actie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-5);
+}
+
+.cadeaubon__actie p {
+  color: var(--kalk-op-inkt);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.cadeaubon__actie p a {
+  white-space: nowrap;
+}
+
 /* ---------- Contact ---------- */
 .winkel {
   display: flex;
@@ -1338,19 +1461,20 @@ html.menu-open .header {
   transform: scale(1.04);
 }
 
-/* het huisnummer groot naast naam en adres */
+/* het huisnummer klein en ingetogen naast naam en adres */
 .winkel__info {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
 .winkel__nr {
   flex: none;
+  padding-top: 0.35em;
   font-family: var(--font-display);
-  font-size: var(--fs-nummer);
-  line-height: 0.8;
-  color: var(--oranje);
+  font-size: var(--fs-md);
+  line-height: 1;
+  color: var(--steen);
 }
 
 .winkel__tekst {
@@ -1419,13 +1543,10 @@ html.menu-open .header {
 /* ---------- Nieuwsbrief ---------- */
 .nieuwsbrief__tekst {
   display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: var(--space-4);
   row-gap: var(--space-5);
 }
 
 .nieuwsbrief__tekst p {
-  grid-column: 1 / -1;
   font-size: var(--fs-lead);
   line-height: 1.45;
 }
