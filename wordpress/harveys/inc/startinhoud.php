@@ -261,7 +261,7 @@ add_action(
 		}
 		foreach ( $data['collectie'] as $groep => $fotos ) {
 			foreach ( $fotos as $foto ) {
-				$taken[] = array( 'soort' => 'collectie', 'groep' => $groep, 'bestand' => $foto[0], 'titel' => $foto[1], 'bijschrift' => $foto[1] );
+				$taken[] = array( 'soort' => 'collectie', 'groep' => $groep, 'bestand' => $foto[0], 'titel' => $foto[1], 'bijschrift' => $foto[1], 'alt' => isset( $foto[2] ) ? $foto[2] : '' );
 			}
 		}
 

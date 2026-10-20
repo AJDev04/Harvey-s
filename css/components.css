@@ -1721,6 +1721,29 @@ html.menu-open .header {
   gap: var(--space-5);
 }
 
+/* De juridische links en wie de site maakte, samen rechts */
+.footer__rechts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+}
+
+.footer__maker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  font-size: var(--fs-xs);
+}
+
+/* in em, zodat het logo meeschaalt met de tekst: elke regel (VID, EJO) is
+   ongeveer zo hoog als de hoofdletters ernaast */
+.footer__maker img {
+  width: auto;
+  height: 1.5em;
+}
+
 /* ---------- Tekstpagina's (disclaimer, privacy) ---------- */
 .tekstpagina h1 {
   font-size: var(--fs-h2);

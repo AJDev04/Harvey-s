@@ -29,11 +29,13 @@ cp -R "$WORTEL/wordpress/harveys/." "$THEMA/"
 mkdir -p "$THEMA/assets/css" "$THEMA/assets/js"
 cp "$WORTEL"/css/*.css "$THEMA/assets/css/"
 cp "$WORTEL"/js/*.js "$THEMA/assets/js/"
+# het logo van de webdesigner in de footer
+cp "$WORTEL/images/videjo-logo.svg" "$THEMA/assets/"
 
 # de foto's en het logo voor Website → Startinhoud; het thema zelf bevat niets
 # van Harvey's, zodat het zonder startinhoud voor elke winkel werkt
 mkdir -p "$THEMA/starter/logo"
-cp -R "$WORTEL/images/collectie" "$WORTEL/images/merken" "$WORTEL/images/winkel" "$THEMA/starter/"
+cp -R "$WORTEL/images/collectie" "$WORTEL/images/liujo" "$WORTEL/images/merken" "$WORTEL/images/winkel" "$THEMA/starter/"
 cp "$WORTEL/images/winkel-women.jpg" "$WORTEL/images/winkel-men.jpg" \
    "$WORTEL/images/collectie-schoenen.jpg" "$WORTEL/images/hero-poster.jpg" "$THEMA/starter/"
 cp "$WORTEL/images/harveys-naam.svg" "$THEMA/starter/logo/naam.svg"

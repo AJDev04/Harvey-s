@@ -1,6 +1,7 @@
 <?php
 /**
- * Einde van elke pagina: de footer met snelmenu, winkels, logo en de juridische links.
+ * Einde van elke pagina: de footer met snelmenu, winkels, logo, de juridische links
+ * en wie de site maakte.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -43,16 +44,22 @@ $harveys_disclaimer = harveys_optie( 'disclaimer_pagina' ) ? get_permalink( (int
 					<?php endif; ?>
 					<span>Copyright © <?php echo esc_html( wp_date( 'Y' ) . ' · ' . get_bloginfo( 'name' ) ); ?></span>
 				</div>
-				<?php if ( $harveys_privacy || $harveys_disclaimer ) : ?>
-					<nav class="footer__links" aria-label="Juridisch">
-						<?php if ( $harveys_disclaimer ) : ?>
-							<a href="<?php echo esc_url( $harveys_disclaimer ); ?>">Disclaimer</a>
-						<?php endif; ?>
-						<?php if ( $harveys_privacy ) : ?>
-							<a href="<?php echo esc_url( $harveys_privacy ); ?>">Privacy</a>
-						<?php endif; ?>
-					</nav>
-				<?php endif; ?>
+				<div class="footer__rechts">
+					<?php if ( $harveys_privacy || $harveys_disclaimer ) : ?>
+						<nav class="footer__links" aria-label="Juridisch">
+							<?php if ( $harveys_disclaimer ) : ?>
+								<a href="<?php echo esc_url( $harveys_disclaimer ); ?>">Disclaimer</a>
+							<?php endif; ?>
+							<?php if ( $harveys_privacy ) : ?>
+								<a href="<?php echo esc_url( $harveys_privacy ); ?>">Privacy</a>
+							<?php endif; ?>
+						</nav>
+					<?php endif; ?>
+					<a class="footer__maker" href="https://videjo.be/">
+						Webdesign door
+						<img src="<?php echo esc_url( HARVEYS_URL . '/assets/videjo-logo.svg' ); ?>" alt="VIDEJO" width="815" height="647" loading="lazy" decoding="async" />
+					</a>
+				</div>
 			</div>
 		</div>
 	</footer>

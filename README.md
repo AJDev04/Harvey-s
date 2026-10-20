@@ -129,17 +129,26 @@ naam op dezelfde plek, of pas het `src` en de `alt`-tekst in `index.html` aan.
 | `winkel-men.jpg`                     | Gevel Harvey's Men (contact)             |
 | `winkel/*.jpg`                       | Carrousel bij "Over Harvey's": interieurfoto's van beide winkels |
 | `collectie-schoenen.jpg`             | Nieuwsbericht Nathan-Baume               |
-| `collectie/*.jpg`                    | Galerij: de collectiefoto's van harveys.be, `hem-`/`haar-` + merk |
+| `collectie/*.jpg`                    | Galerij: de collectiefoto's van harveys.be, `hem-`/`haar-` + merk; `haar-guess-sfeer`, `-denim`, `-suede`, `-tassen` en `-avond` komen uit de campagne van Guess FW26/27 |
+| `campagne-guess-*.jpg`               | Campagnebeelden van Guess FW26/27 (modellen, motor, close-up), nog niet in gebruik |
+| `liujo/*.jpg`                        | Campagnebeelden van Liu Jo FW26: zes in de galerij (Voor haar); `liujo-avond-4x5` is de avondfoto al bijgesneden voor WordPress (dat snijdt in het midden en zou het gezicht wegsnijden); `liujo-gele-muur` (liggend en `-staand`) en `liujo-trap` nog niet in gebruik |
 | `merken/*`                           | Merklogo's, één bestand per merk         |
+| `videjo-logo.svg`                    | "Webdesign door VIDEJO" in de footer, linkt naar videjo.be; `tools/maak-thema.sh` zet het ook in `assets/` van het WordPress-thema |
 
 De bestanden `harveys-icon.*`, `harveys-logo.svg` en `harveys-logo-white.png` zijn
-van de vorige huisstijl en worden niet meer gebruikt.
+van de vorige huisstijl en worden niet meer gebruikt; `collectie/haar-guess-1.jpg`
+tot `-3.jpg` en `collectie/haar-liu-jo-1.jpg` tot `-3.jpg` zijn vervangen door de
+campagnebeelden van Guess en Liu Jo.
 
 Foto's voor de galerij werken het best in staand formaat (4:5), minstens
 1000 px breed. Een foto toevoegen: zet het bestand in `images/collectie/` en
 kopieer een `<figure class="galerij__item">`-blok in `index.html` (in de groep
 "Voor haar" of "Voor hem"); `data-merk` en `data-groep` zijn wat de lichtbak
-toont. Het raster is een bento:
+toont, met de `alt` van de foto als beschrijving (zonder `alt`: groep en merk).
+Valt een gezicht weg bij het bijsnijden tot 4:5, zet dan op de `<img>` een
+`style="object-position: 50% 20%"` (de tweede waarde: hoe ver van boven). In
+WordPress staat de alt-tekst bij de foto in de mediabibliotheek; daar wordt elke
+foto in het midden bijgesneden. Het raster is een bento:
 elke zevende foto is dubbel zo groot (op een telefoon: elke vijfde over de volle
 breedte). Het aantal kolommen staat in `--kolommen` in `css/tokens.css`.
 
@@ -173,7 +182,9 @@ privacy), zo letterlijk mogelijk overgenomen. De Engelse zin bij de nieuwsbrief
 ("Sign up to our newsletter to receive exclusive offers.") staat er in het
 Nederlands. De slogan "Casual Luxury" komt uit de nieuwe huisstijl; de gegevens bij
 de cadeaubon komen van de bon uit de winkel (op harveys.be staat geen cadeaubon).
-Foto's in `images/` zijn van harveys.be; merklogo's komen van Wikimedia Commons of
+Foto's in `images/` zijn van harveys.be, behalve de campagnebeelden van Guess
+FW26/27 (via de persdienst van Fashion Club 70) en van Liu Jo FW26 (uit hun B2B-deck);
+merklogo's komen van Wikimedia Commons of
 van de websites van de merken zelf. Voeg geen inhoud toe die niet bij Harvey's
 vandaan komt.
 
@@ -203,7 +214,7 @@ Dat maakt in `dist/`:
 
 | Bestand                             | Voor                                                     |
 | ----------------------------------- | -------------------------------------------------------- |
-| `harveys.zip` (± 8,7 MB)            | Harvey's: met het logo, de foto's en de teksten van de huidige site |
+| `harveys.zip` (± 15 MB)             | Harvey's: met het logo, de foto's en de teksten van de huidige site |
 | `harveys-zonder-startinhoud.zip`    | een andere winkel: enkel het thema (± 270 kB)            |
 
 ### Installeren

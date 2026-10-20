@@ -34,7 +34,8 @@ if ( ! $harveys_groepen ) {
 				<div class="galerij__raster">
 					<?php
 					foreach ( $harveys_fotos as $harveys_foto ) :
-						$harveys_beeld = harveys_beeld( $harveys_foto, 'large', array( 'alt' => '', 'sizes' => '(min-width: 64em) 25vw, (min-width: 48em) 33vw, 50vw' ) );
+						// de alt-tekst uit de mediabibliotheek; de lichtbak toont ze bij de vergrote foto
+						$harveys_beeld = harveys_beeld( $harveys_foto, 'large', array( 'sizes' => '(min-width: 64em) 25vw, (min-width: 48em) 33vw, 50vw' ) );
 						if ( ! $harveys_beeld ) {
 							continue;
 						}

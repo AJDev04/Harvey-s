@@ -199,7 +199,8 @@
     vulTekst(i);
     // data-groot: de grote versie van de foto (WordPress); anders dezelfde als in het raster
     beeld.src = item.dataset.groot || bron.currentSrc || bron.src;
-    beeld.alt = item.dataset.groep + ' — ' + item.dataset.merk;
+    // de alt-tekst van de foto zelf, anders groep en merk
+    beeld.alt = bron.alt || item.dataset.groep + ' — ' + item.dataset.merk;
     return bron;
   }
 
