@@ -1,0 +1,142 @@
+/* Enkel voor het WordPress-thema: wat de statische site niet nodig heeft.
+   De rest van de vormgeving staat in de gedeelde bestanden (tokens, base, ...). */
+
+/* Ingelogd staat de zwarte balk van WordPress bovenaan: de header schuift eronder */
+.admin-bar .header {
+  top: 32px;
+}
+
+@media (max-width: 782px) {
+  .admin-bar .header {
+    top: 46px;
+  }
+}
+
+/* Logo als tekst, als er (nog) geen SVG is (Website → Logo en kleur). In de hero,
+   de footer en op de bon vult de naam de breedte van het logo, zoals een SVG:
+   de lettergrootte is die breedte gedeeld door het aantal tekens (--tekens, uit
+   inc/logo.php); een teken in Michroma is ongeveer 1,05 em breed. */
+.logo__tekst {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero__logo:has(> .logo__tekst),
+.footer__logo:has(> .logo__tekst),
+.bon__logo:has(> .logo__tekst) {
+  container-type: inline-size;
+}
+
+.hero__logo .logo__tekst,
+.footer__logo .logo__tekst,
+.bon__logo .logo__tekst {
+  font-size: calc(100cqi / (var(--tekens, 8) * 1.05));
+}
+
+.hero__logo .logo__tekst {
+  font-size: min(7.5rem, calc(100cqi / (var(--tekens, 8) * 1.05)));
+  text-align: center;
+}
+
+/* Nieuws: meer dan één bericht onder elkaar, en een bericht zonder foto */
+.nieuws {
+  gap: var(--space-9);
+}
+
+@media (min-width: 48em) {
+  .nieuws-item--zonder-beeld {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nieuws-item__meer {
+  align-self: flex-start;
+}
+
+/* Een nieuwsbericht: de titel in de serif, zoals op de homepage */
+.tekstpagina h1.tekstpagina__titel {
+  font-family: var(--font-serif);
+  font-size: var(--fs-statement);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+/* Tekstpagina's en nieuwsberichten: wat de editor van WordPress kan maken */
+.tekstpagina__datum {
+  color: var(--oranje-diep);
+}
+
+.tekstpagina__beeld {
+  margin-bottom: var(--space-7);
+}
+
+.tekstpagina__inhoud h2,
+.tekstpagina__inhoud h3 {
+  margin-top: var(--space-5);
+  font-family: var(--font-serif);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  text-transform: none;
+}
+
+.tekstpagina__inhoud ul:not(.tekstpagina__lijst) {
+  padding-left: 1.25em;
+  list-style: disc;
+}
+
+.tekstpagina__inhoud ol {
+  padding-left: 1.25em;
+  list-style: decimal;
+}
+
+.tekstpagina__inhoud li + li {
+  margin-top: var(--space-1);
+}
+
+.tekstpagina__inhoud figure {
+  margin: var(--space-5) 0;
+}
+
+.tekstpagina__inhoud img {
+  border-radius: var(--radius-md);
+}
+
+.tekstpagina__lijst {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.tekstpagina__lijst li {
+  display: grid;
+  gap: var(--space-1);
+}
+
+/* Klassen die WordPress zelf gebruikt */
+.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.aligncenter {
+  margin-inline: auto;
+}
+
+.wp-caption-text,
+.wp-element-caption {
+  margin-top: var(--space-2);
+  color: var(--steen);
+  font-size: var(--fs-sm);
+}

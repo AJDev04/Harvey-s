@@ -1,7 +1,7 @@
 /* Ontwerptokens — de enige plek met losse waarden. Zie DESIGN.md voor de regels. */
 :root {
   /* Kleur — huisstijl "Casual Luxury": oranje vlak, zwart woordmerk */
-  --oranje: #e04b00; /* het merkvlak: hero, merken, nieuwsbrief, cadeaubon */
+  --oranje: #e04b00; /* het merkvlak: hero, merken, nieuwsbrief */
   --oranje-diep: #b83c00; /* hover op oranje; oranje tekst op licht (contrast 5:1) */
   --oranje-licht: #f2835a; /* kern van de spotlight in de hero, nooit voor tekst */
   --kalk: #f4efe8; /* hoofdachtergrond, gebroken wit */
@@ -35,7 +35,7 @@
   --rust: var(--steen);
 
   /* Typografie */
-  --font-display: 'Michroma', 'Microgramma Extd D', 'Eurostile Extended', 'Arial Black', sans-serif;
+  --font-display: 'Michroma', 'Arial Black', sans-serif;
   --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
   --font-sans: 'Geist', 'Helvetica Neue', Arial, sans-serif;
 

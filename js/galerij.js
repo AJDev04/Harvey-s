@@ -47,11 +47,7 @@
       knop.id = groep.id + '-tab';
       knop.setAttribute('role', 'tab');
       knop.setAttribute('aria-controls', groep.id);
-      knop.appendChild(document.createTextNode(titel ? titel.textContent : 'Groep ' + (i + 1)));
-      var aantal = document.createElement('span');
-      aantal.className = 'tabs__aantal';
-      aantal.textContent = itemsVan(groep).length;
-      knop.appendChild(aantal);
+      knop.textContent = titel ? titel.textContent : 'Groep ' + (i + 1);
       groep.setAttribute('role', 'tabpanel');
       groep.setAttribute('aria-labelledby', knop.id);
       tabs.appendChild(knop);
@@ -201,7 +197,8 @@
     var bron = item.querySelector('img');
     huidig = i;
     vulTekst(i);
-    beeld.src = bron.currentSrc || bron.src;
+    // data-groot: de grote versie van de foto (WordPress); anders dezelfde als in het raster
+    beeld.src = item.dataset.groot || bron.currentSrc || bron.src;
     beeld.alt = item.dataset.groep + ' — ' + item.dataset.merk;
     return bron;
   }

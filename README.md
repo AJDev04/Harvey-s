@@ -5,6 +5,9 @@ Statische site voor Harvey's Women en Harvey's Men in Aalst, in de huisstijl
 CASUAL LUXURY in Microgramma Extended. Gewone HTML, CSS en JavaScript, zonder
 buildstap. Later te hosten op Cloudflare Pages.
 
+Dezelfde site bestaat ook als WordPress-thema, waarin de winkel zelf foto's, nieuws,
+merken, teksten en het logo beheert: zie [WordPress-thema](#wordpress-thema).
+
 De ontwerpregels (kleuren, typografie, componenten, beweging, do's en don'ts) staan
 in `DESIGN.md`. Wijzig je iets aan de vormgeving, houd dat bestand dan bij.
 
@@ -24,7 +27,9 @@ js/main.js          menu, header, hero, band, titels, cadeaubon, open/gesloten,
                     nieuwsbrief, reveal van secties, merkbanden, carrousel
 js/galerij.js       tabbladen, de bol "Bekijk" en de lichtbak van de Collectie
 tools/maak-logo.py  maakt het logo als SVG-paden en zet het in de pagina's
+tools/maak-thema.sh bouwt het WordPress-thema als zip in dist/
 tools/fonts/        Michroma (OFL-licentie), invoer voor maak-logo.py
+wordpress/harveys/  het WordPress-thema: PHP-sjablonen en de beheerschermen
 images/             alle beelden
 favicon.svg
 ```
@@ -41,7 +46,7 @@ en ga naar http://localhost:8000.
 
 ## Huisstijl
 
-- **Kleur**: oranje `--oranje` als vlak (hero, merken, nieuwsbrief, cadeaubon),
+- **Kleur**: oranje `--oranje` als vlak (hero, merken, nieuwsbrief),
   met zwarte tekst erop, zoals in de huisstijl. Verder gebroken wit `--kalk`, linnen
   en warm zwart `--inkt`. Op de oranje vlakken ligt een fijne filmkorrel (`--korrel`).
 - **Letters**: Michroma (de open heruitgave van Microgramma) voor titels, labels en
@@ -71,8 +76,9 @@ met een dunne omlijning voor het gewicht, en meldt het dat. Een ander lettertype
 ontwerp: `--font pad/naar/lettertype.otf`, `--bron ontwerp.svg`.
 
 Het script schrijft `images/harveys-casual-luxury.svg` (zwart op transparant),
-`images/harveys-casual-luxury-oranje.svg` (op het oranje vlak, zoals de huisstijl)
-en `favicon.svg` (de H), en zet het logo in de pagina's tussen de markeringen
+`images/harveys-casual-luxury-oranje.svg` (op het oranje vlak, zoals de huisstijl),
+`images/harveys-naam.svg` en `images/harveys-slogan.svg` (naam en slogan apart, voor
+het WordPress-thema) en `favicon.svg` (de H), en zet het logo in de pagina's tussen de markeringen
 `<!-- logo:naam:… -->` (header, cadeaubon), `<!-- logo:slogan:… -->` (mobiel
 menu, cadeaubon), `<!-- logo:lockup:… -->` (footer) en `<!-- logo:hero:… -->`
 (hero, elk teken een apart pad voor de intro). Een nieuwe versie van het logo:
@@ -117,6 +123,7 @@ naam op dezelfde plek, of pas het `src` en de `alt`-tekst in `index.html` aan.
 | ------------------------------------ | ---------------------------------------- |
 | `harveys-casual-luxury.svg`          | Logo, zwart op transparant (gegenereerd) |
 | `harveys-casual-luxury-oranje.svg`   | Logo op het oranje vlak (gegenereerd)    |
+| `harveys-naam.svg`, `harveys-slogan.svg` | Naam en slogan apart, voor de startinhoud van het WordPress-thema (gegenereerd) |
 | `hero-poster.jpg`                    | Stilstaand beeld tot de hero-video laadt |
 | `winkel-women.jpg`                   | Gevel Harvey's Women (contact)           |
 | `winkel-men.jpg`                     | Gevel Harvey's Men (contact)             |
@@ -132,7 +139,7 @@ Foto's voor de galerij werken het best in staand formaat (4:5), minstens
 1000 px breed. Een foto toevoegen: zet het bestand in `images/collectie/` en
 kopieer een `<figure class="galerij__item">`-blok in `index.html` (in de groep
 "Voor haar" of "Voor hem"); `data-merk` en `data-groep` zijn wat de lichtbak
-toont, en het aantal op het tabblad telt vanzelf mee. Het raster is een bento:
+toont. Het raster is een bento:
 elke zevende foto is dubbel zo groot (op een telefoon: elke vijfde over de volle
 breedte). Het aantal kolommen staat in `--kolommen` in `css/tokens.css`.
 
@@ -154,21 +161,149 @@ venster klein en toont het enkel de poster.
 
 Onder de openingsuren toont een label of de winkels nu open zijn ("Nu open · tot
 18 uur" of "Gesloten · opent maandag om 10 uur"). Het rekent in Belgische tijd en
-kent de wettelijke feestdagen. Veranderen de uren, pas dan ook `setupStatus` in
-`js/main.js` aan.
+kent de wettelijke feestdagen. In de statische site staan de uren als standaard in
+`setupStatus` in `js/main.js` (maandag tot zaterdag 10–18 uur); het WordPress-thema
+geeft de ingestelde uren mee in `data-uren` op het label.
 
 ## Bronnen van de inhoud
 
 Alle teksten, merken, adressen, telefoonnummers en openingsuren komen van
-www.harveys.be (homepagina, collectiepagina's en het nieuwsbericht). De slogan
-"Casual Luxury" komt uit de nieuwe huisstijl. Foto's in `images/` zijn van
-harveys.be; merklogo's komen van Wikimedia Commons of van de websites van de merken
-zelf. Voeg geen inhoud toe die niet bij Harvey's vandaan komt.
+www.harveys.be (homepagina, collectiepagina's, het nieuwsbericht, disclaimer en
+privacy), zo letterlijk mogelijk overgenomen. De Engelse zin bij de nieuwsbrief
+("Sign up to our newsletter to receive exclusive offers.") staat er in het
+Nederlands. De slogan "Casual Luxury" komt uit de nieuwe huisstijl; de gegevens bij
+de cadeaubon komen van de bon uit de winkel (op harveys.be staat geen cadeaubon).
+Foto's in `images/` zijn van harveys.be; merklogo's komen van Wikimedia Commons of
+van de websites van de merken zelf. Voeg geen inhoud toe die niet bij Harvey's
+vandaan komt.
 
 ## Cloudflare Pages
 
 Geen build command nodig; output directory: `/` (de hoofdmap).
 
-De nieuwsbrief is in deze mockup nog niet gekoppeld: het formulier toont enkel
-een bevestiging. Koppel later een Pages Function of een externe dienst in
-`setupNewsletter` in `js/main.js`.
+De nieuwsbrief is in de statische site niet gekoppeld: het formulier toont enkel
+een bevestiging. In het WordPress-thema werkt ze wel (zie hieronder).
+
+## WordPress-thema
+
+Hetzelfde ontwerp als WordPress-thema. De vormgeving is gedeeld: `css/` en `js/`
+gaan ongewijzigd mee, dus een aanpassing daar geldt voor beide versies. Alles wat
+per winkel verschilt, staat niet in de code maar in de admin van WordPress: logo,
+icoontje, kleur, teksten, foto's, merken, winkels en openingsuren. Het thema zelf
+bevat niets van Harvey's; dat komt er pas in met de startinhoud. Zo werkt hetzelfde
+thema ook voor een tweede winkel.
+
+### Bouwen
+
+```sh
+sh tools/maak-thema.sh
+```
+
+Dat maakt in `dist/`:
+
+| Bestand                             | Voor                                                     |
+| ----------------------------------- | -------------------------------------------------------- |
+| `harveys.zip` (± 8,7 MB)            | Harvey's: met het logo, de foto's en de teksten van de huidige site |
+| `harveys-zonder-startinhoud.zip`    | een andere winkel: enkel het thema (± 270 kB)            |
+
+### Installeren
+
+1. Maak eerst een back-up van de bestaande site (of test op een kopie/staging van
+   de hosting): zodra je het thema activeert, ziet iedereen de nieuwe site.
+2. In WordPress: Weergave → Thema's → Nieuw thema → Thema uploaden, kies de zip en
+   activeer. Is de upload te groot voor de hosting, zet dan de map `dist/harveys/`
+   via FTP in `wp-content/themes/`.
+3. Instellingen → Algemeen: Sitetitel (`Harvey’s`), Ondertitel (`Casual Luxury`;
+   schermlezers en zoekmachines lezen die als de naam van het logo) en de taal
+   Nederlands (België), voor de datums.
+4. Enkel voor Harvey's: Website → Startinhoud → Startinhoud importeren. Dat zet het
+   logo en het icoontje, alle teksten, de winkels en uren, 38 collectiefoto's, 26
+   merken met logo, het nieuwsbericht en de pagina's Privacy en Disclaimer erin.
+   Eén keer doen.
+
+### Wat waar staat in de admin
+
+| Op de site                      | In WordPress                                                        |
+| ------------------------------- | ------------------------------------------------------------------- |
+| Logo (header, hero, bon, footer) | Website → Logo en kleur: naam en slogan als SVG                    |
+| Icoontje in het browsertabblad  | Website → Logo en kleur (SVG), of Site-pictogram in de Customizer (PNG) |
+| Kleur (hero, merken, nieuwsbrief, accenten) | Website → Logo en kleur                                 |
+| Hero-video, band                | Website → Hero en band                                              |
+| Nieuws                          | Nieuws (de gewone berichten van WordPress, met een uitgelichte afbeelding). Bij meer dan één bericht een carrousel, het nieuwste eerst; hoeveel berichten erin staan: Website → Nieuws en merken |
+| Collectie                       | Website → Collectie: twee groepen (standaard Voor haar en Voor hem, de naam pas je aan), foto's kiezen, slepen voor de volgorde, merk eronder typen |
+| Merken                          | Merken: per merk een naam, een logo en Voor haar en/of Voor hem; Volgorde bepaalt de plaats |
+| Over ons                        | Website → Over ons: titel, uitspraak, tekst en foto's                |
+| Cadeaubon                       | Website → Cadeaubon                                                 |
+| Contact en openingsuren         | Website → Winkels en uren (een tweede winkel mag leeg blijven)     |
+| Nieuwsbrief                     | Website → Nieuwsbrief; inschrijvingen in Website → Inschrijvingen, als CSV te downloaden |
+| Privacy, Disclaimer, footer     | gewone pagina's; Website → Algemeen; Instellingen → Privacy          |
+
+Een sectie zonder inhoud (geen nieuws, geen foto's, ...) verdwijnt vanzelf, ook uit
+het menu. In teksten maakt `*woord*` een woord schuin; de uitspraak bij Over ons staat
+altijd recht. Het onderschrift van een foto in de carrousel staat er enkel voor
+schermlezers.
+
+### Een tweede winkel
+
+Installeer `harveys-zonder-startinhoud.zip` op de WordPress-site van die winkel en
+vul alles in onder Website, Merken en Nieuws. Zolang er geen logo is, staat de
+Sitetitel er in letters (in de hero en de footer even breed als een logo). Het
+logo: Website → Logo en kleur, met twee SVG-bestanden.
+
+- **Naam** en **slogan** apart, elk met de tekst omgezet naar contouren
+  (Illustrator: Tekst → Contouren maken; daarna Exporteren als SVG).
+- Elke letter een apart pad: dan komen de letters in de hero één voor één op.
+  Eén pad voor alles werkt ook, dan komt het logo in één keer.
+- De kleur doet er niet toe: het logo neemt de kleur van zijn plek aan (zwart op
+  oranje, licht in de footer). Witte vlakken om letters "uit te sparen" werken
+  daarom niet; gebruik gaten in het pad zelf (zoals in een O).
+- Met *Breedte van de slogan* en *Ruimte tussen naam en slogan* zet je de slogan
+  juist onder de naam, zoals in het ontwerp van het logo.
+- Op hetzelfde tabblad: het *Icoontje* voor het browsertabblad (een SVG met zijn
+  eigen kleuren) en de *Kleur* van de vlakken en accenten. De tekst op die kleur is
+  zwart; kies dus een heldere kleur.
+
+Elke SVG die geüpload wordt, ook een merklogo, wordt eerst opgekuist: scripts,
+links naar buiten en ingesloten pagina's gaan eruit (`wordpress/harveys/inc/svg.php`).
+
+### De vormgeving aanpassen
+
+Pas `css/` of `js/` aan (zoals voor de statische site), bouw opnieuw met
+`sh tools/maak-thema.sh` en upload de zip opnieuw (WordPress vraagt of het thema
+vervangen mag worden: ja). De instellingen, foto's en merken blijven: die staan in
+de database, niet in het thema. Wat enkel voor WordPress geldt, staat in
+`wordpress/harveys/assets/css/wordpress.css`.
+
+### De code
+
+```
+wordpress/harveys/
+  functions.php            laadt alles uit inc/
+  front-page.php           de homepage: de secties onder elkaar
+  template-parts/sectie-*  één bestand per sectie (hero, nieuws, collectie, ...)
+  header.php, footer.php   de header met menu, de footer
+  page.php, single.php     een pagina (Privacy, ...), een nieuwsbericht
+  inc/instellingen.php     de velden per tabblad onder Website
+  inc/beheer.php           de schermen onder Website
+  inc/logo.php             het logo inline, en samengesteld voor hero en footer
+  inc/svg.php              SVG's uploaden (opgekuist) en tonen
+  inc/merken.php           het berichttype Merk met de groepen
+  inc/nieuwsbrief.php      inschrijvingen bewaren en exporteren
+  inc/hulp.php             openingsuren in woorden, winkels, telefoonlinks
+  inc/startinhoud*.php     de import van de huidige site
+```
+
+De startinhoud zelf (foto's, merklogo's en het logo van Harvey's in `starter/`) zet
+`tools/maak-thema.sh` er bij het bouwen bij, uit `images/` en `favicon.svg`; enkel
+`harveys.zip` bevat ze.
+
+Lokaal testen zonder hosting kan met WordPress Playground:
+
+```sh
+sh tools/maak-thema.sh
+npx @wp-playground/cli@latest server --login \
+  --mount=$PWD/dist/harveys:/wordpress/wp-content/themes/harveys
+```
+
+Activeer daarna het thema bij Weergave → Thema's. Alles wat je daar doet, is weg
+als je de server stopt.

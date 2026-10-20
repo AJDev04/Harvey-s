@@ -17,6 +17,9 @@ voor het gewicht van de Bold, en zegt het dat.
 Wat het script schrijft:
   images/harveys-casual-luxury.svg         het logo, zwart op transparant
   images/harveys-casual-luxury-oranje.svg  het logo op het oranje vlak, zoals de huisstijl
+  images/harveys-naam.svg                  enkel de naam, en
+  images/harveys-slogan.svg                enkel de slogan: het logo voor het WordPress-thema
+                                           (de startinhoud, zie tools/maak-thema.sh)
   favicon.svg                              de H op een oranje vlak
   index.html, disclaimer.html, privacy.html, tussen de markeringen
       <!-- logo:naam:start --> … <!-- logo:naam:einde -->        de naam (header, bon)  
@@ -300,7 +303,17 @@ def main():
         + groep(h_teken, lijn_naam, INKT) + "</g>"
     )
     (WORTEL / "favicon.svg").write_text(svg_bestand(f"0 0 {zijde:.2f} {zijde:.2f}", favicon), encoding="utf-8")
-    print("  images/harveys-casual-luxury.svg, images/harveys-casual-luxury-oranje.svg, favicon.svg geschreven")
+
+    # Naam en slogan apart, voor Website → Logo en kleur in WordPress; de kleur volgt de plek
+    for bestand, regel, lijn in (("harveys-naam.svg", naam, lijn_naam), ("harveys-slogan.svg", slogan, lijn_slogan)):
+        (WORTEL / "images" / bestand).write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb(kader(lijn, regel))}">'
+            + groep(regel, lijn, "currentColor") + "</svg>\n",
+            encoding="utf-8",
+        )
+    print("  images/harveys-casual-luxury.svg, images/harveys-casual-luxury-oranje.svg,")
+    print("  images/harveys-naam.svg, images/harveys-slogan.svg, favicon.svg geschreven")
 
     # 2. Naam, slogan en lockup inline in de pagina's; de kleur volgt de tekstkleur
     def inline(viewbox, *groepen):

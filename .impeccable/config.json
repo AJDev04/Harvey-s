@@ -1,0 +1,62 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-20T12:21:36.616Z",
+        "reason": "agent: #lichtbak-beeld is the lightbox image, src is set by js/galerij.js when a photo opens"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-20T12:23:02.956Z",
+        "reason": "agent: verified in desktop and mobile renders; full-bleed sections, marquees, lightbox and hairline rows all have padded containers/children"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-20T12:23:02.972Z",
+        "reason": "DESIGN.md pins --kalk #f4efe8 as the page background (brand board)"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-20T12:23:02.989Z",
+        "reason": "DESIGN.md pins Geist and Instrument Serif in the font stack"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-20T12:23:03.005Z",
+        "reason": "DESIGN.md specifies the scroll-velocity band and the brand bands"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-20T12:23:03.021Z",
+        "reason": "DESIGN.md sets display H2 line-height 1.05 (Michroma capitals, never paragraphs)"
+      }
+    ]
+  }
+}

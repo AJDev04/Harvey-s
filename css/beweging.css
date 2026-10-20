@@ -112,13 +112,13 @@
   }
 
   .cadeaubon__beeld.tekst:not(.is-in) .bon--omslag {
-    --bon-x: 17.5cqi;
-    --bon-y: 10.5cqi;
+    --bon-x: 20.5cqi;
+    --bon-y: 19cqi;
   }
 
   .cadeaubon__beeld.tekst:not(.is-in) .bon--kaart {
-    --bon-x: -17.5cqi;
-    --bon-y: -10.5cqi;
+    --bon-x: -20.5cqi;
+    --bon-y: -19cqi;
   }
 
   /* ---------- Merken: de banden schuiven traag voorbij ----------

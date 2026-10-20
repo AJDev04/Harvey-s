@@ -17,8 +17,8 @@ The new identity (`new style harveys's.svg`) is the source of truth: a **#e04b00
 with **HARVEY'S** set in Microgramma Extended Bold and **CASUAL LUXURY** underneath at
 ~29% of the size, tracked +0.2em. The site follows that brand board. Orange is used for
 whole blocks of colour, never for small decoration. The display face is wide and set in
-capitals. Black type goes on orange, bone is used everywhere else, and a single italic
-serif adds a soft, luxurious accent.
+capitals. Black type goes on orange, bone is used everywhere else, and a single serif
+adds a soft, luxurious accent.
 
 **Interaction Tier**: L2 (smooth interaction), with one L3 moment (the sticky hero aperture)
 **Dependencies**: none. Vanilla CSS + JS, IntersectionObserver, rAF. hls.js is lazy-loaded
@@ -29,7 +29,7 @@ for the hero video only (already part of the site).
 ```css
 :root {
   /* Brand */
-  --oranje: #e04b00;          /* brand field: hero, merken, nieuwsbrief, cadeaubon */
+  --oranje: #e04b00;          /* brand field: hero, merken, nieuwsbrief */
   --oranje-diep: #b83c00;     /* hover on orange; orange text on light (AA 5:1) */
   --oranje-licht: #f2835a;    /* hero spotlight core, never for text */
 
@@ -78,8 +78,8 @@ for the hero video only (already part of the site).
 
 **Color Rules:**
 - Every colour is a token in `css/tokens.css`; components never contain hex values.
-- Orange is a *field*, not a sprinkle: it fills a whole section, a card, a voucher or a pill. Small
-  orange accents are limited to the active-state dot, the focus ring and the progress line.
+- Orange is a *field*, not a sprinkle: it fills a whole section, a card or a pill. Small
+  orange accents are limited to the active-state dot and the focus ring.
 - Text on orange is always `--inkt`, as on the brand board, never white.
 - Never put orange text under 24px on a light background; use `--oranje-diep`.
 - One loud section at a time: orange sections never touch each other; a kalk/linnen/inkt
@@ -91,7 +91,7 @@ for the hero video only (already part of the site).
 ```css
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Michroma&display=swap');
 
---font-display: 'Michroma', 'Microgramma Extd D', 'Eurostile Extended', 'Arial Black', sans-serif;
+--font-display: 'Michroma', 'Arial Black', sans-serif;
 --font-serif:   'Instrument Serif', 'Iowan Old Style', Georgia, serif;
 --font-sans:    'Geist', 'Helvetica Neue', Arial, sans-serif;
 ```
@@ -108,7 +108,7 @@ and re-run the script; every logo on the site updates.
 |------|------|------|--------|-------------|----------------|
 | Logo (hero) | SVG paths from `tools/logo-bron.svg` (Microgramma Extd D Bold) | `clamp(17rem, 58vw, 50rem)` wide | Bold | n/a | as designed (slogan +0.2em) |
 | Section H2 | Michroma, UPPERCASE | `clamp(1.625rem, 0.9rem + 3.6vw, 4.25rem)` | 400 | 1.05 | 0.01em |
-| Statement | Instrument Serif | `clamp(1.75rem, 1.1rem + 2.8vw, 3.75rem)` | 400 / italic | 1.12 | -0.01em |
+| Statement | Instrument Serif, upright | `clamp(1.75rem, 1.1rem + 2.8vw, 3.75rem)` | 400 | 1.12 | -0.01em |
 | H3 | Instrument Serif | `clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem)` | 400 | 1.15 | n/a |
 | Body | Geist | 1.0625rem | 400 | 1.65 | n/a |
 | Lead | Geist | `clamp(1.125rem, 1rem + 0.5vw, 1.375rem)` | 400 | 1.45 | n/a |
@@ -119,7 +119,10 @@ and re-run the script; every logo on the site updates.
 - Michroma only in capitals, only for display, labels, numbers and navigation. Never for a
   paragraph.
 - Instrument Serif is the "luxury" voice: story statements, news titles, the lightbox title.
-  Italic is reserved for one or two words of emphasis per statement.
+  The statement is fully upright and in ink: no italic or orange accent words (the text
+  carries its own stress, as in "méér").
+- Store photos in the carousel carry no visible caption; the bar under them is only the
+  counter and the arrows (no progress line, no auto-advance).
 - Geist carries every paragraph, form and address.
 - Display tracking is never negative; labels are always ≥ 0.12em.
 - **NEVER use**: Crimson Text, Karla (old identity), Inter, Roboto, Poppins, Montserrat,
@@ -129,6 +132,8 @@ and re-run the script; every logo on the site updates.
 - Hero logo: no gradient, no shadow. The brand board is flat and that holds here.
 - H2: no gradient, no shadow, no index number.
 - Marquee: the second row is *outlined* (`-webkit-text-stroke`, transparent fill) for rhythm.
+  Phrases are separated by a small orange square (the brand field in miniature; outlined on
+  the outlined row). Never a sparkle or four-point star.
 - Body: no decoration ever.
 
 ## 4. Component Stylings
@@ -166,6 +171,16 @@ and re-run the script; every logo on the site updates.
 .galerij__knop:hover .galerij__label { transform: none; }
 ```
 
+### Carousels: store photos (Over) and news
+One component (`.carrousel`) and one script (`setupCarrousel`) for both. A scroll-snap track
+that the visitor moves by swiping, the arrow keys or the two round arrow buttons; it never moves
+on its own. Under it sits one bar: the counter (`01 / 05`, `--steen`) on the left and the
+arrows on the right. There is no progress line and no visible caption.
+- **Over:** a 78% slide with a peek of the next photo, bleeding to the right edge of the screen.
+- **News (`.carrousel--nieuws`):** one news item at a time across the full container width, with
+  no peek and no bleed, newest first. It appears only when there is more than one news item;
+  with a single item the news section is a plain, unchanged article.
+
 ### Navigation
 ```css
 .header { position: fixed; inset: 0 0 auto; transition: transform var(--duur-menu) var(--ease-uit), background-color var(--duur-snel) var(--ease); }
@@ -201,13 +216,15 @@ a:hover { color: var(--inkt); text-decoration-thickness: 2px; }
   transform: translateX(var(--x)); width: var(--w); transition: transform var(--duur-menu) var(--ease-uit), width var(--duur-menu) var(--ease-uit); }
 ```
 
-### Cadeaubon: two paper vouchers (signature detail)
-An ink section with two A6 vouchers (105 × 148) stacked at an angle: the orange cover
-(logo, slogan, MEN · WOMEN) behind, the bone voucher itself in front (hairline inner frame,
-*Cadeaubon* in Instrument Serif italic, dotted "geschonken door" lines, "1 jaar geldig" in
-`--oranje-diep`). Everything on the vouchers is sized in `cqi`, so it scales with the image.
+### Cadeaubon: the real voucher from the shop (signature detail)
+An ink section with the shop's own folded voucher, drawn as two near-square bone cards with
+a thin ink inner frame, stacked at an angle. Top left the cover (logo, slogan, a thick rule,
+MEN – WOMEN, address, both phone numbers, www.harveys.be); bottom right the inside (logo,
+Cadeaubon in upright Instrument Serif instead of the printed script, "geschonken door" with
+two dotted lines, "1 jaar geldig"). Everything on the cards is sized in `cqi`, so it scales
+with the image.
 On enter the vouchers fan out from a straight stack; on hover devices the pair tilts up
-to 6° in 3D and a glare follows the pointer. Next to it: lead, a hairline fact list
+to 6° in 3D and a glare follows the pointer. Next to it: an optional lead, a hairline fact list
 (`dl`), an orange pill (`.knop--oranje`) and the phone numbers.
 
 ### Form (nieuwsbrief)
@@ -215,7 +232,8 @@ to 6° in 3D and a glare follows the pointer. Next to it: lead, a hairline fact 
 .veld input { background: transparent; border: 0; border-bottom: 1px solid var(--inkt); border-radius: 0; color: var(--inkt); min-height: 3rem; }
 .veld input:hover { border-bottom-width: 2px; }
 .veld input:focus-visible { outline: none; border-bottom: 2px solid var(--inkt); box-shadow: 0 2px 0 0 var(--inkt); }
-.veld input[aria-invalid="true"] { border-bottom-color: var(--fout); }
+.veld input::placeholder { color: var(--inkt); font-family: var(--font-serif); font-style: italic; }  /* full ink for contrast; the italic serif sets it apart from typed text */
+.veld input[aria-invalid="true"] { border-bottom: 2px dotted var(--inkt); box-shadow: none; }  /* red can't work on orange: the line turns dotted, like a typo underline */
 ```
 
 ## 5. Layout Principles
@@ -303,6 +321,10 @@ hero.style.setProperty('--p', p.toFixed(4));
   `--oranje-diep` (2px `--inkt` on orange surfaces), offset 3px.
 - Images: scale 1.05 over 900ms.
 - Links: underline thickens; nav underline slides in from the left.
+- Browser surfaces carry the palette: `::selection` is orange with ink text, inverted to ink
+  with orange text on orange surfaces (hero, orange sections, mobile menu); `accent-color`,
+  `caret-color` and `scrollbar-color` are set on `html`.
+- No functional text below `--fs-label` (11px), including gallery tags and the cursor bubble.
 
 ### Special Effects
 - Pointer effects (spotlight, magnet, tilt, cursor bubble) only under `(hover: hover) and (pointer: fine)`; all pointermove handlers are rAF-throttled.
@@ -323,7 +345,7 @@ JS mirrors this: no split-text, no scrub, no autoplay, no carousel auto-advance.
 ## 8. Do's and Don'ts
 
 ### Do
-- Use orange as a full field (hero, merken, nieuwsbrief, cadeaubon) with ink type on it.
+- Use orange as a full field (hero, merken, nieuwsbrief) with ink type on it.
 - Let the wordmark breathe: at least 1× its cap-height of clear space on every side.
 - Set Michroma in capitals with wide tracking; pair it with Instrument Serif for warmth.
 - Keep photography untouched: no filters, duotones or overlays (except the hero scrim).

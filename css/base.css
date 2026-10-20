@@ -9,6 +9,10 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + var(--space-4));
   -webkit-text-size-adjust: 100%;
+  /* ook wat de browser zelf tekent, krijgt de kleuren van het huis */
+  accent-color: var(--oranje);
+  caret-color: var(--oranje-diep);
+  scrollbar-color: color-mix(in srgb, var(--inkt) 45%, var(--kalk)) var(--kalk);
 }
 
 body {
@@ -137,6 +141,14 @@ button {
   color: var(--inkt);
 }
 
+/* Op de oranje vlakken zou een oranje selectie wegvallen: daar wordt het omgekeerd */
+.hero ::selection,
+.sectie--oranje ::selection,
+.nav__paneel ::selection {
+  background: var(--inkt);
+  color: var(--oranje);
+}
+
 .skip-link {
   position: absolute;
   top: var(--space-2);
@@ -151,6 +163,10 @@ button {
 
 .skip-link:focus {
   transform: none;
+}
+
+.skip-link:hover {
+  color: var(--kalk);
 }
 
 .visually-hidden {

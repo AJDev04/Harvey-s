@@ -128,14 +128,16 @@
   }
 
   /* ---------- Hero-video ----------
-     Cloudflare Stream levert HLS. Safari speelt dat zelf af; andere browsers
-     krijgen hls.js. Bij 'minder beweging' blijft enkel de poster staan. Uit beeld
-     pauzeert de video. */
+     Cloudflare Stream levert HLS (data-hls). Safari speelt dat zelf af; andere
+     browsers krijgen hls.js. Een gewoon bestand (data-src, bv. een .mp4 uit
+     WordPress) speelt rechtstreeks. Bij 'minder beweging' blijft enkel de poster
+     staan. Uit beeld pauzeert de video. */
   function setupHeroVideo() {
     var video = document.querySelector('.hero__video');
     if (!video) return;
     var src = video.dataset.hls;
-    if (!src) return;
+    var bestand = video.dataset.src;
+    if (!src && !bestand) return;
 
     if (reduced) {
       video.removeAttribute('autoplay');
@@ -157,8 +159,8 @@
       }).observe(video.closest('.hero') || video);
     }
 
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = src;
+    if (bestand || video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = bestand || src;
       video.addEventListener('loadedmetadata', play, { once: true });
       return;
     }
@@ -394,14 +396,21 @@
   }
 
   /* ---------- Open of gesloten ----------
-     Openingsuren: maandag tot zaterdag 10–18 uur, zondag en feestdagen gesloten.
-     Rekent in Belgische tijd en kent de Belgische wettelijke feestdagen. */
+     Openingsuren: standaard maandag tot zaterdag 10–18 uur, zondag en feestdagen
+     gesloten. Het WordPress-thema geeft de uren mee in data-uren (per dag, zondag
+     eerst: [van, tot] in uren of null) en data-feestdagen ("0": dan open op
+     feestdagen). Rekent in Belgische tijd en kent de Belgische wettelijke feestdagen. */
   function setupStatus() {
     var el = document.querySelector('.status');
     if (!el || !window.Intl || !Intl.DateTimeFormat.prototype.formatToParts) return;
     var tekst = el.querySelector('.status__tekst');
     var dagen = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
     var DAG = 86400000;
+    var uren = [null, [10, 18], [10, 18], [10, 18], [10, 18], [10, 18], [10, 18]];
+    var feestdagenDicht = el.dataset.feestdagen !== '0';
+    try {
+      if (el.dataset.uren) uren = JSON.parse(el.dataset.uren);
+    } catch (e) { /* standaarduren */ }
 
     // Paaszondag (gregoriaans, "anonieme" methode), als UTC-tijdstip
     function pasen(j) {
@@ -431,8 +440,17 @@
       return t === p + DAG || t === p + 39 * DAG || t === p + 50 * DAG;
     }
 
-    function openDag(t) {
-      return new Date(t).getUTCDay() !== 0 && !feestdag(t);
+    // de uren van die dag, of null als de winkels dan dicht zijn
+    function urenVan(t) {
+      var u = uren[new Date(t).getUTCDay()];
+      return u && !(feestdagenDicht && feestdag(t)) ? u : null;
+    }
+
+    // 10 wordt "10 uur", 9.5 wordt "9.30 uur"
+    function tijd(u) {
+      var h = Math.floor(u);
+      var m = Math.round((u - h) * 60);
+      return h + (m ? '.' + String(m).padStart(2, '0') : '') + ' uur';
     }
 
     var formaat = new Intl.DateTimeFormat('en-GB', {
@@ -452,15 +470,16 @@
       });
       var vandaag = Date.UTC(d.year, d.month - 1, d.day);
       var uur = d.hour + d.minute / 60;
-      var vandaagOpen = openDag(vandaag);
-      var isOpen = vandaagOpen && uur >= 10 && uur < 18;
+      var u = urenVan(vandaag);
+      var isOpen = !!u && uur >= u[0] && uur < u[1];
       var zin = null;
-      if (isOpen) zin = 'Nu open · tot 18 uur';
-      else if (vandaagOpen && uur < 10) zin = 'Gesloten · opent vandaag om 10 uur';
+      if (isOpen) zin = 'Nu open · tot ' + tijd(u[1]);
+      else if (u && uur < u[0]) zin = 'Gesloten · opent vandaag om ' + tijd(u[0]);
       else {
         for (var k = 1; k <= 7 && !zin; k++) {
           var t = vandaag + k * DAG;
-          if (openDag(t)) zin = 'Gesloten · opent ' + (k === 1 ? 'morgen' : dagen[new Date(t).getUTCDay()]) + ' om 10 uur';
+          var v = urenVan(t);
+          if (v) zin = 'Gesloten · opent ' + (k === 1 ? 'morgen' : dagen[new Date(t).getUTCDay()]) + ' om ' + tijd(v[0]);
         }
       }
       if (!zin) return;
@@ -473,7 +492,10 @@
     setInterval(werkBij, 60000);
   }
 
-  /* ---------- Nieuwsbrief ---------- */
+  /* ---------- Nieuwsbrief ----------
+     Met een action op het formulier (het WordPress-thema) gaat het adres echt
+     weg, zonder de pagina te verlaten; zonder action (de statische site) wordt
+     er niets verstuurd. */
   function setupNewsletter() {
     var form = document.querySelector('.nieuwsbrief__form');
     if (!form) return;
@@ -493,9 +515,23 @@
         input.focus();
         return;
       }
-      // Mockup: er wordt nog niets verstuurd. Koppel hier later een echte dienst.
-      message.textContent = 'Bedankt. U hoort binnenkort van ons.';
-      form.reset();
+      if (!form.getAttribute('action') || !window.fetch) {
+        message.textContent = 'Bedankt. U hoort binnenkort van ons.';
+        form.reset();
+        return;
+      }
+      var data = new FormData(form);
+      data.append('ajax', '1');
+      message.textContent = 'Even geduld…';
+      fetch(form.action, { method: 'POST', body: data, credentials: 'same-origin' })
+        .then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          message.textContent = 'Bedankt. U hoort binnenkort van ons.';
+          form.reset();
+        })
+        .catch(function () {
+          message.textContent = 'Dat lukte niet. Probeer het later opnieuw.';
+        });
     });
   }
 
@@ -596,24 +632,23 @@
     });
   }
 
-  /* ---------- Carrousel (Over Harvey's) ----------
+  /* ---------- Carrousels (Over Harvey's, Nieuws) ----------
      Het spoor scrolt met scroll-snap, dus vegen en slepen werken vanzelf.
-     Hier komen de pijlen, de teller, en het vanzelf doorschuiven met de
-     voortgangslijn bij. Bij "minder beweging" schuift er niets vanzelf. */
+     Hier komen de pijlen en de teller bij. Er schuift niets vanzelf. */
   function setupCarrousel() {
-    var wortel = document.getElementById('over-carrousel');
-    if (!wortel) return;
+    document.querySelectorAll('.carrousel').forEach(setupEenCarrousel);
+  }
+
+  function setupEenCarrousel(wortel) {
     var spoor = wortel.querySelector('.carrousel__spoor');
+    if (!spoor) return;
     var slides = Array.prototype.slice.call(spoor.children);
     var teller = wortel.querySelector('.carrousel__nu');
-    var voortgang = wortel.querySelector('.carrousel__voortgang');
-    var interval = 6000;
-    var huidig = 0;
-    var timer = null;
-    var stil = false; // muis erop, focus erin of aan het slepen: niet doorschuiven
+    if (!teller || slides.length < 2) return; // één slide: niets te schuiven
+    var huidig = 0; // de carrousel schuift enkel als de bezoeker dat doet
 
     function index() {
-      var links = spoor.scrollLeft;
+      var links = spoor.scrollLeft + slides[0].offsetLeft; // offsetLeft telt de binnenmarge van het spoor mee
       var beste = 0;
       var afstand = Infinity;
       slides.forEach(function (slide, i) {
@@ -625,10 +660,10 @@
 
     var knoppen = wortel.querySelectorAll('.carrousel__knoppen button');
 
-    // Geen lus: bij de laatste foto stopt het
+    // Geen lus: bij de laatste slide stopt het
     function toon(i) {
       huidig = Math.max(0, Math.min(slides.length - 1, i));
-      spoor.scrollTo({ left: slides[huidig].offsetLeft, behavior: reduced ? 'instant' : 'smooth' });
+      spoor.scrollTo({ left: slides[huidig].offsetLeft - slides[0].offsetLeft, behavior: reduced ? 'instant' : 'smooth' });
       werkTellerBij();
     }
 
@@ -640,26 +675,7 @@
       });
     }
 
-    function herstartVoortgang() {
-      if (reduced) return;
-      voortgang.classList.remove('is-bezig');
-      void voortgang.offsetWidth; // herstart de transitie
-      voortgang.style.setProperty('--tijd', interval + 'ms');
-      if (!stil) voortgang.classList.add('is-bezig');
-    }
-
-    function plan() {
-      clearTimeout(timer);
-      voortgang.classList.remove('is-bezig');
-      if (reduced || huidig >= slides.length - 1) return; // laatste foto: klaar
-      herstartVoortgang();
-      if (stil) return;
-      timer = setTimeout(function () {
-        toon(huidig + 1);
-      }, interval);
-    }
-
-    // Na scrollen (pijl, veeg of sleep) de teller bijwerken en opnieuw plannen
+    // Na scrollen (pijl, veeg of sleep) de teller bijwerken
     var wachtScroll;
     spoor.addEventListener('scroll', function () {
       clearTimeout(wachtScroll);
@@ -669,7 +685,6 @@
           huidig = i;
           werkTellerBij();
         }
-        plan();
       }, 120);
     }, { passive: true });
 
@@ -683,27 +698,6 @@
       if (e.key === 'ArrowRight') { e.preventDefault(); toon(huidig + 1); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); toon(huidig - 1); }
     });
-
-    function pauzeer() { stil = true; clearTimeout(timer); voortgang.classList.remove('is-bezig'); }
-    function hervat() { stil = false; plan(); }
-    wortel.addEventListener('pointerenter', pauzeer);
-    wortel.addEventListener('pointerleave', hervat);
-    wortel.addEventListener('focusin', pauzeer);
-    wortel.addEventListener('focusout', function (e) {
-      if (!wortel.contains(e.relatedTarget)) hervat();
-    });
-
-    // Pas doorschuiven als de carrousel in beeld is
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) plan();
-          else { clearTimeout(timer); voortgang.classList.remove('is-bezig'); }
-        });
-      }, { threshold: 0.4 }).observe(wortel);
-    } else {
-      plan();
-    }
 
     werkTellerBij();
   }

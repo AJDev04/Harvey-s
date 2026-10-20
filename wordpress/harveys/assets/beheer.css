@@ -1,0 +1,118 @@
+/* Admin, Website: de velden voor foto's, SVG's, galerijen en uren. */
+
+.harveys-uitleg {
+  max-width: 48rem;
+  font-size: 14px;
+}
+
+.harveys-beheer h2 {
+  margin-top: 2em;
+}
+
+/* Eén foto of SVG */
+.harveys-media__voorbeeld img {
+  display: block;
+  max-width: 320px;
+  max-height: 160px;
+  margin-bottom: 8px;
+  padding: 8px;
+  background:
+    repeating-conic-gradient(#f0f0f1 0% 25%, #fff 0% 50%) 0 0 / 16px 16px;
+  border: 1px solid #dcdcde;
+}
+
+.harveys-media__weg {
+  color: #b32d2e;
+}
+
+.harveys-media:not(.heeft-waarde) .harveys-media__weg {
+  display: none;
+}
+
+/* Het standaardlogo, als er geen eigen SVG gekozen is */
+/* "Nu: de naam van de site in letters" verdwijnt zodra er een logo gekozen is */
+.harveys-standaard:has(+ .harveys-media.heeft-waarde) {
+  display: none;
+}
+
+/* Kleur */
+.harveys-kleur {
+  width: 4rem;
+  height: 2rem;
+  padding: 2px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+/* Galerij */
+.harveys-galerij__lijst {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 8px;
+}
+
+.harveys-galerij__item {
+  position: relative;
+  width: 120px;
+  margin: 0;
+  cursor: move;
+}
+
+.harveys-galerij__item img {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: #f0f0f1;
+}
+
+.harveys-galerij__item input {
+  width: 100%;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.harveys-galerij__weg {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.harveys-galerij__weg:hover,
+.harveys-galerij__weg:focus {
+  background: #b32d2e;
+}
+
+.harveys-galerij__item.ui-sortable-placeholder {
+  visibility: visible !important;
+  height: 150px;
+  border: 2px dashed #c3c4c7;
+}
+
+.harveys-galerij__aantal {
+  margin-left: 8px;
+  color: #646970;
+}
+
+/* Openingsuren */
+.harveys-uren th,
+.harveys-uren td {
+  padding: 4px 12px 4px 0;
+}
+
+.harveys-uren thead th {
+  font-weight: 400;
+  color: #646970;
+}
