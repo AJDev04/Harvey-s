@@ -129,16 +129,14 @@ naam op dezelfde plek, of pas het `src` en de `alt`-tekst in `index.html` aan.
 | `winkel-men.jpg`                     | Gevel Harvey's Men (contact)             |
 | `winkel/*.jpg`                       | Carrousel bij "Over Harvey's": interieurfoto's van beide winkels |
 | `collectie-schoenen.jpg`             | Nieuwsbericht Nathan-Baume               |
-| `collectie/*.jpg`                    | Galerij: de collectiefoto's van harveys.be, `hem-`/`haar-` + merk; `haar-guess-sfeer`, `-denim`, `-suede`, `-tassen` en `-avond` komen uit de campagne van Guess FW26/27 |
+| `collectie/*.jpg`                    | Galerij: `hem-` + een korte beschrijving van de foto; `haar-guess-sfeer`, `-denim`, `-suede`, `-tassen` en `-avond` komen uit de campagne van Guess FW26/27 |
 | `campagne-guess-*.jpg`               | Campagnebeelden van Guess FW26/27 (modellen, motor, close-up), nog niet in gebruik |
-| `liujo/*.jpg`                        | Campagnebeelden van Liu Jo FW26: zes in de galerij (Voor haar); `liujo-avond-4x5` is de avondfoto al bijgesneden voor WordPress (dat snijdt in het midden en zou het gezicht wegsnijden); `liujo-gele-muur` (liggend en `-staand`) en `liujo-trap` nog niet in gebruik |
+| `liujo/*.jpg`                        | Campagnebeelden van Liu Jo FW26: vijf in de galerij (Voor haar); `liujo-avond-4x5` is de avondfoto al bijgesneden voor WordPress (dat snijdt in het midden en zou het gezicht wegsnijden); `liujo-gele-muur` (liggend en `-staand`) en `liujo-trap` nog niet in gebruik, `liujo-schoenen` niet meer |
 | `merken/*`                           | Merklogo's, één bestand per merk         |
 | `videjo-logo.svg`                    | "Webdesign door VIDEJO" in de footer, linkt naar videjo.be; `tools/maak-thema.sh` zet het ook in `assets/` van het WordPress-thema |
 
 De bestanden `harveys-icon.*`, `harveys-logo.svg` en `harveys-logo-white.png` zijn
-van de vorige huisstijl en worden niet meer gebruikt; `collectie/haar-guess-1.jpg`
-tot `-3.jpg` en `collectie/haar-liu-jo-1.jpg` tot `-3.jpg` zijn vervangen door de
-campagnebeelden van Guess en Liu Jo.
+van de vorige huisstijl en worden niet meer gebruikt.
 
 Foto's voor de galerij werken het best in staand formaat (4:5), minstens
 1000 px breed. Een foto toevoegen: zet het bestand in `images/collectie/` en

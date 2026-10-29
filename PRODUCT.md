@@ -79,12 +79,13 @@ Loyalty-card holders get 5% off.
 
 - Texts from harveys.be: home page, collection pages, the Nathan-Baume news item,
   disclaimer and privacy.
-- Photos: 38 collection photos (`images/collectie/`, prefixed `haar-` or `hem-` plus the
-  brand), store interiors (`images/winkel/`), both facades (`images/winkel-women.jpg`,
+- Photos: the gallery has 6 "Voor hem" photos (`images/collectie/hem-*`) and 10 "Voor haar"
+  campaign photos: Guess FW26/27 (`images/collectie/haar-guess-*`) and Liu Jo FW26
+  (`images/liujo/`), store interiors (`images/winkel/`), both facades (`images/winkel-women.jpg`,
   `images/winkel-men.jpg`), the news photo (`images/collectie-schoenen.jpg`), and the hero
   video on Cloudflare Stream with `images/hero-poster.jpg`.
-- Brand logos in `images/merken/`. No logo yet for No Secrets, Freebird, Senso, Reset,
-  Nathan-Baume, Beaumont and Hox; their names stand in as text.
+- Brand logos in `images/merken/`. No logo yet for No Secrets, Senso, Reset and
+  Nathan-Baume; their names stand in as text.
 - The shop's real gift voucher, which the voucher section reproduces.
 - **Absent, so never fabricate:** reviews or testimonials, prices, an online shop, staff names
   or photos, founding year or history, press, awards, and opening hours or offers that the shop
