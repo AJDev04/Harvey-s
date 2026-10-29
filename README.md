@@ -28,6 +28,7 @@ js/main.js          menu, header, hero, band, titels, cadeaubon, open/gesloten,
 js/galerij.js       tabbladen, de bol "Bekijk" en de lichtbak van de Collectie
 tools/maak-logo.py  maakt het logo als SVG-paden en zet het in de pagina's
 tools/maak-thema.sh bouwt het WordPress-thema als zip in dist/
+tools/haal-collectiefotos.sh haalt de productfoto's van Voor haar op (voorbeeldbeelden)
 tools/fonts/        Michroma (OFL-licentie), invoer voor maak-logo.py
 wordpress/harveys/  het WordPress-thema: PHP-sjablonen en de beheerschermen
 images/             alle beelden
@@ -129,9 +130,9 @@ naam op dezelfde plek, of pas het `src` en de `alt`-tekst in `index.html` aan.
 | `winkel-men.jpg`                     | Gevel Harvey's Men (contact)             |
 | `winkel/*.jpg`                       | Carrousel bij "Over Harvey's": interieurfoto's van beide winkels |
 | `collectie-schoenen.jpg`             | Nieuwsbericht Nathan-Baume               |
-| `collectie/*.jpg`                    | Galerij: `hem-` + een korte beschrijving van de foto; `haar-guess-sfeer`, `-denim`, `-suede`, `-tassen` en `-avond` komen uit de campagne van Guess FW26/27 |
+| `collectie/*.jpg`                    | Galerij: `hem-` + een korte beschrijving van de foto. Voor haar: negen `haar-`-productfoto's uit de wintercollectie (merk + stuk, 1200 × 1500 px), voorbeeldbeelden voor de presentatie, opgehaald met `sh tools/haal-collectiefotos.sh` (zie [Bronnen](#bronnen-van-de-inhoud)), plus `haar-cambio-1` (de Cambio-broek van harveys.be); `haar-cambio-2` en `-3` (ook van harveys.be) en `haar-guess-*` (campagne Guess FW26/27) zijn niet in gebruik |
 | `campagne-guess-*.jpg`               | Campagnebeelden van Guess FW26/27 (modellen, motor, close-up), nog niet in gebruik |
-| `liujo/*.jpg`                        | Campagnebeelden van Liu Jo FW26: vijf in de galerij (Voor haar); `liujo-avond-4x5` is de avondfoto al bijgesneden voor WordPress (dat snijdt in het midden en zou het gezicht wegsnijden); `liujo-gele-muur` (liggend en `-staand`) en `liujo-trap` nog niet in gebruik, `liujo-schoenen` niet meer |
+| `liujo/*.jpg`                        | Campagnebeelden van Liu Jo FW26, niet meer in de galerij; `liujo-avond-4x5` is de avondfoto al bijgesneden voor WordPress (dat snijdt in het midden en zou het gezicht wegsnijden) |
 | `merken/*`                           | Merklogo's, één bestand per merk         |
 | `videjo-logo.svg`                    | "Webdesign door VIDEJO" in de footer, linkt naar videjo.be; `tools/maak-thema.sh` zet het ook in `assets/` van het WordPress-thema |
 
@@ -181,7 +182,12 @@ privacy), zo letterlijk mogelijk overgenomen. De Engelse zin bij de nieuwsbrief
 Nederlands. De slogan "Casual Luxury" komt uit de nieuwe huisstijl; de gegevens bij
 de cadeaubon komen van de bon uit de winkel (op harveys.be staat geen cadeaubon).
 Foto's in `images/` zijn van harveys.be, behalve de campagnebeelden van Guess
-FW26/27 (via de persdienst van Fashion Club 70) en van Liu Jo FW26 (uit hun B2B-deck);
+FW26/27 (via de persdienst van Fashion Club 70) en van Liu Jo FW26 (uit hun B2B-deck),
+en de negen `haar-`-productfoto's van de Collectie (wintercollectie, enkel merken
+die op de site staan): die komen van de websites van Polo Ralph Lauren,
+7 For All Mankind en Rino & Pelle en zijn **enkel voorbeeldbeelden om de site aan
+Harvey's voor te stellen**. Vervang ze door de
+officiële beelden van de merken (of eigen foto's) voor de site online gaat;
 merklogo's komen van Wikimedia Commons of
 van de websites van de merken zelf. Voeg geen inhoud toe die niet bij Harvey's
 vandaan komt.
