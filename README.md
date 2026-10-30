@@ -130,7 +130,7 @@ naam op dezelfde plek, of pas het `src` en de `alt`-tekst in `index.html` aan.
 | `winkel-men.jpg`                     | Gevel Harvey's Men (contact)             |
 | `winkel/*.jpg`                       | Carrousel bij "Over Harvey's": interieurfoto's van beide winkels |
 | `collectie-schoenen.jpg`             | Nieuwsbericht Nathan-Baume               |
-| `collectie/*.jpg`                    | Galerij: `hem-`/`haar-` + merk of beschrijving. Voor haar staan enkel stukken die zeker bij Harvey's liggen: de collectiefoto's van harveys.be (`haar-cambio-1` tot `-3`, `haar-liu-jo-1` en `-2`, `haar-polo-ralph-lauren-1`, `haar-reset-1`) en `haar-prl-donsjack-navy` en `haar-7fam-lotta-corduroy`, twee stukken uit de winkel met een voorbeeldbeeld van de website van het merk (ophalen met `sh tools/haal-collectiefotos.sh`, zie [Bronnen](#bronnen-van-de-inhoud)); `haar-guess-*` (campagne Guess FW26/27) zijn niet in gebruik |
+| `collectie/*.jpg`                    | Galerij: `hem-`/`haar-` + merk of beschrijving. Voor haar staan enkel stukken die zeker bij Harvey's liggen: `haar-prl-donsjack-khaki` en `haar-7fam-lotta-corduroy` (nagekeken op een video uit de winkel), `haar-nosecrets-cardigan-macaron`, `haar-senso-neela-brown` en `haar-reset-felice-coffee-bean` (opgezocht aan de hand van het label), allemaal voorbeeldbeelden opgehaald met `sh tools/haal-collectiefotos.sh` (zie [Bronnen](#bronnen-van-de-inhoud)); plus `haar-cambio-1`, `haar-cambio-3` en `haar-polo-ralph-lauren-1`, collectiefoto's van harveys.be. Niet in gebruik: `haar-cambio-2`, `haar-liu-jo-*`, `haar-reset-1`, `haar-forallmankind-1`, `haar-guess-*` |
 | `campagne-guess-*.jpg`               | Campagnebeelden van Guess FW26/27 (modellen, motor, close-up), nog niet in gebruik |
 | `liujo/*.jpg`                        | Campagnebeelden van Liu Jo FW26, niet meer in de galerij; `liujo-avond-4x5` is de avondfoto al bijgesneden voor WordPress (dat snijdt in het midden en zou het gezicht wegsnijden) |
 | `merken/*`                           | Merklogo's, één bestand per merk         |
@@ -152,8 +152,9 @@ elke zevende foto is dubbel zo groot (op een telefoon: elke vijfde over de volle
 breedte). Het aantal kolommen staat in `--kolommen` in `css/tokens.css`.
 Geeft dat een gat (bij een aantal foto's dat niet uitkomt), zet dan op de
 `<figure>` van een foto die groot zou worden de klasse `galerij__item--klein`:
-die blijft dan gewoon klein. Bij Voor haar (9 foto's) staat ze op de 6de en 8ste
-foto, zodat het raster op elk scherm vol is.
+die blijft dan gewoon klein. Bij Voor haar (8 foto's) staat ze op de 1ste, 6de en
+8ste foto: dan zijn alle foto's even groot en is het raster vol op laptop en
+telefoon (op een tablet, met drie kolommen, gaat 8 niet op).
 
 ## Hero
 
@@ -187,9 +188,10 @@ Nederlands. De slogan "Casual Luxury" komt uit de nieuwe huisstijl; de gegevens 
 de cadeaubon komen van de bon uit de winkel (op harveys.be staat geen cadeaubon).
 Foto's in `images/` zijn van harveys.be, behalve de campagnebeelden van Guess
 FW26/27 (via de persdienst van Fashion Club 70) en van Liu Jo FW26 (uit hun B2B-deck),
-en de productfoto's van het donsjack (Polo Ralph Lauren) en de Lotta in corduroy
-(7 For All Mankind) in de Collectie: stukken die in de winkel liggen (nagekeken op
-een video uit de winkel), met de foto van de website van het merk. Dat zijn **enkel voorbeeldbeelden om de site aan
+en vijf productfoto's in de Collectie (Polo Ralph Lauren, 7 For All Mankind,
+No Secrets, Senso en Reset): stukken die in de winkel liggen, nagekeken op een
+video uit de winkel of opgezocht aan de hand van het label, met de foto van de
+website van het merk (de Senso-foto van de webshop van een verkoper). Dat zijn **enkel voorbeeldbeelden om de site aan
 Harvey's voor te stellen**. Vervang ze door de
 officiële beelden van de merken (of eigen foto's) voor de site online gaat;
 merklogo's komen van Wikimedia Commons of

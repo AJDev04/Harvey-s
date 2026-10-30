@@ -96,14 +96,13 @@ Geldigheid | 1 jaar',
     ],
     'collectie' => [
         'haar' => [
-            ['collectie/haar-prl-donsjack-navy.jpg', 'Polo Ralph Lauren', 'Vrouw in een glanzend marineblauw donsjack met kap en een rood ponylogo, over een jeans'],
-            ['collectie/haar-liu-jo-1.jpg', 'Liu Jo', 'Vrouw in een nauwsluitende lichtroze gebreide jurk met opstaande kraag en lange mouwen'],
+            ['collectie/haar-prl-donsjack-khaki.jpg', 'Polo Ralph Lauren', 'Vrouw in een glanzend kakigroen donsjack met kap (kleur New olive), over een bruine broek'],
+            ['collectie/haar-nosecrets-cardigan-macaron.jpg', 'No Secrets', 'Vrouw in een roze cardigan in de kleur macaron, met kraag en manchetten in imitatiebont'],
             ['collectie/haar-7fam-lotta-corduroy.jpg', '7 For All Mankind', 'Vrouw in een wijde donkerbruine corduroy broek en een zwart vest met een rode riem'],
+            ['collectie/haar-senso-neela-brown.jpg', 'Senso', 'Vrouw in de bruine trui Neela met geborduurde bloemen en ballonmouwen'],
+            ['collectie/haar-reset-felice-coffee-bean.jpg', 'Reset', 'Vrouw in de lange donsjas Felice in coffee bean, met kap en schuine doorstiksels'],
             ['collectie/haar-cambio-1.jpg', 'Cambio', 'Beige corduroy broek met wijde pijpen, gedragen met een witte top en beige enkellaarsjes'],
             ['collectie/haar-polo-ralph-lauren-1.jpg', 'Polo Ralph Lauren', 'Vrouw in een grijs kabelgebreid jack met drukknopen over een wit hemd, met een grijze broek en een zwarte handtas'],
-            ['collectie/haar-cambio-2.jpg', 'Cambio', 'Bordeauxrode broek in imitatieleer met elastische tailleband, gedragen met sneakers'],
-            ['collectie/haar-liu-jo-2.jpg', 'Liu Jo', 'Vrouw in een donkerbruine wikkeljurk met lange mouwen en een gouden gesp aan de taille'],
-            ['collectie/haar-reset-1.jpg', 'Reset', 'Vrouw in een lange donkerbruine gewatteerde jas met hoge kraag, over een witte broek'],
             ['collectie/haar-cambio-3.jpg', 'Cambio', 'Antracietgrijze pantalon met rechte pijpen, gedragen met zilveren enkellaarsjes'],
         ],
         'hem' => [
