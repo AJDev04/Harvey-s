@@ -254,6 +254,7 @@ to 6° in 3D and a glare follows the pointer. Next to it: an optional lead, a ha
 .sectie__kop { display: grid; grid-template-columns: auto 1fr; column-gap: var(--space-5); }
 
 /* Collectie: bento, every 7th photo is 2×2 and the rest pack around it */
+/* .galerij__item--klein opts a photo out of the 2×2 / full-width slot, to avoid a gap */
 .galerij__raster { display: grid; grid-template-columns: repeat(var(--kolommen), 1fr); grid-auto-flow: dense; gap: var(--galerij-gap); }
 .galerij__item:nth-child(7n + 1) { grid-column: span 2; grid-row: span 2; }
 

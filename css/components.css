@@ -755,6 +755,10 @@ html.menu-open .header {
   }
 }
 
+.galerij__raster .galerij__item--klein .galerij__knop {
+  aspect-ratio: 4 / 5;
+}
+
 .galerij__knop img {
   display: block;
   width: 100%;

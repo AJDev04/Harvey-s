@@ -127,6 +127,13 @@
   }
 }
 
+/* Een foto die altijd gewoon klein blijft, ook op een plek die anders groot
+   wordt: zo vermijd je een gat in het raster bij een oneven aantal foto's */
+.galerij__raster .galerij__item--klein {
+  grid-column: auto;
+  grid-row: auto;
+}
+
 /* Merken: twee banden onder elkaar, over de volle breedte */
 .merkgroep + .merkgroep {
   margin-top: var(--space-7);
