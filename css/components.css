@@ -759,7 +759,8 @@ html.menu-open .header {
   aspect-ratio: 4 / 5;
 }
 
-.galerij__knop img {
+.galerij__knop img,
+.galerij__knop video {
   display: block;
   width: 100%;
   height: 100%;
@@ -768,8 +769,42 @@ html.menu-open .header {
 }
 
 .galerij__knop:hover img,
-.galerij__knop:focus-visible img {
+.galerij__knop:focus-visible img,
+.galerij__knop:hover video,
+.galerij__knop:focus-visible video {
   transform: scale(1.05);
+}
+
+/* Een video in de galerij: een kleine afspeelknop rechtsboven, zodat je ziet dat het
+   geen foto is (de video zelf speelt zonder geluid, js/galerij.js) */
+.galerij__item--video .galerij__knop {
+  position: relative;
+}
+
+.galerij__item--video .galerij__knop::before,
+.galerij__item--video .galerij__knop::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.galerij__item--video .galerij__knop::before {
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--kalk);
+}
+
+.galerij__item--video .galerij__knop::after {
+  top: calc(var(--space-3) + 0.7rem);
+  right: calc(var(--space-3) + 0.62rem);
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--inkt);
+  clip-path: polygon(15% 0, 100% 50%, 15% 100%);
 }
 
 .galerij__knop:focus-visible {
@@ -913,7 +948,8 @@ html.menu-open .header {
   height: 100%;
 }
 
-.lichtbak__beeld img {
+.lichtbak__beeld img,
+.lichtbak__beeld video {
   display: block;
   max-width: 100%;
   max-height: 100%;
@@ -922,6 +958,15 @@ html.menu-open .header {
   border-radius: var(--radius-md);
   transform-origin: 0 0;
   box-shadow: var(--schaduw-zwevend);
+}
+
+/* de lichtbak toont de foto of de video; het andere element staat op hidden */
+.lichtbak__beeld [hidden] {
+  display: none;
+}
+
+.lichtbak__beeld video {
+  background: var(--zwart);
 }
 
 .lichtbak__tekst {

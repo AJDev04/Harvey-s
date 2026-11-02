@@ -40,10 +40,12 @@ unset( $harveys_secties['cadeaubon'] ); // die staat enkel in de footer
 						<?php endforeach; ?>
 					</ul>
 					<div class="nav__voet">
-						<p class="nav__adres"><?php echo esc_html( harveys_optie( 'adres_kort' ) ); ?><br /><?php echo esc_html( harveys_optie( 'gemeente' ) ); ?></p>
+						<?php if ( harveys_optie( 'adres_kort' ) || harveys_optie( 'gemeente' ) ) : ?>
+							<p class="nav__adres"><?php echo esc_html( harveys_optie( 'adres_kort' ) ); ?><br /><?php echo esc_html( harveys_optie( 'gemeente' ) ); ?></p>
+						<?php endif; ?>
 						<?php if ( harveys_heeft_slogan() ) : ?>
 							<p class="nav__slogan">
-								<span class="visually-hidden"><?php bloginfo( 'description' ); ?></span>
+								<span class="visually-hidden"><?php echo esc_html( get_bloginfo( 'description' ) ); ?></span>
 								<?php echo harveys_logo( 'slogan' ); // phpcs:ignore WordPress.Security.EscapeOutput -- opgekuiste SVG ?>
 							</p>
 						<?php endif; ?>

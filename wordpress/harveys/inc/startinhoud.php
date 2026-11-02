@@ -7,7 +7,11 @@
  * Eerst komen de teksten, merken, het nieuwsbericht en de pagina's erin; daarna
  * het logo en de foto's, in kleine stappen (een trage server stopt anders
  * halverwege). Logo en foto's staan in starter/ van het thema (enkel in
- * harveys.zip); inc/startinhoud-data.php zegt wat waar hoort.
+ * harveys.zip); inc/startinhoud-data.php zegt wat waar hoort. Zonder die twee
+ * staat Startinhoud niet in het menu.
+ *
+ * Een bestand dat ontbreekt, wordt overgeslagen; de rest gaat gewoon door. Loopt
+ * de server vast op een bestand, dan slaat de volgende stap het over.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -18,10 +22,17 @@ function harveys_starter_map() {
 	return HARVEYS_MAP . '/starter';
 }
 
+/** Bevat deze versie van het thema startinhoud (de foto's en de lijst ervan)? */
+function harveys_heeft_startinhoud() {
+	return is_dir( harveys_starter_map() ) && is_readable( HARVEYS_MAP . '/inc/startinhoud-data.php' );
+}
+
 add_action(
 	'admin_menu',
 	function () {
-		add_submenu_page( 'harveys-algemeen', 'Startinhoud', 'Startinhoud', 'edit_theme_options', 'harveys-startinhoud', 'harveys_import_pagina' );
+		if ( harveys_heeft_startinhoud() || is_array( get_option( HARVEYS_IMPORT ) ) ) {
+			add_submenu_page( 'harveys-algemeen', 'Startinhoud', 'Startinhoud', 'edit_theme_options', 'harveys-startinhoud', 'harveys_import_pagina' );
+		}
 	},
 	20
 );
@@ -54,8 +65,17 @@ function harveys_import_pagina() {
 								balk.value = a.data.gedaan;
 								teller.textContent = a.data.gedaan + ' van ' + a.data.totaal;
 								if ( a.data.klaar ) {
-									melding.innerHTML = '<strong>Klaar.</strong> ' + ( a.data.mislukt ? a.data.mislukt + ' bestand(en) konden niet geïmporteerd worden. ' : '' ) +
-										'<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Bekijk de site</a>';
+									var klaar = document.createElement( 'strong' );
+									klaar.textContent = 'Klaar. ';
+									var link = document.createElement( 'a' );
+									link.href = <?php echo wp_json_encode( esc_url( home_url( '/' ) ) ); ?>;
+									link.textContent = 'Bekijk de site';
+									melding.replaceChildren( klaar, link );
+									if ( a.data.overgeslagen.length ) {
+										var lijst = document.createElement( 'p' );
+										lijst.textContent = 'Overgeslagen (niet gevonden of niet te importeren): ' + a.data.overgeslagen.join( ', ' );
+										melding.after( lijst );
+									}
 								} else {
 									stap();
 								}
@@ -70,6 +90,10 @@ function harveys_import_pagina() {
 		<?php else : ?>
 			<?php if ( $klaar ) : ?>
 				<div class="notice notice-success"><p>De startinhoud is geïmporteerd op <?php echo esc_html( wp_date( 'j F Y \o\m H:i', (int) $klaar ) ); ?>.</p></div>
+				<?php $harveys_overgeslagen = (array) get_option( 'harveys_import_overgeslagen', array() ); ?>
+				<?php if ( $harveys_overgeslagen ) : ?>
+					<div class="notice notice-warning"><p>Overgeslagen (niet gevonden of niet te importeren): <?php echo esc_html( implode( ', ', $harveys_overgeslagen ) ); ?></p></div>
+				<?php endif; ?>
 			<?php endif; ?>
 			<p style="max-width:48rem">Dit zet de inhoud van de oorspronkelijke site van Harvey's in WordPress: het logo, alle teksten en instellingen onder Website,
 				de winkels en openingsuren, de foto's van de collectie en de winkels, de merken met hun logo,
@@ -77,8 +101,8 @@ function harveys_import_pagina() {
 			<p style="max-width:48rem"><strong>Let op:</strong> de instellingen onder Website worden overschreven. Een logo of icoontje dat al
 				gekozen is, blijft staan. Bedoeld voor de eerste keer; nog eens importeren zet de foto's er een tweede keer bij.
 				Voor een andere winkel importeer je dit niet, maar vul je alles zelf in.</p>
-			<?php if ( ! is_dir( harveys_starter_map() ) ) : ?>
-				<p><em>Deze versie van het thema bevat geen startinhoud (de map starter/ ontbreekt).</em></p>
+			<?php if ( ! harveys_heeft_startinhoud() ) : ?>
+				<p><em>Deze versie van het thema bevat geen startinhoud.</em></p>
 			<?php else : ?>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<input type="hidden" name="action" value="harveys_import" />
@@ -91,14 +115,29 @@ function harveys_import_pagina() {
 	<?php
 }
 
+/** Het pad van een bestand in starter/, of '' als het er niet (leesbaar) is. */
+function harveys_import_pad( $relatief ) {
+	$relatief = ltrim( str_replace( '\\', '/', (string) $relatief ), '/' );
+	if ( '' === $relatief || false !== strpos( $relatief, '..' ) ) {
+		return '';
+	}
+	$bron = harveys_starter_map() . '/' . $relatief;
+	return is_file( $bron ) && is_readable( $bron ) ? $bron : '';
+}
+
+/** Staat dit bestand in starter/? */
+function harveys_import_bestaat( $relatief ) {
+	return '' !== harveys_import_pad( $relatief );
+}
+
 /** Zet een bestand uit starter/ in de mediabibliotheek; geeft de id, of 0. */
 function harveys_import_bestand( $relatief, $titel, $alt = '', $bijschrift = '' ) {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 	require_once ABSPATH . 'wp-admin/includes/media.php';
 	require_once ABSPATH . 'wp-admin/includes/image.php';
 
-	$bron = harveys_starter_map() . '/' . $relatief;
-	if ( ! is_readable( $bron ) ) {
+	$bron = harveys_import_pad( $relatief );
+	if ( '' === $bron ) {
 		return 0;
 	}
 	// media_handle_sideload verplaatst het bestand: werk met een kopie
@@ -144,12 +183,15 @@ add_action(
 	'admin_post_harveys_import',
 	function () {
 		if ( ! current_user_can( 'edit_theme_options' ) || ! check_admin_referer( 'harveys_import' ) ) {
-			wp_die( 'Geen toegang.' );
+			wp_die( 'Geen toegang.', '', array( 'response' => 403 ) );
+		}
+		if ( ! harveys_heeft_startinhoud() ) {
+			wp_die( 'Deze versie van het thema bevat geen startinhoud.' );
 		}
 		$data  = require HARVEYS_MAP . '/inc/startinhoud-data.php';
 		$taken = array();
 
-		// Het logo van Harvey's, als er nog geen eigen logo of icoontje gekozen is
+		// Het logo, als er nog geen eigen logo of icoontje gekozen is
 		foreach ( $data['logo'] as $sleutel => $logo ) {
 			if ( ! harveys_optie( $sleutel ) ) {
 				$taken[] = array( 'soort' => 'logo', 'sleutel' => $sleutel, 'bestand' => $logo[0], 'titel' => $logo[1] );
@@ -265,15 +307,27 @@ add_action(
 			}
 		}
 
+		// een bestand dat er niet is, meteen overslaan (en melden); de rest gaat gewoon door
+		$overgeslagen = array();
+		foreach ( $taken as $i => $taak ) {
+			if ( ! harveys_import_bestaat( $taak['bestand'] ) ) {
+				$overgeslagen[] = (string) $taak['bestand'];
+				unset( $taken[ $i ] );
+			}
+		}
+		$taken = array_values( $taken );
+
 		update_option(
 			HARVEYS_IMPORT,
 			array(
-				'taken'   => $taken,
-				'totaal'  => count( $taken ),
-				'mislukt' => 0,
+				'taken'        => $taken,
+				'totaal'       => count( $taken ),
+				'overgeslagen' => $overgeslagen,
+				'bezig'        => null,
 			),
 			false
 		);
+		delete_option( 'harveys_import_overgeslagen' );
 		wp_safe_redirect( admin_url( 'admin.php?page=harveys-startinhoud' ) );
 		exit;
 	}
@@ -287,21 +341,37 @@ add_action(
 			wp_send_json_error( 'geen toegang', 403 );
 		}
 		$wachtrij = get_option( HARVEYS_IMPORT );
-		if ( ! is_array( $wachtrij ) ) {
+		if ( ! is_array( $wachtrij ) || ! isset( $wachtrij['taken'] ) || ! is_array( $wachtrij['taken'] ) ) {
 			wp_send_json_error( 'er loopt geen import' );
+		}
+		$wachtrij += array(
+			'totaal'       => count( $wachtrij['taken'] ),
+			'overgeslagen' => array(),
+			'bezig'        => null,
+		);
+		// de vorige stap is gestopt midden in een bestand (de server liep vast): dat bestand overslaan
+		if ( ! empty( $wachtrij['bezig'] ) ) {
+			$wachtrij['overgeslagen'][] = (string) $wachtrij['bezig'];
+			$wachtrij['bezig']          = null;
 		}
 		$begin = microtime( true );
 
 		while ( $wachtrij['taken'] && microtime( true ) - $begin < 12 ) {
 			$taak = array_shift( $wachtrij['taken'] );
-			$id   = harveys_import_bestand(
+			// eerst bewaren dat dit bestand bezig is: stopt de server nu, dan slaat de volgende stap het over
+			$wachtrij['bezig'] = $taak['bestand'];
+			update_option( HARVEYS_IMPORT, $wachtrij, false );
+
+			$id = harveys_import_bestand(
 				$taak['bestand'],
 				$taak['titel'],
 				isset( $taak['alt'] ) ? $taak['alt'] : '',
 				isset( $taak['bijschrift'] ) ? $taak['bijschrift'] : ''
 			);
+			$wachtrij['bezig'] = null;
 			if ( ! $id ) {
-				$wachtrij['mislukt']++;
+				$wachtrij['overgeslagen'][] = (string) $taak['bestand'];
+				update_option( HARVEYS_IMPORT, $wachtrij, false );
 				continue;
 			}
 			$instellingen = (array) get_option( HARVEYS_OPTIE, array() );
@@ -335,15 +405,16 @@ add_action(
 		if ( $klaar ) {
 			delete_option( HARVEYS_IMPORT );
 			update_option( 'harveys_import_klaar', time() );
+			update_option( 'harveys_import_overgeslagen', array_values( array_unique( $wachtrij['overgeslagen'] ) ), false );
 		} else {
 			update_option( HARVEYS_IMPORT, $wachtrij, false );
 		}
 		wp_send_json_success(
 			array(
-				'klaar'   => $klaar,
-				'gedaan'  => $wachtrij['totaal'] - count( $wachtrij['taken'] ),
-				'totaal'  => $wachtrij['totaal'],
-				'mislukt' => $wachtrij['mislukt'],
+				'klaar'        => $klaar,
+				'gedaan'       => $wachtrij['totaal'] - count( $wachtrij['taken'] ),
+				'totaal'       => $wachtrij['totaal'],
+				'overgeslagen' => array_values( array_unique( $wachtrij['overgeslagen'] ) ),
 			)
 		);
 	}

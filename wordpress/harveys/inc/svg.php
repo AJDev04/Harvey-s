@@ -7,6 +7,9 @@
  *
  * Voor het logo in de pagina (inline) gaat er nog meer uit: elke kleur wordt
  * currentColor, zodat het logo de tekstkleur van zijn plek aanneemt.
+ *
+ * Een SVG uploaden kan enkel een beheerder (harveys_mag_svg); ook als een andere
+ * plugin SVG's toelaat, weigert het thema ze van andere gebruikers.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -91,7 +94,11 @@ function harveys_svg_lees( $inhoud ) {
 /** Is deze attribuutwaarde veilig? Geen scripts, geen verwijzingen naar buiten. */
 function harveys_svg_waarde_veilig( $naam, $waarde, $element ) {
 	$plat = strtolower( preg_replace( '/[\s\x00-\x1f]+/', '', $waarde ) );
-	if ( strpos( $plat, 'javascript:' ) !== false || strpos( $plat, 'expression(' ) !== false ) {
+	if ( strpos( $plat, 'javascript:' ) !== false || strpos( $plat, 'vbscript:' ) !== false || strpos( $plat, 'expression(' ) !== false ) {
+		return false;
+	}
+	// CSS-escapes (\75rl) kunnen url( of javascript: verbergen
+	if ( 'style' === $naam && strpos( $waarde, '\\' ) !== false ) {
 		return false;
 	}
 	if ( 'href' === $naam || 'xlink:href' === $naam ) {
@@ -117,9 +124,11 @@ function harveys_svg_opkuisen( DOMDocument $doc, $inline ) {
 	$elementen  = harveys_svg_elementen( $inline );
 	$attributen = harveys_svg_attributen( $inline );
 
-	// commentaar en processing instructions eruit
+	// commentaar en processing instructions eruit; inline ook alle tekst (er blijft geen
+	// element over dat tekst toont, en zo kan er ook geen CDATA in de pagina belanden)
 	$xpath = new DOMXPath( $doc );
-	foreach ( iterator_to_array( $xpath->query( '//comment() | //processing-instruction()' ) ) as $knoop ) {
+	$weg   = $inline ? '//comment() | //processing-instruction() | //text()' : '//comment() | //processing-instruction()';
+	foreach ( iterator_to_array( $xpath->query( $weg ) ) as $knoop ) {
 		$knoop->parentNode->removeChild( $knoop );
 	}
 
@@ -133,7 +142,7 @@ function harveys_svg_opkuisen( DOMDocument $doc, $inline ) {
 				$el->removeChild( $kind );
 				continue;
 			}
-			if ( 'style' === $naam && preg_match( '/@import|javascript:|expression\(|url\((?!["\']?#)/i', $kind->textContent ) ) {
+			if ( 'style' === $naam && preg_match( '/@import|javascript:|expression\(|url\((?!["\']?#)|\\\\/i', $kind->textContent ) ) {
 				$el->removeChild( $kind );
 				continue;
 			}
@@ -192,11 +201,18 @@ function harveys_svg_schoon_bestand( $inhoud ) {
 
 /* ---------- Uploaden ---------- */
 
+/** Mag de huidige gebruiker een SVG uploaden? Enkel een beheerder. */
+function harveys_mag_svg() {
+	return current_user_can( 'manage_options' ) && current_user_can( 'upload_files' );
+}
+
 add_filter(
 	'upload_mimes',
 	function ( $mimes ) {
-		if ( current_user_can( 'upload_files' ) ) {
+		if ( harveys_mag_svg() ) {
 			$mimes['svg'] = 'image/svg+xml';
+		} else {
+			unset( $mimes['svg'], $mimes['svgz'] );
 		}
 		return $mimes;
 	}
@@ -206,7 +222,7 @@ add_filter(
 add_filter(
 	'wp_check_filetype_and_ext',
 	function ( $data, $file, $bestandsnaam ) {
-		if ( empty( $data['type'] ) && preg_match( '/\.svg$/i', $bestandsnaam ) && current_user_can( 'upload_files' ) ) {
+		if ( empty( $data['type'] ) && preg_match( '/\.svg$/i', (string) $bestandsnaam ) && harveys_mag_svg() ) {
 			$data['ext']  = 'svg';
 			$data['type'] = 'image/svg+xml';
 		}
@@ -221,16 +237,26 @@ function harveys_svg_upload( $bestand ) {
 	if ( empty( $bestand['name'] ) || ! preg_match( '/\.svgz?$/i', $bestand['name'] ) ) {
 		return $bestand;
 	}
+	// een upload die al mislukt is (bv. te groot): WordPress meldt dat zelf
+	if ( ! empty( $bestand['error'] ) || empty( $bestand['tmp_name'] ) || ! is_readable( $bestand['tmp_name'] ) ) {
+		return $bestand;
+	}
+	if ( ! harveys_mag_svg() ) {
+		$bestand['error'] = 'Een SVG uploaden kan enkel een beheerder. Upload het logo als PNG, of vraag het aan een beheerder.';
+		return $bestand;
+	}
 	if ( preg_match( '/\.svgz$/i', $bestand['name'] ) ) {
 		$bestand['error'] = 'Upload een gewoon .svg-bestand (geen .svgz).';
 		return $bestand;
 	}
-	$schoon = harveys_svg_schoon_bestand( (string) file_get_contents( $bestand['tmp_name'] ) );
+	$schoon = harveys_svg_schoon_bestand( (string) file_get_contents( $bestand['tmp_name'] ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 	if ( null === $schoon ) {
 		$bestand['error'] = 'Dit SVG-bestand kon niet gelezen worden. Bewaar het opnieuw als SVG (bv. in Illustrator: Bestand → Exporteren → SVG).';
 		return $bestand;
 	}
-	file_put_contents( $bestand['tmp_name'], $schoon );
+	if ( false === file_put_contents( $bestand['tmp_name'], $schoon ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions
+		$bestand['error'] = 'Het SVG-bestand kon niet opgekuist worden.';
+	}
 	return $bestand;
 }
 add_filter( 'wp_handle_upload_prefilter', 'harveys_svg_upload' );
@@ -273,6 +299,37 @@ add_filter(
 	},
 	10,
 	2
+);
+
+// Een SVG heeft geen pixels: WordPress krijgt de maten uit de viewBox (zonder die
+// meldt het bv. bij een upload via de blokeditor "Undefined array key width")...
+add_filter(
+	'wp_get_attachment_metadata',
+	function ( $meta, $id ) {
+		if ( ! harveys_is_svg( $id ) || ( is_array( $meta ) && isset( $meta['width'], $meta['height'] ) ) ) {
+			return $meta;
+		}
+		list( $b, $h ) = harveys_svg_maten( $id );
+		return array_merge(
+			is_array( $meta ) ? $meta : array(),
+			array(
+				'width'  => $b,
+				'height' => $h,
+			)
+		);
+	},
+	10,
+	2
+);
+
+// ... en maakt er geen verkleinde versies van
+add_filter(
+	'wp_get_missing_image_subsizes',
+	function ( $ontbrekend, $meta, $id ) {
+		return harveys_is_svg( $id ) ? array() : $ontbrekend;
+	},
+	10,
+	3
 );
 
 // Een voorbeeld van de SVG in de mediabibliotheek, in plaats van een icoontje

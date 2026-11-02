@@ -1,7 +1,8 @@
 <?php
 /**
  * Nieuwsbrief: het formulier bewaart het adres in Website → Inschrijvingen
- * (inc/nieuwsbrief.php). Met JavaScript zonder de pagina te verlaten.
+ * (inc/nieuwsbrief.php, met de bescherming tegen spam). Met JavaScript zonder de
+ * pagina te verlaten.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -26,6 +27,7 @@ $harveys_bericht = array(
 		</div>
 		<form class="nieuwsbrief__form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" novalidate>
 			<input type="hidden" name="action" value="harveys_inschrijven" />
+			<input type="hidden" name="harveys_t" value="<?php echo esc_attr( harveys_nieuwsbrief_tijd() ); ?>" />
 			<label class="veld">
 				<span class="veld__label label">E-mailadres</span>
 				<input type="email" name="email" autocomplete="email" required placeholder="Uw e-mailadres" />

@@ -523,7 +523,8 @@
       var data = new FormData(form);
       data.append('ajax', '1');
       message.textContent = 'Even geduld…';
-      fetch(form.action, { method: 'POST', body: data, credentials: 'same-origin' })
+      // getAttribute: form.action zou het verborgen veld name="action" (WordPress) teruggeven
+      fetch(form.getAttribute('action'), { method: 'POST', body: data, credentials: 'same-origin' })
         .then(function (r) {
           if (!r.ok) throw new Error(r.status);
           message.textContent = 'Bedankt. U hoort binnenkort van ons.';

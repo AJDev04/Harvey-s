@@ -107,7 +107,6 @@ Geldigheid | 1 jaar',
         ],
         'hem' => [
             ['collectie/hem-zwarte-denim.jpg', '', 'Man met zonnebril in een zwart denim jasje en grijze jeans, de armen gekruist tegen een betonnen muur'],
-            ['collectie/hem-mintgroen-pak.jpg', '', 'Man in een mintgroen overhemd met borstzakken en een bijpassende broek, met bergen op de achtergrond'],
             ['collectie/hem-kostuum.jpg', '', 'Man in een donkerblauw kostuum, van achteren gezien'],
             ['collectie/hem-marine-jas.jpg', '', 'Man in een donkerblauwe jas en een blauw hemd, met een beige chino en witte sneakers'],
             ['collectie/hem-veldjas.jpg', '', 'Man in een beige veldjas over een donkere trui, in een straat met oude gevels'],

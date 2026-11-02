@@ -10,6 +10,8 @@ add_action(
 	function () {
 		add_theme_support( 'title-tag' );
 		add_theme_support( 'post-thumbnails' );
+		// een video in Media krijgt een uitgelichte afbeelding: het stilstaand beeld in de Collectie
+		add_post_type_support( 'attachment:video', 'thumbnail' );
 		add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption', 'style', 'script' ) );
 		add_theme_support( 'responsive-embeds' );
 	}
@@ -104,7 +106,7 @@ add_action(
 add_filter(
 	'document_title_separator',
 	function () {
-		return '—';
+		return '|';
 	}
 );
 

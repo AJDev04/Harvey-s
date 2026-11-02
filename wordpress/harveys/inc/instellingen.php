@@ -4,7 +4,8 @@
  * ze bewaren. Alles staat samen in één optie, 'harveys'.
  *
  * Veldtypes: tekst, tekstvak, url, getal, vinkje, kleur, pagina, afbeelding,
- * svg, galerij (lijst van foto's) en uren (zeven dagen met van/tot).
+ * svg, galerij (lijst van foto's, met 'video' => true ook video's) en uren
+ * (zeven dagen met van/tot).
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -27,10 +28,10 @@ function harveys_tabbladen() {
 	$winkel = function ( $n ) {
 		return array(
 			"winkel{$n}_naam"     => array( 'type' => 'tekst', 'label' => 'Naam', 'hulp' => $n === 2 ? 'Leeg laten als er maar één winkel is.' : '' ),
-			"winkel{$n}_kort"     => array( 'type' => 'tekst', 'label' => 'Korte naam', 'hulp' => 'Bij "Of bel:" in de sectie Cadeaubon, bv. Women.' ),
+			"winkel{$n}_kort"     => array( 'type' => 'tekst', 'label' => 'Korte naam', 'hulp' => 'Bij "Of bel:" in de sectie Cadeaubon, bv. Dames.' ),
 			"winkel{$n}_straat"   => array( 'type' => 'tekst', 'label' => 'Straat en nummer', 'hulp' => 'Het huisnummer verschijnt ook klein naast de naam.' ),
 			"winkel{$n}_gemeente" => array( 'type' => 'tekst', 'label' => 'Postcode en gemeente' ),
-			"winkel{$n}_telefoon" => array( 'type' => 'tekst', 'label' => 'Telefoon', 'hulp' => 'Zoals het op de site moet staan, bv. 053 80 92 84.' ),
+			"winkel{$n}_telefoon" => array( 'type' => 'tekst', 'label' => 'Telefoon', 'hulp' => 'Zoals het op de site moet staan, bv. 056 12 34 56.' ),
 			"winkel{$n}_foto"     => array( 'type' => 'afbeelding', 'label' => 'Foto van de gevel' ),
 		);
 	};
@@ -42,10 +43,10 @@ function harveys_tabbladen() {
 			'uitleg' => 'De naam en de slogan van de site (voor zoekmachines en schermlezers) staan bij <a href="' . esc_url( admin_url( 'options-general.php' ) ) . '">Instellingen → Algemeen</a> als Sitetitel en Ondertitel. Het logo, het icoontje in het browsertabblad en de kleur stel je in bij <a href="' . esc_url( admin_url( 'admin.php?page=harveys-logo' ) ) . '">Logo en kleur</a>.',
 			'velden' => array(
 				'beschrijving'      => array( 'type' => 'tekstvak', 'label' => 'Beschrijving voor zoekmachines', 'hulp' => 'Eén of twee zinnen; Google toont ze onder de titel.' ),
-				'adres_kort'        => array( 'type' => 'tekst', 'label' => 'Adres, kort', 'hulp' => 'In het mobiele menu, bv. Kattestraat 38 & 49.' ),
+				'adres_kort'        => array( 'type' => 'tekst', 'label' => 'Adres, kort', 'hulp' => 'In het mobiele menu, bv. Marktstraat 12.' ),
 				'gemeente'          => array( 'type' => 'tekst', 'label' => 'Postcode en gemeente', 'hulp' => 'Onder het korte adres in het mobiele menu.' ),
 				'footer_regel'      => array( 'type' => 'tekst', 'label' => 'Regel onderaan de footer' ),
-				'btw'               => array( 'type' => 'tekst', 'label' => 'Btw-nummer', 'hulp' => 'Zoals het er moet staan, bv. BTW BE 0455.889.607.' ),
+				'btw'               => array( 'type' => 'tekst', 'label' => 'Btw-nummer', 'hulp' => 'Zoals het er moet staan, bv. BTW BE 0123.456.789.' ),
 				'disclaimer_pagina' => array( 'type' => 'pagina', 'label' => 'Pagina Disclaimer', 'hulp' => 'De pagina Privacy kies je bij Instellingen → Privacy.' ),
 			),
 		),
@@ -82,9 +83,9 @@ function harveys_tabbladen() {
 			'velden' => array(
 				'collectie_intro'      => array( 'type' => 'tekstvak', 'label' => 'Inleiding' ),
 				'collectie_haar_titel' => array( 'type' => 'tekst', 'label' => 'Naam van de eerste groep', 'standaard' => 'Voor haar', 'hulp' => 'Op het tabblad boven de foto\'s.' ),
-				'collectie_haar'       => array( 'type' => 'galerij', 'label' => 'Foto\'s van de eerste groep' ),
+				'collectie_haar'       => array( 'type' => 'galerij', 'video' => true, 'label' => 'Foto\'s en video\'s van de eerste groep', 'hulp' => 'Een video van in de winkel speelt in de galerij zonder geluid in een lus, en groot met geluid als je erop klikt; er hoort geen merk bij. Zet je ze als eerste, dan krijgt ze het grote vak. Gebruik een korte mp4 (H.264), liefst onder 10 MB. Een stilstaand beeld kies je in Media: open de video, Meer details bewerken, Uitgelichte afbeelding.' ),
 				'collectie_hem_titel'  => array( 'type' => 'tekst', 'label' => 'Naam van de tweede groep', 'standaard' => 'Voor hem' ),
-				'collectie_hem'        => array( 'type' => 'galerij', 'label' => 'Foto\'s van de tweede groep' ),
+				'collectie_hem'        => array( 'type' => 'galerij', 'video' => true, 'label' => 'Foto\'s en video\'s van de tweede groep' ),
 			),
 		),
 		'secties'     => array(
@@ -117,7 +118,7 @@ function harveys_tabbladen() {
 				'cadeaubon_feiten' => array( 'type' => 'tekstvak', 'label' => 'Gegevens', 'hulp' => 'Label | Tekst, één per regel.' ),
 				'cadeaubon_knop'   => array( 'type' => 'tekst', 'label' => 'Tekst op de knop', 'hulp' => 'De knop springt naar Contact.' ),
 				'cadeaubon_klein'  => array( 'type' => 'tekstvak', 'label' => 'Kleine lettertjes', 'hulp' => 'Label | Tekst, één per regel; bv. de regels voor een tegoedbon.' ),
-				'bon_merken'       => array( 'type' => 'tekst', 'label' => 'Op de bon: regel onder de naam', 'hulp' => 'Bv. Men – Women.' ),
+				'bon_merken'       => array( 'type' => 'tekst', 'label' => 'Op de bon: regel onder de naam', 'hulp' => 'Bv. Dames – Heren.' ),
 				'bon_geldig'       => array( 'type' => 'tekst', 'label' => 'Op de bon: geldigheid', 'hulp' => 'Bv. 1 jaar geldig.' ),
 			),
 		),
@@ -141,7 +142,9 @@ function harveys_tabbladen() {
 		'nieuwsbrief' => array(
 			'titel'  => 'Nieuwsbrief',
 			'recht'  => 'edit_others_posts',
-			'uitleg' => 'Wie zich inschrijft, komt in de lijst <a href="' . esc_url( admin_url( 'edit.php?post_type=harveys_inschrijving' ) ) . '">Inschrijvingen</a>; daar kan je ze ook exporteren voor je mailprogramma.',
+			'uitleg' => current_user_can( 'manage_options' )
+				? 'Wie zich inschrijft, komt in de lijst <a href="' . esc_url( admin_url( 'edit.php?post_type=harveys_inschrijving' ) ) . '">Inschrijvingen</a>; daar kan je ze ook exporteren voor je mailprogramma.'
+				: 'Wie zich inschrijft, komt in de lijst Inschrijvingen. Die lijst kan enkel een beheerder zien en exporteren.',
 			'velden' => array(
 				'nieuwsbrief_tonen' => array( 'type' => 'vinkje', 'label' => 'Sectie tonen' ),
 				'nieuwsbrief_titel' => array( 'type' => 'tekst', 'label' => 'Titel' ),
@@ -192,20 +195,42 @@ function harveys_optie( $sleutel ) {
 }
 
 /**
- * Bewaart het tabblad dat net verstuurd is. De andere tabbladen blijven zoals ze
- * waren: alles zit in één optie.
+ * Schoont de optie op voor ze bewaard wordt (de sanitize_callback van
+ * register_setting). Twee gevallen:
+ *
+ * - het formulier van een tabblad onder Website (options.php, met _tab): enkel de
+ *   velden van dat tabblad, en enkel met het recht van dat tabblad; de andere
+ *   tabbladen blijven zoals ze waren, want alles zit in één optie;
+ * - update_option() in de code (de startinhoud): elk bekend veld wordt opgekuist,
+ *   onbekende sleutels vallen weg.
+ *
+ * Een formulier naar options.php zonder geldig tabblad verandert niets.
  */
 function harveys_bewaar( $invoer ) {
+	// WordPress roept dit twee keer op als de optie nog niet bestaat (update_option,
+	// dan add_option): de tweede keer krijgt het wat de eerste keer teruggaf
+	static $vorige = null;
+	if ( null !== $vorige && $invoer === $vorige ) {
+		return $invoer;
+	}
+
 	$oud = get_option( HARVEYS_OPTIE, array() );
 	$oud = is_array( $oud ) ? $oud : array();
 
-	// update_option zonder formulier (bv. de import) geeft gewoon de nieuwe waarden
-	if ( ! is_array( $invoer ) || empty( $invoer['_tab'] ) ) {
-		return is_array( $invoer ) ? $invoer : $oud;
+	$formulier = isset( $_POST['option_page'] ) && HARVEYS_OPTIE === $_POST['option_page']; // phpcs:ignore WordPress.Security.NonceVerification -- options.php controleert de nonce
+	if ( ! $formulier ) {
+		$schoon = array();
+		foreach ( harveys_alle_velden() as $sleutel => $veld ) {
+			if ( is_array( $invoer ) && array_key_exists( $sleutel, $invoer ) ) {
+				$schoon[ $sleutel ] = harveys_schoon_veld( $veld, $invoer[ $sleutel ] );
+			}
+		}
+		$vorige = $schoon;
+		return $schoon;
 	}
 
 	$tabs = harveys_tabbladen();
-	$tab  = sanitize_key( $invoer['_tab'] );
+	$tab  = is_array( $invoer ) && isset( $invoer['_tab'] ) ? sanitize_key( $invoer['_tab'] ) : '';
 	if ( ! isset( $tabs[ $tab ] ) || ! current_user_can( $tabs[ $tab ]['recht'] ) ) {
 		return $oud;
 	}
@@ -216,35 +241,51 @@ function harveys_bewaar( $invoer ) {
 	}
 
 	// onderschriften van foto's in een galerij: die horen bij de foto zelf
-	if ( ! empty( $_POST['harveys_bijschrift'] ) && is_array( $_POST['harveys_bijschrift'] ) ) {
-		foreach ( wp_unslash( $_POST['harveys_bijschrift'] ) as $id => $tekst ) {
+	if ( ! empty( $_POST['harveys_bijschrift'] ) && is_array( $_POST['harveys_bijschrift'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		foreach ( wp_unslash( $_POST['harveys_bijschrift'] ) as $id => $tekst ) { // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- hieronder opgekuist
 			$id = absint( $id );
-			if ( $id && current_user_can( 'edit_post', $id ) ) {
+			if ( $id && is_string( $tekst ) && harveys_is_media( $id ) && current_user_can( 'edit_post', $id ) ) {
 				$tekst = sanitize_text_field( $tekst );
 				if ( wp_get_attachment_caption( $id ) !== $tekst ) {
-					wp_update_post( array( 'ID' => $id, 'post_excerpt' => $tekst ) );
+					wp_update_post(
+						array(
+							'ID'           => $id,
+							'post_excerpt' => $tekst,
+						)
+					);
 				}
 			}
 		}
 	}
 
+	$vorige = $oud;
 	return $oud;
 }
 
-/** Schoont één waarde op volgens het type van het veld. */
+/**
+ * Schoont één waarde op volgens het type van het veld. Neemt ook de vorm aan zoals
+ * ze bewaard is (een galerij als lijst, uren als [van, tot]), voor de import.
+ */
 function harveys_schoon_veld( $veld, $waarde ) {
 	switch ( $veld['type'] ) {
 		case 'vinkje':
 			return ! empty( $waarde );
 		case 'tekstvak':
-			return sanitize_textarea_field( (string) $waarde );
+			return sanitize_textarea_field( is_scalar( $waarde ) ? (string) $waarde : '' );
 		case 'url':
-			return esc_url_raw( trim( (string) $waarde ) );
+			return esc_url_raw( trim( is_scalar( $waarde ) ? (string) $waarde : '' ), array( 'http', 'https' ) );
 		case 'kleur':
-			$kleur = sanitize_hex_color( trim( (string) $waarde ) );
-			return $kleur ? strtolower( $kleur ) : '';
+			$kleur = sanitize_hex_color( trim( is_scalar( $waarde ) ? (string) $waarde : '' ) );
+			if ( ! $kleur ) {
+				return '';
+			}
+			// #abc wordt #aabbcc: een kleurveld in de browser kent enkel de lange vorm
+			if ( 4 === strlen( $kleur ) ) {
+				$kleur = '#' . $kleur[1] . $kleur[1] . $kleur[2] . $kleur[2] . $kleur[3] . $kleur[3];
+			}
+			return strtolower( $kleur );
 		case 'getal':
-			if ( '' === trim( (string) $waarde ) ) {
+			if ( ! is_scalar( $waarde ) || '' === trim( (string) $waarde ) ) {
 				return '';
 			}
 			$getal = (float) str_replace( ',', '.', (string) $waarde );
@@ -256,21 +297,31 @@ function harveys_schoon_veld( $veld, $waarde ) {
 			}
 			return $getal;
 		case 'pagina':
+			$id = is_scalar( $waarde ) ? absint( $waarde ) : 0;
+			return ( $id && 'page' === get_post_type( $id ) ) ? $id : '';
 		case 'afbeelding':
+			$id = is_scalar( $waarde ) ? absint( $waarde ) : 0;
+			return harveys_is_beeld( $id ) ? $id : '';
 		case 'svg':
-			return absint( $waarde ) ?: '';
+			$id = is_scalar( $waarde ) ? absint( $waarde ) : 0;
+			return ( harveys_is_beeld( $id ) && harveys_is_svg( $id ) ) ? $id : '';
 		case 'galerij':
-			return array_values( array_filter( array_map( 'absint', explode( ',', (string) $waarde ) ) ) );
+			$ids = is_array( $waarde ) ? $waarde : explode( ',', is_scalar( $waarde ) ? (string) $waarde : '' );
+			// een galerij met 'video' (de Collectie) laat ook video's toe
+			$ids = array_filter( array_map( 'absint', array_filter( $ids, 'is_scalar' ) ), empty( $veld['video'] ) ? 'harveys_is_beeld' : 'harveys_is_media' );
+			return array_values( array_unique( $ids ) );
 		case 'uren':
 			$uren = array();
 			for ( $d = 0; $d < 7; $d++ ) {
-				$van      = isset( $waarde[ $d ]['van'] ) ? harveys_schoon_tijd( $waarde[ $d ]['van'] ) : '';
-				$tot      = isset( $waarde[ $d ]['tot'] ) ? harveys_schoon_tijd( $waarde[ $d ]['tot'] ) : '';
-				$uren[]   = ( $van && $tot && $van < $tot ) ? array( $van, $tot ) : array( '', '' );
+				$dag = ( is_array( $waarde ) && isset( $waarde[ $d ] ) && is_array( $waarde[ $d ] ) ) ? $waarde[ $d ] : array();
+				// uit het formulier ['van' => .., 'tot' => ..], bewaard [van, tot]
+				$van    = harveys_schoon_tijd( isset( $dag['van'] ) ? $dag['van'] : ( isset( $dag[0] ) ? $dag[0] : '' ) );
+				$tot    = harveys_schoon_tijd( isset( $dag['tot'] ) ? $dag['tot'] : ( isset( $dag[1] ) ? $dag[1] : '' ) );
+				$uren[] = ( $van && $tot && $van < $tot ) ? array( $van, $tot ) : array( '', '' );
 			}
 			return $uren;
 		default:
-			return sanitize_text_field( (string) $waarde );
+			return sanitize_text_field( is_scalar( $waarde ) ? (string) $waarde : '' );
 	}
 }
 

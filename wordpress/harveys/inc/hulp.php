@@ -53,6 +53,46 @@ function harveys_beeld( $id, $grootte = 'large', $attr = array() ) {
 	return $id ? wp_get_attachment_image( (int) $id, $grootte, false, $attr ) : '';
 }
 
+/** Is dit een afbeelding in de mediabibliotheek (ook een SVG)? */
+function harveys_is_beeld( $id ) {
+	$id = (int) $id;
+	return $id > 0 && 'attachment' === get_post_type( $id ) && 0 === strpos( (string) get_post_mime_type( $id ), 'image/' );
+}
+
+/** De videoformaten die elke browser afspeelt; enkel die kunnen in de Collectie. */
+function harveys_videotypes() {
+	return array( 'video/mp4', 'video/webm', 'video/quicktime' );
+}
+
+/** Is dit een video in de mediabibliotheek die een browser afspeelt (mp4, webm of mov)? */
+function harveys_is_video( $id ) {
+	$id = (int) $id;
+	return $id > 0 && 'attachment' === get_post_type( $id ) && in_array( (string) get_post_mime_type( $id ), harveys_videotypes(), true );
+}
+
+/** Een foto of een video uit de mediabibliotheek (de Collectie toont beide). */
+function harveys_is_media( $id ) {
+	return harveys_is_beeld( $id ) || harveys_is_video( $id );
+}
+
+/**
+ * Het stilstaand beeld van een video: de uitgelichte afbeelding die in Media bij
+ * de video gekozen is, of niets (dan toont de browser het eerste beeld).
+ */
+function harveys_video_poster( $id, $grootte = 'large' ) {
+	$url = get_the_post_thumbnail_url( (int) $id, $grootte );
+	return $url ? $url : '';
+}
+
+/**
+ * De foto's van een galerij-instelling (Collectie, Over ons) die nog in de
+ * mediabibliotheek staan: een verwijderde foto laat zo geen leeg vak achter.
+ * Met $met_video tellen ook video's mee (de Collectie).
+ */
+function harveys_fotos( $sleutel, $met_video = false ) {
+	return array_values( array_filter( array_map( 'intval', (array) harveys_optie( $sleutel ) ), $met_video ? 'harveys_is_media' : 'harveys_is_beeld' ) );
+}
+
 /**
  * De ingevulde winkels: naam, korte naam, straat, gemeente, telefoon, foto, en
  * apart het huisnummer en de straatnaam.
@@ -85,16 +125,36 @@ function harveys_opsomming( $delen ) {
 	return $delen ? implode( ', ', $delen ) . ' en ' . $laatste : (string) $laatste;
 }
 
+/** "09:30" als [9, 30]. */
+function harveys_uur_min( $hhmm ) {
+	$delen = array_map( 'intval', explode( ':', (string) $hhmm ) );
+	return array( $delen[0], isset( $delen[1] ) ? $delen[1] : 0 );
+}
+
 /** 09:30 wordt "9.30", 18:00 wordt "18". */
 function harveys_tijd( $hhmm ) {
-	list( $u, $m ) = array_map( 'intval', explode( ':', $hhmm ) );
+	list( $u, $m ) = harveys_uur_min( $hhmm );
 	return $m ? $u . '.' . sprintf( '%02d', $m ) : (string) $u;
+}
+
+/** De openingsuren zoals bewaard: zeven dagen [van, tot], of null als ze er niet (goed) staan. */
+function harveys_uren() {
+	$uren = harveys_optie( 'uren' );
+	if ( ! is_array( $uren ) || 7 !== count( $uren ) ) {
+		return null;
+	}
+	$schoon = array();
+	foreach ( array_values( $uren ) as $u ) {
+		$u        = array_values( (array) $u );
+		$schoon[] = array( isset( $u[0] ) ? (string) $u[0] : '', isset( $u[1] ) ? (string) $u[1] : '' );
+	}
+	return $schoon;
 }
 
 /** De openingsuren in woorden, één regel per groep dagen met dezelfde uren. */
 function harveys_uren_regels() {
-	$uren = harveys_optie( 'uren' );
-	if ( ! is_array( $uren ) || 7 !== count( $uren ) ) {
+	$uren = harveys_uren();
+	if ( ! $uren ) {
 		return array();
 	}
 	$dagen  = harveys_dagen();
@@ -151,12 +211,12 @@ function harveys_uren_regels() {
  * week, zondag eerst zoals in JavaScript, [van, tot] in uren of null.
  */
 function harveys_uren_data() {
-	$uren = harveys_optie( 'uren' );
-	if ( ! is_array( $uren ) || 7 !== count( $uren ) ) {
+	$uren = harveys_uren();
+	if ( ! $uren ) {
 		return null;
 	}
 	$uur = function ( $hhmm ) {
-		list( $u, $m ) = array_map( 'intval', explode( ':', $hhmm ) );
+		list( $u, $m ) = harveys_uur_min( $hhmm );
 		return round( $u + $m / 60, 4 );
 	};
 	$js = array();
@@ -177,7 +237,10 @@ function harveys_bon_adres() {
 		$regels[] = reset( $straten ) . ' ' . implode( '/', wp_list_pluck( $winkels, 'nr' ) );
 	} else {
 		foreach ( $winkels as $w ) {
-			$regels[] = $w['straat'];
+			// een lang adres ("Shoppingcenter K, Steenpoort 2") op aparte regels, zodat het op de bon past
+			foreach ( preg_split( '/\s*,\s*/', (string) $w['straat'] ) as $deel ) {
+				$regels[] = $deel;
+			}
 		}
 	}
 	foreach ( array_unique( wp_list_pluck( $winkels, 'gemeente' ) ) as $gemeente ) {
@@ -188,6 +251,12 @@ function harveys_bon_adres() {
 		'adres'   => array_filter( array_merge( $regels, $telefoons ) ),
 		'website' => preg_replace( '#^https?://#', '', untrailingslashit( home_url() ) ),
 	);
+}
+
+/** De link naar de pagina Disclaimer (Website → Algemeen), als die gepubliceerd is. */
+function harveys_disclaimer_url() {
+	$id = (int) harveys_optie( 'disclaimer_pagina' );
+	return ( $id && 'publish' === get_post_status( $id ) ) ? (string) get_permalink( $id ) : '';
 }
 
 /** Link naar een sectie op de homepage; op de homepage zelf enkel het anker. */
@@ -209,7 +278,7 @@ function harveys_secties() {
 		array(
 			'home'      => 'Home',
 			'nieuws'    => wp_count_posts( 'post' )->publish > 0 ? 'Nieuws' : '',
-			'collectie' => ( harveys_optie( 'collectie_haar' ) || harveys_optie( 'collectie_hem' ) ) ? 'Collectie' : '',
+			'collectie' => ( harveys_fotos( 'collectie_haar' ) || harveys_fotos( 'collectie_hem' ) ) ? 'Collectie' : '',
 			'merken'    => ( $merken && $merken->publish > 0 ) ? 'Merken' : '',
 			'over'      => ( harveys_optie( 'over_titel' ) || harveys_optie( 'over_tekst' ) ) ? 'Over ons' : '',
 			'cadeaubon' => harveys_optie( 'cadeaubon_tonen' ) ? 'Cadeaubon' : '',

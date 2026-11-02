@@ -169,6 +169,10 @@ and re-run the script; every logo on the site updates.
   transform: translateY(calc(100% + var(--space-3)));
 }
 .galerij__knop:hover .galerij__label { transform: none; }
+/* Video tile (WordPress): plays muted in a loop while in view; a small kalk circle
+   with an inkt play triangle top-right marks it; in the lightbox it plays with sound */
+.galerij__item--video .galerij__knop::before { /* 2.25rem kalk circle, top/right var(--space-3) */ }
+.galerij__item--video .galerij__knop::after  { /* inkt triangle, clip-path polygon */ }
 ```
 
 ### Carousels: store photos (Over) and news
@@ -257,6 +261,13 @@ to 6° in 3D and a glare follows the pointer. Next to it: an optional lead, a ha
 /* .galerij__item--klein opts a photo out of the 2×2 / full-width slot, to avoid a gap */
 .galerij__raster { display: grid; grid-template-columns: repeat(var(--kolommen), 1fr); grid-auto-flow: dense; gap: var(--galerij-gap); }
 .galerij__item:nth-child(7n + 1) { grid-column: span 2; grid-row: span 2; }
+
+/* WordPress: the theme picks the big photos per group (inc/galerij.php), so the grid
+   is always full on 4 and 2 columns; the nth-child rule does not apply there.
+   Same tile shapes, only their positions change (assets/css/wordpress.css). */
+.galerij__raster--berekend .galerij__item:nth-child(n) { grid-column: auto; grid-row: auto; }
+@media (min-width: 48em)    { .galerij__raster--berekend .galerij__item.galerij__item--groot { grid-column: span 2; grid-row: span 2; } }
+@media (max-width: 47.99em) { .galerij__raster--berekend .galerij__item.galerij__item--breed { grid-column: span 2; } }
 
 /* Contact: two stores side by side, a small grey house number beside each name */
 .contact { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-7); }
@@ -377,6 +388,15 @@ JS mirrors this: no split-text, no scrub, no autoplay, no carousel auto-advance.
 **Collapsing Strategy:** grids collapse to fewer columns, never to horizontal scroll (only
 the carousel and marquees scroll sideways, on purpose). Pointer-only effects switch off on touch.
 Gallery labels are always visible on touch.
+
+**Gallery without gaps:** the bento grid must end in a full row on desktop (4 columns) and
+mobile (2 columns). The static site does this by hand with `.galerij__item--klein`. The
+WordPress theme computes it per group: mobile keeps every 5th photo full-width unless the
+count is 2 or 4 past a multiple of 5 (then the last one stays small); desktop starts from
+every 7th photo 2×2 and changes as few photos as possible (preferably making a big one
+small, never leaving a row of only big photos when it can be avoided, changes towards the
+end). 1 or 3 photos can never fill 4 columns; there the smallest gap remains. Tablet
+(3 columns) is not guaranteed. The full rule and a table are in README.md.
 
 ```css
 @media (max-width: 47.99em) {

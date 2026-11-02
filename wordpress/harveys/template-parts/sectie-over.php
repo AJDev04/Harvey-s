@@ -12,14 +12,7 @@ $harveys_tekst = harveys_optie( 'over_tekst' );
 if ( ! $harveys_titel && ! $harveys_tekst ) {
 	return;
 }
-$harveys_fotos = array_values(
-	array_filter(
-		(array) harveys_optie( 'over_fotos' ),
-		function ( $id ) {
-			return (bool) wp_get_attachment_image_url( $id );
-		}
-	)
-);
+$harveys_fotos  = harveys_fotos( 'over_fotos' );
 $harveys_aantal = count( $harveys_fotos );
 ?>
 <section class="sectie reveal" id="over" aria-labelledby="over-titel">

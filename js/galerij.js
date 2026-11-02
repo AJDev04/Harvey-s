@@ -3,8 +3,11 @@
    - Met een muis volgt een oranje bol met "Bekijk" de cursor boven de foto's.
    - Klik op een foto opent de lichtbak, waarin het beeld vanuit zijn plek in het
      raster naar het midden groeit; bladeren gaat binnen dezelfde groep.
+   - Een video (WordPress, .galerij__item--video) speelt in het raster zonder geluid
+     in een lus zodra ze in beeld is, en in de lichtbak met geluid en knoppen.
    Zonder JavaScript staan beide groepen gewoon onder elkaar in het raster; zonder
-   beweging (prefers-reduced-motion) vervallen het groeien en de bol. */
+   beweging (prefers-reduced-motion) vervallen het groeien, de bol en het vanzelf
+   afspelen van video's. */
 
 (function () {
   'use strict';
@@ -149,8 +152,47 @@
     window.addEventListener('scroll', verbergCursor, { passive: true });
   }
 
+  /* ---------- Video's in het raster: spelen zonder geluid zolang ze in beeld zijn ---------- */
+  var tegels = Array.prototype.slice.call(galerij.querySelectorAll('.galerij__video'));
+
+  function speel(v) {
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {}); // geweigerd (bv. spaarstand): dan blijft het eerste beeld staan
+  }
+
+  function maakTegels() {
+    if (!tegels.length || reduced || !('IntersectionObserver' in window)) return;
+    var kijker = new IntersectionObserver(function (items) {
+      items.forEach(function (e) {
+        e.target.inBeeld = e.isIntersecting;
+        if (e.isIntersecting && !lichtbak.open) speel(e.target);
+        else e.target.pause();
+      });
+    }, { threshold: 0.25 });
+    tegels.forEach(function (v) {
+      v.muted = true;
+      kijker.observe(v);
+    });
+  }
+
+  // terwijl de lichtbak open is, staan de video's in het raster stil
+  function pauzeerTegels() {
+    tegels.forEach(function (v) {
+      v.pause();
+    });
+  }
+
+  function speelTegels() {
+    if (reduced) return;
+    tegels.forEach(function (v) {
+      if (v.inBeeld) speel(v);
+    });
+  }
+
   /* ---------- Lichtbak ---------- */
   var beeld = document.getElementById('lichtbak-beeld');
+  var video = document.getElementById('lichtbak-video'); // ontbreekt in oudere markup: dan enkel foto's
+  var actief = beeld; // wat nu groot staat: de foto of de video
   var nummer = document.getElementById('lichtbak-nummer');
   var totaal = document.getElementById('lichtbak-totaal');
   var titel = document.getElementById('lichtbak-titel');
@@ -192,42 +234,96 @@
     });
   }
 
+  function isVideo(item) {
+    return !!(video && item.dataset.video);
+  }
+
+  // het beeld in het raster: de video of de foto
+  function bronVan(item) {
+    return item.querySelector('.galerij__video') || item.querySelector('img');
+  }
+
+  // doe iets zodra het grote beeld maat heeft (een foto geladen, van een video de afmetingen)
+  function alsKlaar(el, doe) {
+    if (el === video) {
+      if (video.readyState >= 1 && video.videoWidth) doe();
+      else video.addEventListener('loadedmetadata', doe, { once: true });
+    } else if (beeld.complete && beeld.naturalWidth) doe();
+    else beeld.addEventListener('load', doe, { once: true });
+  }
+
+  // oude animaties weg (een vervaging bij het bladeren blijft anders hangen)
+  function wis(el) {
+    if (el && el.getAnimations) {
+      el.getAnimations().forEach(function (a) {
+        a.cancel();
+      });
+    }
+  }
+
   function zetBeeld(i) {
     var item = lijst[i];
-    var bron = item.querySelector('img');
+    var bron = bronVan(item);
     huidig = i;
     vulTekst(i);
-    // data-groot: de grote versie van de foto (WordPress); anders dezelfde als in het raster
-    beeld.src = item.dataset.groot || bron.currentSrc || bron.src;
-    // de alt-tekst van de foto zelf, anders groep en merk
-    beeld.alt = bron.alt || item.dataset.groep + ' — ' + item.dataset.merk;
+    if (isVideo(item)) {
+      beeld.hidden = true;
+      video.hidden = false;
+      if (video.dataset.bron !== item.dataset.video) {
+        video.dataset.bron = item.dataset.video;
+        video.poster = bron.getAttribute('poster') || '';
+        video.src = item.dataset.video;
+      } else {
+        video.currentTime = 0;
+      }
+      video.setAttribute('aria-label', item.dataset.titel || item.dataset.groep + ' — ' + item.dataset.merk);
+      // met geluid: de klik van de bezoeker laat dat toe; bij "minder beweging" start ze pas met de knop
+      if (!reduced) speel(video);
+      actief = video;
+    } else {
+      if (video) {
+        video.pause();
+        video.hidden = true;
+      }
+      beeld.hidden = false;
+      // data-groot: de grote versie van de foto (WordPress); anders dezelfde als in het raster
+      beeld.src = item.dataset.groot || bron.currentSrc || bron.src;
+      // de alt-tekst van de foto zelf, anders groep en merk
+      beeld.alt = bron.alt || item.dataset.groep + ' — ' + item.dataset.merk;
+      actief = beeld;
+    }
     return bron;
   }
 
   function open(item) {
     lijst = itemsVan(item.closest('.galerij__groep') || galerij);
+    wis(beeld);
+    wis(video);
     var bron = zetBeeld(lijst.indexOf(item));
     var van = bron.getBoundingClientRect();
+    var el = actief;
     verbergCursor();
+    pauzeerTegels();
     if (!lichtbak.open) lichtbak.showModal();
     lichtbak.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: ease, fill: 'both' });
     // wachten tot het beeld maat heeft, anders klopt de eindstand niet
-    var start = function () {
-      groei(van, beeld, false);
+    alsKlaar(el, function () {
+      groei(van, el, false);
       tekstIn();
-    };
-    if (beeld.complete && beeld.naturalWidth) start();
-    else beeld.addEventListener('load', start, { once: true });
+    });
   }
 
   function sluit() {
     if (!lichtbak.open) return;
     var item = lijst[huidig];
-    var naar = item.querySelector('img').getBoundingClientRect();
-    var klaar = groei(naar, beeld, true);
+    var naar = bronVan(item).getBoundingClientRect();
+    var el = actief;
+    if (video) video.pause();
+    var klaar = groei(naar, el, true);
     lichtbak.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 350, delay: 200, easing: ease, fill: 'both' });
     klaar.then(function () {
       lichtbak.close();
+      speelTegels();
       item.querySelector('.galerij__knop').focus({ preventScroll: true });
     });
   }
@@ -239,15 +335,14 @@
       return;
     }
     // korte overgang: oud beeld weg, nieuw beeld erin
-    var weg = beeld.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: ease, fill: 'both' });
+    var weg = actief.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: ease, fill: 'both' });
     weg.finished.then(function () {
       zetBeeld(i);
-      var toon = function () {
-        beeld.animate([{ opacity: 0, transform: 'translateY(0.5rem)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: ease, fill: 'both' });
+      var el = actief;
+      alsKlaar(el, function () {
+        el.animate([{ opacity: 0, transform: 'translateY(0.5rem)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: ease, fill: 'both' });
         tekstIn();
-      };
-      if (beeld.complete && beeld.naturalWidth) toon();
-      else beeld.addEventListener('load', toon, { once: true });
+      });
     });
   }
 
@@ -279,4 +374,5 @@
 
   maakTabs();
   maakCursor();
+  maakTegels();
 })();

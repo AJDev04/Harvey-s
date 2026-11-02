@@ -43,6 +43,36 @@
   text-align: center;
 }
 
+/* Collectie: welke foto's groot zijn, rekent inc/galerij.php per groep uit, zodat
+   het raster vol is. De vaste regel uit layout.css (elke zevende, elke vijfde)
+   geldt hier dus niet; de vorm van een grote foto blijft dezelfde.
+   --groot: 2 × 2 vanaf een tablet; --breed: over de volle breedte op een gsm. */
+.galerij__raster--berekend .galerij__item:nth-child(n) {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.galerij__raster--berekend .galerij__item:nth-child(n) .galerij__knop {
+  aspect-ratio: 4 / 5;
+}
+
+@media (min-width: 48em) {
+  .galerij__raster--berekend .galerij__item.galerij__item--groot {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .galerij__raster--berekend .galerij__item.galerij__item--groot .galerij__knop {
+    aspect-ratio: auto;
+  }
+}
+
+@media (max-width: 47.99em) {
+  .galerij__raster--berekend .galerij__item.galerij__item--breed {
+    grid-column: span 2;
+  }
+}
+
 /* Nieuws: meer dan één bericht onder elkaar, en een bericht zonder foto */
 .nieuws {
   gap: var(--space-9);

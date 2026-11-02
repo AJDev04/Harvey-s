@@ -25,7 +25,7 @@ css/components.css  header, hero, band, galerij, kaarten, formulier, footer
 css/beweging.css    animaties bij het laden en op scroll (uit bij "minder beweging")
 js/main.js          menu, header, hero, band, titels, cadeaubon, open/gesloten,
                     nieuwsbrief, reveal van secties, merkbanden, carrousel
-js/galerij.js       tabbladen, de bol "Bekijk" en de lichtbak van de Collectie
+js/galerij.js       tabbladen, de bol "Bekijk", de lichtbak en de video's van de Collectie
 tools/maak-logo.py  maakt het logo als SVG-paden en zet het in de pagina's
 tools/maak-thema.sh bouwt het WordPress-thema als zip in dist/
 tools/haal-collectiefotos.sh haalt de productfoto's van Voor haar op (voorbeeldbeelden)
@@ -154,7 +154,9 @@ Geeft dat een gat (bij een aantal foto's dat niet uitkomt), zet dan op de
 `<figure>` van een foto die groot zou worden de klasse `galerij__item--klein`:
 die blijft dan gewoon klein. Bij Voor haar (8 foto's) staat ze op de 1ste, 6de en
 8ste foto: dan zijn alle foto's even groot en is het raster vol op laptop en
-telefoon (op een tablet, met drie kolommen, gaat 8 niet op).
+telefoon (op een tablet, met drie kolommen, gaat 8 niet op). In WordPress hoeft
+dat niet: daar rekent het thema het zelf uit (zie
+[Collectie: geen gat in het raster](#collectie-geen-gat-in-het-raster)).
 
 ## Hero
 
@@ -224,8 +226,14 @@ Dat maakt in `dist/`:
 
 | Bestand                             | Voor                                                     |
 | ----------------------------------- | -------------------------------------------------------- |
-| `harveys.zip` (± 15 MB)             | Harvey's: met het logo, de foto's en de teksten van de huidige site |
-| `harveys-zonder-startinhoud.zip`    | een andere winkel: enkel het thema (± 270 kB)            |
+| `harveys.zip` (± 14 MB)             | Harvey's: met het logo, de foto's en de teksten van de huidige site |
+| `harveys-zonder-startinhoud.zip`    | een andere winkel: enkel het thema (± 275 kB), zonder `starter/` en zonder `inc/startinhoud-data.php` |
+
+De versie van het thema staat in `wordpress/harveys/style.css` (`Version:`) en in
+`HARVEYS_VERSIE` in `functions.php`; verhoog ze allebei bij een nieuwe zip. Ontbreekt een
+bestand dat de startinhoud noemt, dan stopt het script en zegt het welk; de vijf
+productfoto's van Voor haar staan niet in git en haal je eerst op met
+`sh tools/haal-collectiefotos.sh`.
 
 ### Installeren
 
@@ -238,9 +246,13 @@ Dat maakt in `dist/`:
    schermlezers en zoekmachines lezen die als de naam van het logo) en de taal
    Nederlands (België), voor de datums.
 4. Enkel voor Harvey's: Website → Startinhoud → Startinhoud importeren. Dat zet het
-   logo en het icoontje, alle teksten, de winkels en uren, 38 collectiefoto's, 26
-   merken met logo, het nieuwsbericht en de pagina's Privacy en Disclaimer erin.
-   Eén keer doen.
+   logo en het icoontje, alle teksten, de winkels en uren, 13 collectiefoto's (8 voor
+   haar, 5 voor hem, zoals in `index.html`), 21 merken (17 met logo), de foto's van de winkels, het
+   nieuwsbericht en de pagina's Privacy en Disclaimer erin. Eén keer doen. Ontbreekt
+   een bestand, dan slaat de import het over en gaat verder; op het einde staat welke
+   bestanden overgeslagen zijn. Loopt de server vast op een bestand, herlaad dan de
+   pagina: de import slaat dat bestand over en gaat verder waar hij was. In de zip
+   zonder startinhoud staat Startinhoud niet in het menu.
 
 ### Wat waar staat in de admin
 
@@ -251,18 +263,96 @@ Dat maakt in `dist/`:
 | Kleur (hero, merken, nieuwsbrief, accenten) | Website → Logo en kleur                                 |
 | Hero-video, band                | Website → Hero en band                                              |
 | Nieuws                          | Nieuws (de gewone berichten van WordPress, met een uitgelichte afbeelding). Bij meer dan één bericht een carrousel, het nieuwste eerst; hoeveel berichten erin staan: Website → Nieuws en merken |
-| Collectie                       | Website → Collectie: twee groepen (standaard Voor haar en Voor hem, de naam pas je aan), foto's kiezen, slepen voor de volgorde, merk eronder typen |
+| Collectie                       | Website → Collectie: twee groepen (standaard Voor haar en Voor hem, de naam pas je aan), foto's en video's kiezen, slepen voor de volgorde, merk eronder typen. Welke foto's groot zijn, kiest het thema zelf (zie hieronder); video's: zie [Collectie: video's](#collectie-videos) |
 | Merken                          | Merken: per merk een naam, een logo en Voor haar en/of Voor hem; Volgorde bepaalt de plaats |
 | Over ons                        | Website → Over ons: titel, uitspraak, tekst en foto's                |
 | Cadeaubon                       | Website → Cadeaubon                                                 |
 | Contact en openingsuren         | Website → Winkels en uren (een tweede winkel mag leeg blijven)     |
-| Nieuwsbrief                     | Website → Nieuwsbrief; inschrijvingen in Website → Inschrijvingen, als CSV te downloaden |
+| Nieuwsbrief                     | Website → Nieuwsbrief; inschrijvingen in Website → Inschrijvingen, als CSV te downloaden (enkel voor beheerders) |
 | Privacy, Disclaimer, footer     | gewone pagina's; Website → Algemeen; Instellingen → Privacy          |
 
 Een sectie zonder inhoud (geen nieuws, geen foto's, ...) verdwijnt vanzelf, ook uit
-het menu. In teksten maakt `*woord*` een woord schuin; de uitspraak bij Over ons staat
-altijd recht. Het onderschrift van een foto in de carrousel staat er enkel voor
+het menu. Een foto die uit de mediabibliotheek verwijderd is, telt niet meer mee. In
+teksten maakt `*woord*` een woord schuin; de uitspraak bij Over ons staat altijd
+recht. Het onderschrift van een foto in de carrousel staat er enkel voor
 schermlezers.
+
+### Collectie: video's
+
+Naast foto's kan een groep van de Collectie ook video's bevatten (Website → Collectie,
+Foto's en video's toevoegen): beelden van in de winkel, zodat klanten zien wat er nu
+ligt. Een video telt in het raster als een foto, ook om te bepalen welke groot zijn:
+zet je ze als eerste, dan krijgt ze het grote vak.
+
+- **In het raster** speelt een video zonder geluid in een lus, zodra ze voor een kwart
+  in beeld is; buiten beeld of in het andere tabblad staat ze stil. Rechtsboven staat
+  een kleine afspeelknop, zodat je ziet dat het geen foto is. Bij "minder beweging"
+  speelt ze niet vanzelf.
+- **Klik je erop**, dan opent ze groot in de lichtbak, met geluid en de knoppen van
+  de browser. Bladeren gaat gewoon door foto's en video's heen; bij het sluiten stopt
+  ze.
+- **Formaat**: mp4 (H.264), webm of mov; een ander formaat weigert het beheerscherm.
+  Kort en klein houden, liefst onder 10 MB: de hosting begrenst vaak de grootte van
+  een upload, en een zware video laadt traag op een gsm. Staand (4:5) past het best;
+  het raster snijdt bij zoals bij een foto.
+- **Stilstaand beeld**: in Media de video openen, Meer details bewerken, Uitgelichte
+  afbeelding. Zonder toont de browser het eerste beeld van de video.
+- **Geen merk**: bij een video hoort geen merk, het beheerscherm toont er geen veld
+  voor. In het raster staat er geen label onder; in de lichtbak staat "In de winkel"
+  als titel, en schermlezers horen "Video in de winkel" met de naam van de groep.
+
+Code: `harveys_is_video()` en `harveys_video_poster()` in `inc/hulp.php`, het veld
+`'video' => true` in `inc/instellingen.php`, het tegeltje in
+`template-parts/sectie-collectie.php` (`galerij__item--video`, `galerij__video`), het
+afspelen en de lichtbak in `js/galerij.js` (`#lichtbak-video`), de stijl in
+`css/components.css`. De statische site heeft (nog) geen video's, maar dezelfde
+lichtbak en dezelfde code.
+
+### Collectie: geen gat in het raster
+
+In de statische site lost `galerij__item--klein` met de hand een gat in het raster
+op. In WordPress rekent het thema per groep zelf uit welke foto's groot zijn, apart
+voor laptop (4 kolommen) en gsm (2 kolommen), zodat het raster vol is
+(`inc/galerij.php`; de klassen `galerij__item--groot` en `galerij__item--breed` op
+een `galerij__raster--berekend`, de stijl in `assets/css/wordpress.css`). De winkel
+hoeft niets te doen. De regel:
+
+- **Gsm**: elke vijfde foto staat over de volle breedte (1, 6, 11, ...). Is het
+  aantal foto's 2 of 4 meer dan een veelvoud van 5 (2, 4, 7, 9, 12, 14, ...), dan
+  wordt de laatste brede foto gewoon klein.
+- **Laptop**: elke zevende foto is groot, 2 × 2 (1, 8, 15, ...). Elke 14 foto's
+  vullen zo precies 5 rijen. Is het raster daarna niet vol, dan zoekt het thema de
+  kleinste aanpassing: zo weinig mogelijk foto's die van grootte wisselen (een grote
+  wordt klein, of een kleine wordt groot), liefst een grote klein maken, liefst
+  zonder rij met enkel grote foto's, en zo ver mogelijk achteraan.
+- Met **1 of 3 foto's** kunnen vier kolommen nooit vol: dan blijft het kleinste gat
+  (1 foto: groot, de helft van de breedte; 3 foto's: op één rij met één leeg vak).
+- Een **tablet** (3 kolommen) gebruikt dezelfde grote foto's als de laptop; daar kan
+  wel een gat blijven.
+
+Zo valt het uit voor 1 tot 16 foto's (de nummers van de grote foto's):
+
+| Foto's | Laptop: groot (2 × 2) | Gsm: volle breedte | Laptop |
+| ------ | --------------------- | ------------------ | ------ |
+| 1      | 1                     | 1                  | 4 lege vakken |
+| 2      | 1, 2                  | geen               | vol    |
+| 3      | geen                  | 1                  | 1 leeg vak |
+| 4      | geen                  | geen               | vol    |
+| 5      | 1                     | 1                  | vol    |
+| 6      | 1, 4                  | 1, 6               | vol    |
+| 7      | 1, 6, 7               | 1                  | vol    |
+| 8      | geen                  | 1, 6               | vol    |
+| 9      | 1                     | 1                  | vol    |
+| 10     | 1, 8                  | 1, 6               | vol    |
+| 11     | 1, 8, 9               | 1, 6, 11           | vol    |
+| 12     | geen                  | 1, 6               | vol    |
+| 13     | 1                     | 1, 6, 11           | vol    |
+| 14     | 1, 8                  | 1, 6               | vol    |
+| 15     | 1, 8, 13              | 1, 6, 11           | vol    |
+| 16     | 1, 8, 15, 16          | 1, 6, 11, 16       | vol    |
+
+Op gsm is het raster altijd vol. Wie de volgorde van de foto's zelf wil kiezen:
+de eerste foto van een groep is meestal groot.
 
 ### Een tweede winkel
 
@@ -286,6 +376,28 @@ logo: Website → Logo en kleur, met twee SVG-bestanden.
 
 Elke SVG die geüpload wordt, ook een merklogo, wordt eerst opgekuist: scripts,
 links naar buiten en ingesloten pagina's gaan eruit (`wordpress/harveys/inc/svg.php`).
+Een SVG uploaden kan enkel een beheerder; een redacteur gebruikt voor een merklogo
+een PNG.
+
+### Rechten en veiligheid
+
+- **Beheerder**: alles. **Redacteur**: alle tabbladen onder Website behalve Logo en
+  kleur en Startinhoud, plus Nieuws en Merken; geen SVG's, geen inschrijvingen.
+- Elk formulier in de admin heeft een nonce en een controle van het recht; een
+  tabblad bewaart enkel zijn eigen velden, en elk veld wordt opgekuist volgens zijn
+  soort (ook bij de import). Foto-id's die niet in de mediabibliotheek staan, worden
+  niet bewaard.
+- **Nieuwsbrief**: inschrijvingen en de CSV-export zijn enkel voor beheerders (het
+  zijn persoonsgegevens). Een adres staat er maar één keer in, ongeacht hoofdletters.
+  Tegen spam: een verborgen veld dat enkel een bot invult, een tijdsval (wie binnen 2
+  seconden na het laden verstuurt, is geen mens) en hoogstens 10 inschrijvingen per
+  IP-adres per 10 minuten. Een bot krijgt "bedankt", maar er wordt niets bewaard. Het
+  formulier heeft bewust geen nonce: de homepage wordt vaak gecachet, en dan zou een
+  verlopen nonce echte bezoekers tegenhouden. Staat de sectie uit, dan neemt het
+  formulier niets meer aan.
+- Functies, constanten, opties, hooks, berichttypes en scripts beginnen met
+  `harveys_`, `HARVEYS_` of `harveys-`, zodat niets botst met plugins (Genesis,
+  WPForms, ...).
 
 ### De vormgeving aanpassen
 
@@ -309,6 +421,7 @@ wordpress/harveys/
   inc/logo.php             het logo inline, en samengesteld voor hero en footer
   inc/svg.php              SVG's uploaden (opgekuist) en tonen
   inc/merken.php           het berichttype Merk met de groepen
+  inc/galerij.php          Collectie: welke foto's groot zijn, zodat het raster vol is
   inc/nieuwsbrief.php      inschrijvingen bewaren en exporteren
   inc/hulp.php             openingsuren in woorden, winkels, telefoonlinks
   inc/startinhoud*.php     de import van de huidige site
@@ -318,13 +431,33 @@ De startinhoud zelf (foto's, merklogo's en het logo van Harvey's in `starter/`) 
 `tools/maak-thema.sh` er bij het bouwen bij, uit `images/` en `favicon.svg`; enkel
 `harveys.zip` bevat ze.
 
-Lokaal testen zonder hosting kan met WordPress Playground:
+### Testen
+
+Lokaal testen zonder hosting kan met WordPress Playground, in elke versie van PHP en
+WordPress, met de meldingen van PHP in een logbestand:
 
 ```sh
 sh tools/maak-thema.sh
-npx @wp-playground/cli@latest server --login \
+mkdir -p /tmp/wp-log
+npx @wp-playground/cli@latest server --login --php=7.4 --wp=6.4 \
+  --define-bool WP_DEBUG true --define-bool WP_DEBUG_DISPLAY false \
+  --define WP_DEBUG_LOG /log/debug.log --mount=/tmp/wp-log:/log \
   --mount=$PWD/dist/harveys:/wordpress/wp-content/themes/harveys
 ```
 
-Activeer daarna het thema bij Weergave → Thema's. Alles wat je daar doet, is weg
-als je de server stopt.
+Activeer daarna het thema bij Weergave → Thema's (of upload de zip daar, om ook de
+installatie te testen). Alles wat je daar doet, is weg als je de server stopt; de
+meldingen staan in `/tmp/wp-log/debug.log`. Kies de versies met `--php` (7.4 tot
+8.5) en `--wp` (bv. `6.4` of `latest`). Let op: met `--blueprint` gelden die twee
+niet; zet de versies dan in de blueprint zelf (`"preferredVersions": { "php": "7.4",
+"wp": "6.4" }`). De nieuwste versie van de CLI vraagt Node 24.18 of nieuwer; met een
+oudere Node werkt `@wp-playground/cli@3.1.58`.
+
+Elk PHP-bestand nakijken op fouten (`php -l`), in een bepaalde versie van PHP:
+
+```sh
+for f in $(cd wordpress/harveys && find . -name '*.php'); do
+  npx @wp-playground/cli@latest php --php=7.4 --wordpress-install-mode=do-not-attempt-installing \
+    --skip-sqlite-setup --verbosity=quiet --mount=$PWD/wordpress/harveys:/thema -- -l /thema/$f
+done
+```

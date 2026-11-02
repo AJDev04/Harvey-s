@@ -42,11 +42,26 @@ cp "$WORTEL/images/harveys-naam.svg" "$THEMA/starter/logo/naam.svg"
 cp "$WORTEL/images/harveys-slogan.svg" "$THEMA/starter/logo/slogan.svg"
 cp "$WORTEL/favicon.svg" "$THEMA/starter/logo/favicon.svg"
 
+# elk bestand dat de startinhoud noemt, moet in starter/ staan: anders stopt het
+# bouwen hier, in plaats van een zip te maken waarin foto's ontbreken
+ONTBREEKT=0
+for BESTAND in $(grep -oE "'[A-Za-z0-9/._-]+\.(jpg|jpeg|png|webp|svg|mp4|webm)'" "$THEMA/inc/startinhoud-data.php" | tr -d "'"); do
+  if [ ! -f "$THEMA/starter/$BESTAND" ]; then
+    echo "Ontbreekt voor de startinhoud: images/$BESTAND"
+    ONTBREEKT=1
+  fi
+done
+if [ "$ONTBREEKT" -ne 0 ]; then
+  echo "De productfoto's van Voor haar haal je op met: sh tools/haal-collectiefotos.sh"
+  exit 1
+fi
+
 find "$THEMA" -name '.DS_Store' -delete
 
 cd "$DIST"
 zip -rqX harveys.zip harveys
-zip -rqX harveys-zonder-startinhoud.zip harveys -x 'harveys/starter/*'
+# zonder startinhoud: zonder de foto's en zonder de lijst met de inhoud van Harvey's
+zip -rqX harveys-zonder-startinhoud.zip harveys -x 'harveys/starter/*' 'harveys/inc/startinhoud-data.php'
 
 echo "Klaar:"
 ls -lh "$DIST"/*.zip | awk '{ print "  " $NF "  (" $5 ")" }'

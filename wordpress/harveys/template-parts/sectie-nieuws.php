@@ -39,7 +39,9 @@ $harveys_carrousel = $harveys_aantal > 1;
 				$harveys_nieuws->the_post();
 				$harveys_tekst = has_excerpt() ? get_the_excerpt() : wp_strip_all_tags( strip_shortcodes( get_the_content() ) );
 				$harveys_kort  = wp_trim_words( $harveys_tekst, 45 );
-				$harveys_meer  = $harveys_kort !== trim( preg_replace( '/\s+/', ' ', $harveys_tekst ) );
+				// "Lees verder" als de tekst ingekort is, of als er naast de samenvatting nog meer tekst in het bericht staat
+				$harveys_meer  = $harveys_kort !== trim( preg_replace( '/\s+/', ' ', $harveys_tekst ) )
+					|| ( has_excerpt() && '' !== trim( wp_strip_all_tags( strip_shortcodes( get_the_content() ) ) ) );
 				?>
 				<?php if ( $harveys_carrousel ) : ?>
 					<div class="carrousel__slide" role="group" aria-label="<?php echo esc_attr( sprintf( 'Bericht %d van %d', $harveys_nieuws->current_post + 1, $harveys_aantal ) ); ?>">

@@ -209,28 +209,48 @@ function harveys_beheer_rij( $sleutel, $veld ) {
 			break;
 
 		case 'galerij':
-			$ids       = is_array( $waarde ) ? $waarde : array();
+			$ids        = is_array( $waarde ) ? $waarde : array();
 			$bijschrift = isset( $veld['bijschrift'] ) ? $veld['bijschrift'] : 'Merk';
-			echo '<div class="harveys-galerij" data-bijschrift="' . esc_attr( $bijschrift ) . '"><ul class="harveys-galerij__lijst">';
+			$met_video  = ! empty( $veld['video'] );
+			$aantal     = array( 'foto' => 0, 'video' => 0 );
+			echo '<div class="harveys-galerij" data-bijschrift="' . esc_attr( $bijschrift ) . '" data-video="' . ( $met_video ? '1' : '0' ) . '"><ul class="harveys-galerij__lijst">';
 			foreach ( $ids as $foto ) {
-				$url = wp_get_attachment_image_url( $foto, 'thumbnail' );
-				if ( ! $url ) {
-					continue;
+				if ( $met_video && harveys_is_video( $foto ) ) {
+					// een video: het stilstaand beeld als dat er is, anders het eerste beeld van de video zelf
+					$poster    = harveys_video_poster( $foto, 'thumbnail' );
+					$voorbeeld = '<video src="' . esc_url( wp_get_attachment_url( $foto ) . '#t=0.5' ) . '" muted playsinline preload="metadata"' . ( $poster ? ' poster="' . esc_url( $poster ) . '"' : '' ) . '></video>';
+					$soort     = 'video';
+				} else {
+					$url = wp_get_attachment_image_url( $foto, 'thumbnail' );
+					if ( ! $url ) {
+						continue;
+					}
+					$voorbeeld = '<img src="' . esc_url( $url ) . '" alt="" />';
+					$soort     = 'foto';
 				}
-				printf(
-					'<li class="harveys-galerij__item" data-id="%1$d"><img src="%2$s" alt="" /><input type="text" name="harveys_bijschrift[%1$d]" value="%3$s" placeholder="%4$s" aria-label="%4$s" /><button type="button" class="harveys-galerij__weg" aria-label="Foto weghalen">×</button></li>',
+				++$aantal[ $soort ];
+				// een video is een beeld van in de winkel: daar hoort geen merk bij
+				$veldje = 'video' === $soort ? '<span class="harveys-galerij__soort">Video in de winkel</span>' : sprintf(
+					'<input type="text" name="harveys_bijschrift[%1$d]" value="%2$s" placeholder="%3$s" aria-label="%3$s" />',
 					(int) $foto,
-					esc_url( $url ),
 					esc_attr( wp_get_attachment_caption( $foto ) ),
 					esc_attr( $bijschrift )
 				);
+				printf(
+					'<li class="harveys-galerij__item" data-id="%1$d" data-soort="%2$s">%3$s%4$s<button type="button" class="harveys-galerij__weg" aria-label="Weghalen">×</button></li>',
+					(int) $foto,
+					esc_attr( $soort ),
+					$voorbeeld, // phpcs:ignore WordPress.Security.EscapeOutput -- hierboven opgebouwd met esc_url
+					$veldje // phpcs:ignore WordPress.Security.EscapeOutput -- hierboven ge-escaped
+				);
 			}
 			printf(
-				'</ul><input type="hidden" class="harveys-galerij__ids" id="%s" name="%s" value="%s" /><p><button type="button" class="button harveys-galerij__toevoegen">Foto\'s toevoegen</button> <span class="harveys-galerij__aantal">%s</span></p></div>',
+				'</ul><input type="hidden" class="harveys-galerij__ids" id="%s" name="%s" value="%s" /><p><button type="button" class="button harveys-galerij__toevoegen">%s</button> <span class="harveys-galerij__aantal">%s</span></p><p class="harveys-galerij__melding" hidden></p></div>',
 				esc_attr( $id ),
 				esc_attr( $naam ),
 				esc_attr( implode( ',', $ids ) ),
-				esc_html( sprintf( _n( '%d foto', '%d foto\'s', count( $ids ) ), count( $ids ) ) )
+				esc_html( $met_video ? 'Foto\'s en video\'s toevoegen' : 'Foto\'s toevoegen' ),
+				esc_html( harveys_galerij_telling( $aantal['foto'], $aantal['video'] ) )
 			);
 			break;
 
@@ -258,4 +278,13 @@ function harveys_beheer_rij( $sleutel, $veld ) {
 		echo '<p class="description">' . esc_html( $veld['hulp'] ) . '</p>';
 	}
 	echo '</td></tr>';
+}
+
+/** "3 foto's", of met video's erbij "3 foto's, 1 video" (de teller onder een galerij). */
+function harveys_galerij_telling( $fotos, $videos ) {
+	$tekst = 1 === (int) $fotos ? '1 foto' : (int) $fotos . ' foto\'s';
+	if ( $videos ) {
+		$tekst .= ', ' . ( 1 === (int) $videos ? '1 video' : (int) $videos . ' video\'s' );
+	}
+	return $tekst;
 }

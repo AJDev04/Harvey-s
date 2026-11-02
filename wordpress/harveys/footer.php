@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 $harveys_secties = harveys_secties();
 unset( $harveys_secties['home'] );
 $harveys_privacy    = get_privacy_policy_url();
-$harveys_disclaimer = harveys_optie( 'disclaimer_pagina' ) ? get_permalink( (int) harveys_optie( 'disclaimer_pagina' ) ) : '';
+$harveys_disclaimer = harveys_disclaimer_url();
 ?>
 	<footer class="footer">
 		<div class="container">
@@ -25,7 +25,7 @@ $harveys_disclaimer = harveys_optie( 'disclaimer_pagina' ) ? get_permalink( (int
 							<?php echo esc_html( $harveys_winkel['naam'] ); ?><br />
 							<?php echo esc_html( $harveys_winkel['straat'] ); ?>
 							<?php if ( $harveys_winkel['telefoon'] ) : ?>
-								· <a href="<?php echo esc_attr( harveys_tel( $harveys_winkel['telefoon'] ) ); ?>"><?php echo esc_html( $harveys_winkel['telefoon'] ); ?></a>
+								· <a href="<?php echo esc_url( harveys_tel( $harveys_winkel['telefoon'] ) ); ?>"><?php echo esc_html( $harveys_winkel['telefoon'] ); ?></a>
 							<?php endif; ?>
 						</p>
 					<?php endforeach; ?>

@@ -30,7 +30,7 @@ $harveys_data = harveys_uren_data();
 						</div>
 					<?php endif; ?>
 					<div class="winkel__info">
-						<?php if ( $harveys_w['nr'] ) : ?>
+						<?php if ( $harveys_w['nr'] && count( $harveys_winkels ) > 1 ) : // het huisnummer onderscheidt twee winkels; bij één winkel is het niet nodig ?>
 							<span class="winkel__nr" aria-hidden="true"><?php echo esc_html( $harveys_w['nr'] ); ?></span>
 						<?php endif; ?>
 						<div class="winkel__tekst">
@@ -39,7 +39,7 @@ $harveys_data = harveys_uren_data();
 								<span><?php echo esc_html( $harveys_w['straat'] ); ?></span>
 								<span><?php echo esc_html( $harveys_w['gemeente'] ); ?></span>
 								<?php if ( $harveys_w['telefoon'] ) : ?>
-									<a class="pil-link" href="<?php echo esc_attr( harveys_tel( $harveys_w['telefoon'] ) ); ?>"><?php echo esc_html( $harveys_w['telefoon'] ); ?></a>
+									<a class="pil-link" href="<?php echo esc_url( harveys_tel( $harveys_w['telefoon'] ) ); ?>"><?php echo esc_html( $harveys_w['telefoon'] ); ?></a>
 								<?php endif; ?>
 							</address>
 						</div>

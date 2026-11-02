@@ -59,7 +59,8 @@
   cursor: move;
 }
 
-.harveys-galerij__item img {
+.harveys-galerij__item img,
+.harveys-galerij__item video {
   display: block;
   width: 120px;
   height: 120px;
@@ -115,4 +116,32 @@
 .harveys-uren thead th {
   font-weight: 400;
   color: #646970;
+}
+
+/* Een video in de galerij: een klein label linksboven */
+.harveys-galerij__item[data-soort="video"]::before {
+  content: "Video";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 1;
+  padding: 1px 6px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 11px;
+  line-height: 18px;
+  pointer-events: none;
+}
+
+.harveys-galerij__melding {
+  color: #b32d2e;
+}
+
+.harveys-galerij__soort {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 28px;
+  color: #50575e;
 }

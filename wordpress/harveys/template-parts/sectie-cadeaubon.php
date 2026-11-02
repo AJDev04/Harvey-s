@@ -69,17 +69,19 @@ $harveys_bellen  = array_filter(
 					</dl>
 				<?php endif; ?>
 				<div class="cadeaubon__actie">
-					<a class="knop knop--oranje magneet" href="#contact">
-						<span><?php echo esc_html( harveys_optie( 'cadeaubon_knop' ) ?: 'Kom langs' ); ?></span>
-						<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
-					</a>
+					<?php if ( isset( harveys_secties()['contact'] ) ) : // de knop springt naar Contact ?>
+						<a class="knop knop--oranje magneet" href="#contact">
+							<span><?php echo esc_html( harveys_optie( 'cadeaubon_knop' ) ?: 'Kom langs' ); ?></span>
+							<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+						</a>
+					<?php endif; ?>
 					<?php if ( $harveys_bellen ) : ?>
 						<p>Of bel:
 							<?php
 							$harveys_links = array();
 							foreach ( $harveys_bellen as $harveys_w ) {
 								$harveys_links[] = ( count( $harveys_bellen ) > 1 ? esc_html( $harveys_w['kort'] ) . ' ' : '' )
-									. '<a href="' . esc_attr( harveys_tel( $harveys_w['telefoon'] ) ) . '">' . esc_html( $harveys_w['telefoon'] ) . '</a>';
+									. '<a href="' . esc_url( harveys_tel( $harveys_w['telefoon'] ) ) . '">' . esc_html( $harveys_w['telefoon'] ) . '</a>';
 							}
 							echo implode( ' · ', $harveys_links ); // phpcs:ignore WordPress.Security.EscapeOutput -- hierboven ge-escaped
 							?>
